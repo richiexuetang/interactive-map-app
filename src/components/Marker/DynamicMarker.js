@@ -151,8 +151,8 @@ const DynamicMarker = ({
       delete L.Icon.Default.prototype._getIconUrl;
       L.Icon.Default.mergeOptions({
         iconUrl: `images/icons/${gameSlug}/${marker.category}.png`,
-        iconSize: [35, 45],
-        iconAnchor: [17, 45],
+        iconSize: [66, 89],
+        iconAnchor: [33, 45],
       });
     })();
   }, []);
