@@ -11,7 +11,7 @@ import { useMapContext } from "src/context/app-context";
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
-  const res = await fetch(`http://localhost:8080/api/markers/${areaId}`);
+  const res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/api/markers/${areaId}`);
 
   const data = await res.json();
   const markers = data.data;
