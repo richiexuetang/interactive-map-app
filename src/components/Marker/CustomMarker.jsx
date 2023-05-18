@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
 
 import { Box, HStack, Stack, Text, Checkbox, Divider } from "@chakra-ui/react";
 import { LinkIcon } from "@chakra-ui/icons";

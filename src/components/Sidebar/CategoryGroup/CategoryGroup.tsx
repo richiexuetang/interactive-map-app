@@ -29,10 +29,6 @@ const CategoryGroup = ({
     }
   }, [categories, members]);
 
-  const getCategoryCount = (value) => {
-    return 1;
-  };
-
   return (
     <VStack w="100%" key={group}>
       <HStack px="8px" pt={5} justifyContent="space-between" w="100%">

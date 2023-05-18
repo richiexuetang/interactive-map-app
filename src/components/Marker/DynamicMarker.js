@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import L from "leaflet";
 import * as ReactLeaflet from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 const { Marker } = ReactLeaflet;
 
@@ -14,6 +16,12 @@ const DynamicMarker = ({
   ...rest
 }) => {
   const map = useMap();
+
+  useEffect(() => {
+    if (typeof window === undefined) {
+      return;
+    }
+  }, [window]);
 
   useEffect(() => {
     (async function init() {
@@ -150,28 +158,28 @@ const DynamicMarker = ({
   }, []);
 
   return (
-    <Marker
-      position={marker.coord}
-      icon={
-        new L.icon({
-          iconUrl: `/images/icons/${gameSlug}/${marker.category}.png`,
-          iconSize: [35, 45],
-          iconAnchor: [17, 45],
-        })
-      }
-      zIndexOffset={100 + rank}
-      eventHandlers={{
-        click: () => {
-          map.flyTo(marker.coord, map.getMaxZoom(), {
-            animate: true,
-            duration: 0.5,
-          });
-        },
-      }}
-      {...rest}
-    >
-      {children(ReactLeaflet, L)}
-    </Marker>
+      <Marker
+        position={marker.coord}
+        icon={
+          new L.icon({
+            iconUrl: `/images/icons/${gameSlug}/${marker.category}.png`,
+            iconSize: [35, 45],
+            iconAnchor: [17, 45],
+          })
+        }
+        zIndexOffset={100 + rank}
+        eventHandlers={{
+          click: () => {
+            map.flyTo(marker.coord, map.getMaxZoom(), {
+              animate: true,
+              duration: 0.5,
+            });
+          },
+        }}
+        {...rest}
+      >
+        {children(ReactLeaflet, L)}
+      </Marker>
   );
 };
 

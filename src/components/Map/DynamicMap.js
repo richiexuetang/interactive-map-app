@@ -3,6 +3,9 @@ import * as ReactLeaflet from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import Sidebar from "@components/Sidebar/Sidebar";
 import { useMapContext } from "src/context/app-context";
+import MarkerClusterGroup from "@components/Marker/MarkerClusterGroup";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 const { MapContainer, useMap } = ReactLeaflet;
 
@@ -25,7 +28,13 @@ const Map = ({ children, ...rest }) => {
       maxZoom={maxZoom}
       {...rest}
     >
-      {children(ReactLeaflet, L)}
+      <MarkerClusterGroup
+        zoomToBoundsOnClick={true}
+        disableClusteringAtZoom={11}
+        maxClusterRadius={10}
+      >
+        {children(ReactLeaflet, L)}
+      </MarkerClusterGroup>
       <Sidebar useMap={useMap} />
     </MapContainer>
   );
