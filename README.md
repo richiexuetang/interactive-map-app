@@ -1,11 +1,3 @@
-# 🍃 Next.js Leaflet Starter
-
-Jumpstart your new Next.js mapping project with Leaflet!
-
-## ⚡ Quick Deploy
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/colbyfayock/next-leaflet-starter) [![Deploy with Vercel Now](https://zeit.co/button)](https://vercel.com/import/project?template=https://github.com/colbyfayock/next-leaflet-starter)
-
-
 ## 🧰 What This Includes
 * [Yarn](https://yarnpkg.com/en/)
 * [Next.js](https://nextjs.org/)
@@ -16,13 +8,6 @@ Jumpstart your new Next.js mapping project with Leaflet!
 
 ### Requirements
 * [Yarn](https://yarnpkg.com/en/)
-
-### Quick Start
-```
-yarn create next-app -e https://github.com/colbyfayock/next-leaflet-starter
-# or
-npm run create-next-app -e https://github.com/colbyfayock/next-leaflet-starter
-```
 
 ### Running the Project
 First, run the development server:

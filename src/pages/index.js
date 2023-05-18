@@ -1,55 +1,84 @@
-import Head from 'next/head';
+import Head from "next/head";
 
-import Layout from '@components/Layout';
-import Section from '@components/Section';
-import Container from '@components/Container';
-import Map from '@components/Map';
-import Button from '@components/Button';
+import Layout from "@components/Layout";
+import Section from "@components/Section";
+import Container from "@components/Container";
+import Map from "@components/Map";
+import Button from "@components/Button";
+import { Box, chakra, Text, Image } from "@chakra-ui/react";
 
-import styles from '@styles/Home.module.scss';
+import styles from "@styles/Home.module.scss";
+import Link from "next/link";
 
-const DEFAULT_CENTER = [38.907132, -77.036546]
+const DEFAULT_CENTER = [83.93, -168.15];
+const DEFAULT_BOUNDS = [
+  [83.8, -169.65],
+  [84, -167],
+];
+
+const gamesData = [
+  {
+    name: "The Witcher 3",
+    path: "witcher3",
+    previewImage: "/images/preview/witcher3.png",
+  },
+  {
+    name: "Tears of the Kingdom",
+    path: "totk",
+    previewImage: "/images/preview/totk.png",
+  },
+];
 
 export default function Home() {
   return (
     <Layout>
       <Head>
-        <title>Next.js Leaflet Starter</title>
-        <meta name="description" content="Create mapping apps with Next.js Leaflet Starter" />
+        <title>Interactive Maps</title>
+        <meta
+          name="description"
+          content="Interactive Maps for different RPGs"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Section>
-        <Container>
-          <h1 className={styles.title}>
-            Next.js Leaflet Starter
-          </h1>
+        <Text textAlign="center" fontSize={35}>
+          Games:
+        </Text>
 
-          <Map className={styles.homeMap} width="800" height="400" center={DEFAULT_CENTER} zoom={12}>
-            {({ TileLayer, Marker, Popup }) => (
-              <>
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-                />
-                <Marker position={DEFAULT_CENTER}>
-                  <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
-                  </Popup>
-                </Marker>
-              </>
-            )}
-          </Map>
-
-          <p className={styles.description}>
-            <code className={styles.code}>yarn create next-app -e https://github.com/colbyfayock/next-leaflet-starter</code>
-          </p>
-
-          <p className={styles.view}>
-            <Button href="https://github.com/colbyfayock/next-leaflet-starter">Vew on GitHub</Button>
-          </p>
-        </Container>
+        <Box display="flex" flexWrap="wrap" justifyContent="center">
+          {gamesData.map((gameData) => (
+            <Box key={gameData.name} flex="0 0 25%" maxW="25%" px="1rem">
+              <Link href={`/game/${gameData.path}`}>
+                <chakra.a
+                  background="#e8dfd0 !important"
+                  cursor="pointer"
+                  display="flex"
+                  flexDirection="column"
+                  wordBreak="break-word"
+                >
+                  <Image
+                    objectFit="cover"
+                    src={`${gameData.previewImage}`}
+                    alt={`${gameData.previewImage}`}
+                  />
+                  <Box textAlign="center" flex="1 1 auto">
+                    <Text
+                      m="0 !important"
+                      color="#173936"
+                      fontWeight="400"
+                      fontSize="1.5rem"
+                      lineHeight="1.2"
+                    >
+                      {gameData.name}
+                    </Text>
+                  </Box>
+                </chakra.a>
+              </Link>
+            </Box>
+          ))}
+        </Box>
       </Section>
     </Layout>
-  )
+  );
 }

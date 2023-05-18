@@ -1,9 +1,9 @@
 {
-  "name": "next-leaflet-starter",
+  "name": "interactive-map-rpg",
   "homepage": "https://next-leaflet-starter.netlify.app",
   "version": "0.1.0",
   "license": "MIT",
-  "author": "Colby Fayock <hello@colbyfayock.com>",
+  "author": "Richard Tang <richard772794659@gmail.com>",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,19 +12,34 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/colbyfayock/next-leaflet-starter"
+    "url": ""
   },
   "bugs": {
-    "url": "https://github.com/colbyfayock/next-leaflet-starter/issues"
+    "url": "https://github.com"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.0.19",
+    "@chakra-ui/react": "^2.6.1",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "add": "^2.0.6",
     "copy-webpack-plugin": "^11.0.0",
+    "framer-motion": "^10.12.12",
     "leaflet": "^1.9.3",
     "next": "^13.0.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
     "react-leaflet": "^4.2.0",
-    "sass": "^1.57.0"
+    "sass": "^1.57.0",
+    "sharp": "^0.32.1",
+    "styled-components": "^6.0.0-rc.1",
+    "yarn": "^1.22.19"
+  },
+  "devDependencies": {
+    "@tsconfig/next": "^1.0.5",
+    "@types/node": "20.1.7",
+    "@types/react": "18.2.6",
+    "typescript": "5.0.4"
   }
 }

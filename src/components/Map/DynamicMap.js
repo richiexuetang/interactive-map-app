@@ -1,35 +1,51 @@
-import { useEffect } from 'react';
-import Leaflet from 'leaflet';
-import * as ReactLeaflet from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
+import L from "leaflet";
+import * as ReactLeaflet from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import Sidebar from "@components/Sidebar/Sidebar";
 
-import styles from './Map.module.scss';
+const { MapContainer, useMap } = ReactLeaflet;
 
-const { MapContainer } = ReactLeaflet;
-
-const Map = ({ children, className, width, height, ...rest }) => {
-  let mapClassName = styles.map;
-
-  if ( className ) {
-    mapClassName = `${mapClassName} ${className}`;
-  }
-
-  useEffect(() => {
-    (async function init() {
-      delete Leaflet.Icon.Default.prototype._getIconUrl;
-      Leaflet.Icon.Default.mergeOptions({
-        iconRetinaUrl: 'leaflet/images/marker-icon-2x.png',
-        iconUrl: 'leaflet/images/marker-icon.png',
-        shadowUrl: 'leaflet/images/marker-shadow.png',
-      });
-    })();
-  }, []);
-
+const Map = ({
+  children,
+  config,
+  markerRefs,
+  categoryItems,
+  navSelections,
+  area,
+  categoryCounts,
+  markers,
+  ...rest
+}) => {
+  const { center, zoom, bounds, minZoom, maxZoom, gameSlug, subSelections } = config;
   return (
-    <MapContainer className={mapClassName} {...rest}>
-      {children(ReactLeaflet, Leaflet)}
+    <MapContainer
+      style={{ background: "#967959", height: "100vh", width: "100vw" }}
+      scrollWheelZoom={false}
+      smoothWheelZoom={true}
+      smoothSensitivity={15}
+      doubleClickZoom={false}
+      attributionControl={false}
+      zoomControl={false}
+      center={center}
+      zoom={zoom}
+      bounds={bounds}
+      minZoom={minZoom}
+      maxZoom={maxZoom}
+      {...rest}
+    >
+      {children(ReactLeaflet, L)}
+      <Sidebar
+        markerRefs={markerRefs}
+        game={gameSlug}
+        categoryGroups={categoryItems.categoryGroups}
+        navSelections={subSelections}
+        area={area}
+        categoryCounts={categoryCounts}
+        useMap={useMap}
+        markers={markers}
+      />
     </MapContainer>
-  )
-}
+  );
+};
 
 export default Map;
