@@ -2,21 +2,13 @@ import L from "leaflet";
 import * as ReactLeaflet from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import Sidebar from "@components/Sidebar/Sidebar";
+import { useMapContext } from "src/context/app-context";
 
 const { MapContainer, useMap } = ReactLeaflet;
 
-const Map = ({
-  children,
-  config,
-  markerRefs,
-  categoryItems,
-  navSelections,
-  area,
-  categoryCounts,
-  markers,
-  ...rest
-}) => {
-  const { center, zoom, bounds, minZoom, maxZoom, gameSlug, subSelections } = config;
+const Map = ({ children, ...rest }) => {
+  const { config } = useMapContext();
+  const { center, zoom, bounds, minZoom, maxZoom } = config;
   return (
     <MapContainer
       style={{ background: "#967959", height: "100vh", width: "100vw" }}
@@ -34,16 +26,7 @@ const Map = ({
       {...rest}
     >
       {children(ReactLeaflet, L)}
-      <Sidebar
-        markerRefs={markerRefs}
-        game={gameSlug}
-        categoryGroups={categoryItems.categoryGroups}
-        navSelections={subSelections}
-        area={area}
-        categoryCounts={categoryCounts}
-        useMap={useMap}
-        markers={markers}
-      />
+      <Sidebar useMap={useMap} />
     </MapContainer>
   );
 };

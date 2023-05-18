@@ -1,8 +1,11 @@
 import React from "react";
 import { CategoryGroup } from ".";
 import useMapObject from "@hooks/useMapObject";
+import { useMapContext } from "src/context/app-context";
 
-const CategoryGroups = ({ categoryGroups, game, categoryCounts }) => {
+const CategoryGroups = () => {
+  const {categoryItems, game} = useMapContext();
+  const {categoryGroups} = categoryItems;
   return (
     <>
       {categoryGroups.map((categoryGroup) => {
@@ -19,7 +22,6 @@ const CategoryGroups = ({ categoryGroups, game, categoryCounts }) => {
             group={categoryGroup.name}
             categoryMap={categoryGroup.members}
             game={game}
-            categoryCounts={categoryCounts}
           />
         );
       })}

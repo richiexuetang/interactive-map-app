@@ -7,19 +7,14 @@ import { initialUserSettings } from "@data/LocalStorage/initial";
 import { CategoryGroups } from "../CategoryGroup";
 import { SearchInput, SearchResults } from "../Search";
 import { SETTING_HIDE_ALL, SETTING_HIDE_COMPLETED } from "@data/LocalStorage";
+import { useMapContext } from "src/context/app-context";
 
-const Content = ({
-  markerRefs,
-  game,
-  categoryGroups,
-  navSelections,
-  area,
-  categoryCounts,
-  useMap,
-  markers,
-}) => {
+const Content = ({ useMap }) => {
   const router = useRouter();
   const map = useMap();
+
+  const { area, game, config } = useMapContext();
+  const navSelections = config.subSelections;
 
   const [userSettings, setUserSettings] = useLocalStorage(
     "interactive_map_user_setting",
@@ -37,17 +32,17 @@ const Content = ({
 
   const toggle = (settingKey) => {
     const current = userSettings[settingKey][game];
-    const copy = {...userSettings};
+    const copy = { ...userSettings };
     copy[settingKey][game] = !current;
-    
+
     if (settingKey === SETTING_HIDE_COMPLETED) {
       setHideCompleted(!current);
-    } else if (settingKey === SETTING_HIDE_ALL){
+    } else if (settingKey === SETTING_HIDE_ALL) {
       setHideAllMarkers(!current);
     }
 
     setUserSettings({ ...copy });
-  }
+  };
 
   const navigateToArea = (selection) => {
     const { to } = selection;
@@ -72,20 +67,24 @@ const Content = ({
   return (
     <VStack>
       <HStack>
-        <Button onClick={() => toggle(SETTING_HIDE_ALL)} variant="underlined" fontSize="12px">
+        <Button
+          onClick={() => toggle(SETTING_HIDE_ALL)}
+          variant="underlined"
+          fontSize="12px"
+        >
           {hideAllMarkers ? "Show All" : "Hide All"}
         </Button>
-        <Button onClick={() => toggle(SETTING_HIDE_COMPLETED)} variant="underlined" fontSize="12px">
+        <Button
+          onClick={() => toggle(SETTING_HIDE_COMPLETED)}
+          variant="underlined"
+          fontSize="12px"
+        >
           {hideCompleted ? "Show Completed" : "Hide Completed"}
         </Button>
       </HStack>
 
       <Box mt={5}>
-        <SearchInput
-          results={results}
-          setResults={setResults}
-          markers={markers}
-        />
+        <SearchInput results={results} setResults={setResults} />
       </Box>
 
       {navSelections && (
@@ -111,18 +110,9 @@ const Content = ({
 
       <Box w="100%" p={4} pb={0}>
         {results && results.length ? (
-          <SearchResults
-            results={results}
-            markerRefs={markerRefs}
-            game={game}
-            useMap={useMap}
-          />
+          <SearchResults results={results} useMap={useMap} />
         ) : (
-          <CategoryGroups
-            categoryGroups={categoryGroups}
-            game={game}
-            categoryCounts={categoryCounts}
-          />
+          <CategoryGroups />
         )}
       </Box>
     </VStack>

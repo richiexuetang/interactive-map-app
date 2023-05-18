@@ -6,7 +6,6 @@ const DynamicMap = dynamic(() => import("./DynamicMap"), {
 });
 
 const Map = (props) => {
-  const { config, markerRefs, categoryItems, area, categoryCounts, markers } = props;
   return (
     <div>
       <DynamicMap {...props} />

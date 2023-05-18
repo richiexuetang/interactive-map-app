@@ -3,22 +3,22 @@ import React, { useEffect, useState } from "react";
 
 import useMapObject, { MapOrEntries } from "src/hooks/useMapObject";
 import MarkerButton from "../MarkerButton";
+import { useMapContext } from "src/context/app-context";
 
 interface CategoryGroupPropsType {
   group: string;
   categoryMap: MapOrEntries<string, string>;
   game: string;
-  categoryCounts: Object;
 }
 
 const CategoryGroup = ({
   group,
   categoryMap,
   game,
-  categoryCounts,
 }: CategoryGroupPropsType) => {
   const [members] = useMapObject<string, string>(categoryMap);
   const [categories, setCategories] = useState([]);
+  const {categoryCounts} = useMapContext();
 
   useEffect(() => {
     if (!categories.length) {

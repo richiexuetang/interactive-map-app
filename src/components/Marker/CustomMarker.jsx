@@ -15,12 +15,14 @@ import {
   SETTING_HIDE_COMPLETED,
   USER_SETTING,
 } from "@data/LocalStorage";
+import { useMapContext } from "src/context/app-context";
 
 const Marker = dynamic(() => import("./DynamicMarker"), {
   ssr: false,
 });
 
 const CustomMarker = (props) => {
+  const {area} = useMapContext();
   const { marker, gameSlug, useMap, rank } = props;
   const { _id: id, category, title, type, descriptions } = marker;
   

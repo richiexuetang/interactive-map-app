@@ -9,19 +9,13 @@ import {
   DrawerHeader,
   Image as ChakraImage,
 } from "@chakra-ui/react";
-import Content from "./Content/Content";
 import Link from "next/link";
 
-const Sidebar = ({
-  markerRefs,
-  game,
-  categoryGroups,
-  navSelections,
-  area,
-  categoryCounts,
-  useMap,
-  markers,
-}) => {
+import Content from "./Content/Content";
+import { useMapContext } from "src/context/app-context";
+
+const Sidebar = ({ useMap }) => {
+  const { game } = useMapContext();
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
@@ -88,16 +82,7 @@ const Sidebar = ({
             </Link>
           </DrawerHeader>
           <DrawerBody px="0" pb="0">
-            <Content
-              markerRefs={markerRefs}
-              game={game}
-              categoryGroups={categoryGroups}
-              navSelections={navSelections}
-              area={area}
-              categoryCounts={categoryCounts}
-              useMap={useMap}
-              markers={markers}
-            />
+            <Content useMap={useMap} />
           </DrawerBody>
         </DrawerContent>
       </Drawer>

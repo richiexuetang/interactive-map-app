@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { mapConfig } from "../game/[slug]";
 import Map from "@components/Map";
 import { areaConfig } from "@data/areaConfig";
 import CustomMarker from "@components/Marker/CustomMarker";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { initialUserSettings } from "@data/LocalStorage/initial";
-import { useState } from "react";
 import { categoryItemsConfig } from "@data/categoryItemsConfig";
+import { COMPLETED, USER_SETTING } from "@data/LocalStorage";
+import { useMapContext } from "src/context/app-context";
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
@@ -25,7 +26,7 @@ export async function getStaticProps(context) {
   );
 
   const categoryCounts = {};
-  markers.map(({category}) => {
+  markers.map(({ category }) => {
     if (!categoryCounts[category]) {
       categoryCounts[category] = 1;
     } else {
@@ -39,7 +40,7 @@ export async function getStaticProps(context) {
       areaId,
       config,
       categoryItems,
-      categoryCounts
+      categoryCounts,
     },
   };
 }
@@ -59,24 +60,40 @@ export async function getStaticPaths() {
   };
 }
 
-const MapPage = ({ markers, areaId, config, categoryItems, categoryCounts }) => {
+const MapPage = ({
+  markers,
+  areaId,
+  config,
+  categoryItems,
+  categoryCounts,
+}) => {
   if (typeof window !== "undefined") {
-    useLocalStorage("interactive_map_user_setting", initialUserSettings);
-    useLocalStorage("interactive_map_completed", {});
+    useLocalStorage(USER_SETTING, initialUserSettings);
+    useLocalStorage(COMPLETED, {});
   }
-  const [markerRefs, setMakerRefs] = useState([]);
+
+  const {
+    setArea,
+    setConfig,
+    setGame,
+    setCategoryItems,
+    setCategoryCounts,
+    setMarkers,
+  } = useMapContext();
+
+  useEffect(() => {
+    setArea(areaId);
+    setConfig(config);
+    setGame(config.gameSlug);
+    setCategoryItems(categoryItems);
+    setCategoryCounts(categoryCounts);
+    setMarkers(markers);
+  }, [areaId, config, categoryItems, categoryCounts]);
 
   return (
     <>
-      <Map
-        config={config}
-        area={areaId}
-        markerRefs={markerRefs}
-        categoryItems={categoryItems}
-        categoryCounts={categoryCounts}
-        markers={markers}
-      >
-        {({ TileLayer, useMap }, Leaflet) => (
+      <Map markers={markers}>
+        {({ TileLayer, useMap }) => (
           <>
             <TileLayer url={`/tiles/${areaId}/{z}/{x}/{y}.png`} />
             {markers &&
@@ -93,7 +110,7 @@ const MapPage = ({ markers, areaId, config, categoryItems, categoryCounts }) => 
           </>
         )}
       </Map>
-    </> 
+    </>
   );
 };
 

@@ -1,7 +1,9 @@
 import React, { useRef} from "react";
 import {Box, Image} from "@chakra-ui/react";
+import { useMapContext } from "src/context/app-context";
 
-const SearchResult = ({result, markerRef, game, useMap}) => {
+const SearchResult = ({result, useMap}) => {
+    const {game} = useMapContext();
     const {_id: id, category, title, coord, descriptions} = result;
     const ref = useRef(null);
     const map = useMap();
