@@ -2,12 +2,9 @@ import Head from "next/head";
 
 import Layout from "@components/Layout";
 import Section from "@components/Section";
-import Container from "@components/Container";
-import Map from "@components/Map";
-import Button from "@components/Button";
-import { Box, chakra, Text, Image } from "@chakra-ui/react";
+import { Box, chakra, Text } from "@chakra-ui/react";
+import Image from "next/image";
 
-import styles from "@styles/Home.module.scss";
 import Link from "next/link";
 
 const DEFAULT_CENTER = [83.93, -168.15];
@@ -58,7 +55,8 @@ export default function Home() {
                   wordBreak="break-word"
                 >
                   <Image
-                    objectFit="cover"
+                    width={210}
+                    height={144}
                     src={`${gameData.previewImage}`}
                     alt={`${gameData.previewImage}`}
                   />

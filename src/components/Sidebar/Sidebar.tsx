@@ -6,13 +6,13 @@ import {
   DrawerContent,
   IconButton,
   Box,
-  DrawerHeader,
-  Image as ChakraImage,
+  DrawerHeader
 } from "@chakra-ui/react";
 import Link from "next/link";
 
 import Content from "./Content/Content";
 import { useMapContext } from "src/context/app-context";
+import Image from "next/image";
 
 const Sidebar = ({ useMap }) => {
   const { game } = useMapContext();
@@ -72,12 +72,13 @@ const Sidebar = ({ useMap }) => {
               aria-label="sidebar-button"
             />
           </Box>
-          <DrawerHeader textAlign="center">
+          <DrawerHeader textAlign="center" _hover={{ cursor: "pointer" }}>
             <Link href="/">
-              <ChakraImage
+              <Image
+                width={360}
+                height={60}
                 src={`/images/logos/${game}/logo.png`}
                 alt="logo"
-                _hover={{ cursor: "pointer" }}
               />
             </Link>
           </DrawerHeader>

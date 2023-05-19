@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
+import { NextSeo } from "next-seo";
 
-import { mapConfig } from "../game/[slug]";
 import Map from "@components/Map";
-import { areaConfig } from "@data/areaConfig";
 import CustomMarker from "@components/Marker/CustomMarker";
-import useLocalStorage from "@hooks/useLocalStorage";
+import { areaConfig } from "@data/areaConfig";
 import { initialUserSettings } from "@data/LocalStorage/initial";
 import { categoryItemsConfig } from "@data/categoryItemsConfig";
 import { COMPLETED, USER_SETTING } from "@data/LocalStorage";
+import {mapConfig} from "@data/index";
+import useLocalStorage from "@hooks/useLocalStorage";
 import { useMapContext } from "src/context/app-context";
-import { NextSeo } from "next-seo";
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;

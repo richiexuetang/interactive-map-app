@@ -5,25 +5,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import Section from "@components/Section/Section";
 import Layout from "@components/Layout/Layout";
-
-export const mapConfig = [
-  {
-    name: "witcher3",
-    mapOptions: [
-      ["white-orchard", "White Orchard"],
-      ["velen-novigrad", "Velen & Novigrad"],
-      ["skellige", "Skellige Isles"],
-      ["kaer-morhen", "Kaer Morhen"],
-      ["toussaint", "Toussaint"],
-      ["fablesphere", "Fablesphere"],
-      ["isle-of-mists", "Isle of Mists"],
-    ],
-  },
-  {
-    name: "totk",
-    mapOptions: [["hyrule", "Hyrule"]],
-  },
-];
+import {mapConfig} from "@data/index";
 
 export async function getStaticProps(context) {
   const gameSlug = context.params.slug;
@@ -105,8 +87,8 @@ const GamePage = ({ config }) => {
                         <Image
                           src={`/images/maps/${config.name}/${option[0]}.jpg`}
                           alt={`${option[0]}-map`}
-                          width={250}
-                          height={100}
+                          width={210}
+                          height={144}
                           priority
                         />
                         <Box textAlign="center" flex="1 1 auto">
