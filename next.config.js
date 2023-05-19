@@ -5,6 +5,14 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 const nextConfig = {
   reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "i.ibb.co*",
+      },
+    ],
+  },
   webpack: (config) => {
     config.plugins.push(
       new CopyPlugin({

@@ -56,7 +56,7 @@ export async function getStaticPaths() {
 
   mapConfig.map((conf) => {
     conf.mapOptions.map((option) => {
-      paths.push(`/map/${option[0]}`);
+      paths.push(`/map/${option.path}`);
     });
   });
 

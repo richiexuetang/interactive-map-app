@@ -1,3 +1,4 @@
+//@ts-nocheck
 import L from "leaflet";
 import * as ReactLeaflet from "react-leaflet";
 import "leaflet.markercluster/dist/MarkerCluster.css";

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useEffect } from "react";
 import L from "leaflet";
 import * as ReactLeaflet from "react-leaflet";

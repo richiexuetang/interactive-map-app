@@ -6,7 +6,11 @@ import useLocalStorage from "@hooks/useLocalStorage";
 import { initialUserSettings } from "@data/LocalStorage/initial";
 import { CategoryGroups } from "../CategoryGroup";
 import { SearchInput, SearchResults } from "../Search";
-import { SETTING_HIDE_ALL, SETTING_HIDE_COMPLETED } from "@data/LocalStorage";
+import {
+  SETTING_HIDE_ALL,
+  SETTING_HIDE_COMPLETED,
+  USER_SETTING,
+} from "@data/LocalStorage";
 import { useMapContext } from "src/context/app-context";
 import { useMarkerContext } from "src/context/marker-context";
 
@@ -14,13 +18,14 @@ const Content = ({ useMap }) => {
   const router = useRouter();
   const map = useMap();
 
-  const {setHideAll, setHideCompleted, hideCompleted, hideAll} = useMarkerContext();
+  const { setHideAll, setHideCompleted, hideCompleted, hideAll } =
+    useMarkerContext();
 
   const { area, game, config } = useMapContext();
   const navSelections = config.subSelections;
 
   const [userSettings, setUserSettings] = useLocalStorage(
-    "interactive_map_user_setting",
+    USER_SETTING,
     initialUserSettings
   );
 
