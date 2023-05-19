@@ -52,13 +52,13 @@ const Content = ({ useMap }) => {
     }
 
     if (to === area) {
-      // console.log("" + map.getCenter().lat + "," + map.getCenter().lng);
-      // console.log(map.getZoom());
+      console.log("" + map.getCenter().lat + "," + map.getCenter().lng);
+      console.log(map.getZoom());
 
-      map.flyTo(selection.location, selection.zoom, {
-        animate: true,
-        duration: 0.5,
-      });
+      // map.flyTo(selection.location, selection.zoom, {
+      //   animate: true,
+      //   duration: 0.5,
+      // });
     } else {
       router.push(`/map/${to}`);
     }

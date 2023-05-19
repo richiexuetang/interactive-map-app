@@ -9,13 +9,13 @@ import { initialUserSettings } from "@data/LocalStorage/initial";
 import { categoryItemsConfig } from "@data/categoryItemsConfig";
 import { COMPLETED, USER_SETTING } from "@data/LocalStorage";
 import { useMapContext } from "src/context/app-context";
+import { NextSeo } from "next-seo";
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
 
-  const res = await fetch(
-    `${process.env.REACT_APP_API_ENDPOINT}/api/markers/${areaId}`
-  );
+  const res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/api/markers/${areaId}`);
+  //const res = await fetch(`http://localhost:8080/api/markers/${areaId}`);
 
   const data = await res.json();
   const markers = data.data;
@@ -96,6 +96,10 @@ const MapPage = ({
 
   return (
     <>
+      <NextSeo
+        title="Interactive Map for Zelda: Tears of the Kingdom totk | Witcher 3"
+        description="Interactive Map for Zelda: Tears of the Kingdom totk | Witcher 3"
+      />
       <Map markers={markers}>
         {({ TileLayer, useMap }) => (
           <>
@@ -104,6 +108,7 @@ const MapPage = ({
               markers.map((marker, i) => {
                 return (
                   <CustomMarker
+                    key={i}
                     useMap={useMap}
                     marker={marker}
                     gameSlug={config.gameSlug}

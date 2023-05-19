@@ -18,7 +18,7 @@ const CategoryGroup = ({
 }: CategoryGroupPropsType) => {
   const [members] = useMapObject<string, string>(categoryMap);
   const [categories, setCategories] = useState([]);
-  const {categoryCounts} = useMapContext();
+  const { categoryCounts } = useMapContext();
 
   useEffect(() => {
     if (!categories.length) {
@@ -40,6 +40,7 @@ const CategoryGroup = ({
         return (
           categoryCounts[key] && (
             <MarkerButton
+              key={key}
               game={game}
               type={value}
               num={categoryCounts[key]}

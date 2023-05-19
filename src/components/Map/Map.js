@@ -1,4 +1,3 @@
-import Sidebar from "@components/Sidebar/Sidebar";
 import dynamic from "next/dynamic";
 
 const DynamicMap = dynamic(() => import("./DynamicMap"), {
