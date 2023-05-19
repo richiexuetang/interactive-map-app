@@ -21,10 +21,11 @@ const Marker = dynamic(() => import("./DynamicMarker"), {
 });
 
 const CustomMarker = (props) => {
-  const {area} = useMapContext();
-  const { marker, gameSlug, useMap, rank } = props;
+  const { area } = useMapContext();
+  const { marker, useMap, rank, gameSlug } = props;
+
   const { _id: id, category, title, type, descriptions } = marker;
-  
+
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
   const [completed, setCompleted] = useState(completedMarkers[id]);
@@ -56,7 +57,13 @@ const CustomMarker = (props) => {
   return (
     <>
       {!shouldHide && (
-        <Marker {...props} opacity={completed ? 0.5 : 1}>
+        <Marker
+          opacity={completed ? 0.5 : 1}
+          gameSlug={gameSlug}
+          marker={marker}
+          useMap={useMap}
+          rank={rank}
+        >
           {({ Popup }) => {
             const CustomPopup = styled(Popup)`
               border-radius: 0;

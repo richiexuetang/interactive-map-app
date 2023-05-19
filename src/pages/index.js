@@ -2,16 +2,10 @@ import Head from "next/head";
 
 import Layout from "@components/Layout";
 import Section from "@components/Section";
-import { Box, chakra, Text } from "@chakra-ui/react";
+import { Box, chakra, Text, Image as ChakraImage } from "@chakra-ui/react";
 import Image from "next/image";
 
 import Link from "next/link";
-
-const DEFAULT_CENTER = [83.93, -168.15];
-const DEFAULT_BOUNDS = [
-  [83.8, -169.65],
-  [84, -167],
-];
 
 const gamesData = [
   {
@@ -45,34 +39,35 @@ export default function Home() {
 
         <Box display="flex" flexWrap="wrap" justifyContent="center">
           {gamesData.map((gameData) => (
-            <Box key={gameData.name} flex="0 0 25%" maxW="25%" px="1rem">
-              <Link href={`/game/${gameData.path}`}>
-                <chakra.a
-                  background="#e8dfd0 !important"
-                  cursor="pointer"
-                  display="flex"
-                  flexDirection="column"
-                  wordBreak="break-word"
-                >
-                  <Image
-                    width={210}
-                    height={144}
-                    src={`${gameData.previewImage}`}
-                    alt={`${gameData.previewImage}`}
-                  />
-                  <Box textAlign="center" flex="1 1 auto">
-                    <Text
-                      m="0 !important"
-                      color="#173936"
-                      fontWeight="400"
-                      fontSize="1.5rem"
-                      lineHeight="1.2"
-                    >
-                      {gameData.name}
-                    </Text>
-                  </Box>
-                </chakra.a>
-              </Link>
+            <Box key={gameData.name} px="1rem" maxW="25%">
+              <chakra.a
+                as={Link}
+                href={`/game/${gameData.path}`}
+                background="#e8dfd0 !important"
+                cursor="pointer"
+                display="flex"
+                flexDirection="column"
+                wordBreak="break-word"
+              >
+                <ChakraImage
+                  boxSize={240}
+                  objectFit="cover"
+                  src={`${gameData.previewImage}`}
+                  alt={`${gameData.previewImage}`}
+                  style={{ objectFit: "contain" }}
+                />
+                <Box textAlign="center" flex="1 1 auto">
+                  <Text
+                    m="0 !important"
+                    color="#173936"
+                    fontWeight="400"
+                    fontSize="1.5rem"
+                    lineHeight="1.2"
+                  >
+                    {gameData.name}
+                  </Text>
+                </Box>
+              </chakra.a>
             </Box>
           ))}
         </Box>

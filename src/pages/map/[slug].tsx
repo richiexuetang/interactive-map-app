@@ -10,6 +10,7 @@ import { COMPLETED, USER_SETTING } from "@data/LocalStorage";
 import {mapConfig} from "@data/index";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { useMapContext } from "src/context/app-context";
+import Markers from "@components/Marker/Markers";
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
@@ -104,7 +105,8 @@ const MapPage = ({
         {({ TileLayer, useMap }) => (
           <>
             <TileLayer url={`/tiles/${areaId}/{z}/{x}/{y}.png`} />
-            {markers &&
+            <Markers useMap={useMap} gameSlug={config.gameSlug}/>
+            {/* {markers &&
               markers.map((marker, i) => {
                 return (
                   <CustomMarker
@@ -115,7 +117,7 @@ const MapPage = ({
                     rank={i}
                   />
                 );
-              })}
+              })} */}
           </>
         )}
       </Map>
