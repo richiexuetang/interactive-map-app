@@ -16,7 +16,7 @@ import { useMapContext } from "src/context/app-context";
 
 const Sidebar = ({ useMap }) => {
   const { game } = useMapContext();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <>

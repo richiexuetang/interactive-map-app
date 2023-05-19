@@ -5,11 +5,7 @@ const DynamicMap = dynamic(() => import("./DynamicMap"), {
 });
 
 const Map = (props) => {
-  return (
-    <div>
-      <DynamicMap {...props} />
-    </div>
-  );
+  return <DynamicMap {...props} />;
 };
 
 export default Map;
