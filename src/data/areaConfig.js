@@ -499,20 +499,6 @@ export const areaConfig = [
                 flex: "100%"
             },
             {
-                name: "Great Sky Island",
-                to: "hyrule",
-                location: [1.0079390681501714, -0.6961018160589272],
-                zoom: 14.63,
-                flex: "32%"
-            },
-            {
-                name: "Akkala Sky",
-                to: "hyrule",
-                location: [1.104468572574996, -0.6288512389397539],
-                zoom: 12.9,
-                flex: "32%"
-            },
-            {
                 name: "Surface",
                 to: "hyrule",
                 location: [0.6984909381621621, -0.7724546477287465],
@@ -520,24 +506,10 @@ export const areaConfig = [
                 flex: "100%"
             },
             {
-                name: "Akkala Highlands",
-                to: "hyrule",
-                location: [0.758486950109451,-0.5977043378],
-                zoom: 13.67,
-                flex: "32%"
-            },
-            {
                 name: "Deep Akkala",
                 to: "hyrule",
                 location: [0.8044985442005653,-0.5996532952547807],
                 zoom: 14.87,
-                flex: "32%"
-            },
-            {
-                name: "East Necluda",
-                to: "hyrule",
-                location: [0.6038863886259566,-0.600779656200714],
-                zoom: 14.26,
                 flex: "32%"
             },
             {
