@@ -3,7 +3,12 @@ import { useMapContext } from "src/context/app-context";
 import CustomMarker from "./CustomMarker";
 import { useMarkerContext } from "src/context/marker-context";
 import useLocalStorage from "@hooks/useLocalStorage";
-import { SETTING_HIDE_ALL, SETTING_HIDE_COMPLETED, USER_SETTING, initialUserSettings } from "@data/LocalStorage";
+import {
+  SETTING_HIDE_ALL,
+  SETTING_HIDE_COMPLETED,
+  USER_SETTING,
+  initialUserSettings,
+} from "@data/LocalStorage";
 
 const Markers = (props) => {
   const { setHideAll, setHideCompleted } = useMarkerContext();
@@ -13,17 +18,17 @@ const Markers = (props) => {
 
   useEffect(() => {
     if (userSettings && userSettings[SETTING_HIDE_ALL][gameSlug]) {
-        setHideAll(true);
+      setHideAll(true);
     } else {
-        setHideAll(false);
+      setHideAll(false);
     }
   }, [setHideAll]);
 
   useEffect(() => {
     if (userSettings && userSettings[SETTING_HIDE_COMPLETED][gameSlug]) {
-        setHideCompleted(true);
+      setHideCompleted(true);
     } else {
-        setHideCompleted(false);
+      setHideCompleted(false);
     }
   }, [setHideCompleted]);
 
