@@ -16,7 +16,7 @@ import Image from "next/image";
 
 const Sidebar = ({ useMap }) => {
   const { game } = useMapContext();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
     <>
