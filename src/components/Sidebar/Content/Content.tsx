@@ -52,10 +52,10 @@ const Content = ({ useMap }) => {
       return;
     }
 
-    if (to === area) {
-      // console.log("" + map.getCenter().lat + "," + map.getCenter().lng);
-      // console.log(map.getZoom());
+    console.log("" + map.getCenter().lat + "," + map.getCenter().lng);
+    console.log(map.getZoom());
 
+    if (to === area) {
       map.flyTo(selection.location, selection.zoom, {
         animate: true,
         duration: 0.5,

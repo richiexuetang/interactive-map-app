@@ -10,7 +10,7 @@ const SearchResult = ({ result, useMap }) => {
   const map = useMap();
 
   const goToPosition = (pos) => {
-    map.flyTo(pos, map.getMaxZoom(), { animate: true, duration: 0.5 });
+    map.flyTo(pos, map.getMinZoom() + 2, { animate: true, duration: 0.5 });
   };
 
   return (

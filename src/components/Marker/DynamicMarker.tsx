@@ -160,7 +160,7 @@ const DynamicMarker = ({
         zIndexOffset={100 + rank}
         eventHandlers={{
           click: () => {
-            map.flyTo(marker.coord, map.getMaxZoom(), {
+            map.flyTo(marker.coord, map.getMinZoom() + 2, {
               animate: true,
               duration: 0.5,
             });

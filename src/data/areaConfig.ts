@@ -71,8 +71,8 @@ export const areaConfig = [
         name: "velen-novigrad",
         maxZoom: 14,
         minZoom: 8,
-        zoom: 10,
-        center: [83.93, -168.15],
+        zoom: 11.16,
+        center: [83.93452867987337,-168.36352006154092],
         bounds: [
             [83.8, -169.65],
             [84, -167]
@@ -207,8 +207,8 @@ export const areaConfig = [
         name: "skellige",
         maxZoom: 14,
         minZoom: 8,
-        zoom: 10,
-        center: [83.93, -168.15],
+        zoom: 11.11,
+        center: [83.93479035496269,-168.36735111494806],
         bounds: [
             [83.8, -169.65],
             [84, -167]
@@ -275,8 +275,8 @@ export const areaConfig = [
         name: "kaer-morhen",
         maxZoom: 12,
         minZoom: 8,
-        zoom: 10,
-        center: [83.93, -168.15],
+        zoom: 11.13,
+        center: [83.93473072594844,-168.36435688202212],
         bounds: [
             [83.8, -169.65],
             [84, -167]
@@ -313,142 +313,6 @@ export const areaConfig = [
             {
                 name: "Isle of Mists",
                 to: "isle-of-mists",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
-                name: "Toussaint",
-                to: "toussaint",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
-                name: "Fablesphere",
-                to: "fablesphere",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            }
-        ]
-    },
-    {
-        name: "fablesphere",
-        maxZoom: 12,
-        minZoom: 8,
-        zoom: 10,
-        center: [83.93, -168.15],
-        bounds: [
-            [83.8, -169.65],
-            [84, -167]
-        ],
-        gameSlug: "witcher3",
-        subSelections: [
-            {
-                name: "White Orchard",
-                to: "white-orchard",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
-                name: "Velen Novigrad",
-                to: "velen-novigrad",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
-                name: "Skellige",
-                to: "skellige",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
-                name: "Kaer Morhen",
-                to: "kaer-morhen",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
-                name: "Isle of Mists",
-                to: "isle-of-mists",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
-                name: "Toussaint",
-                to: "toussaint",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            }
-        ]
-    },
-    {
-        name: "isle-of-mists",
-        maxZoom: 12,
-        minZoom: 8,
-        zoom: 10,
-        center: [83.93, -168.15],
-        bounds: [
-            [83.8, -169.65],
-            [84, -167]
-        ],
-        gameSlug: "witcher3",
-        subSelections: [
-            {
-                name: "White Orchard",
-                to: "white-orchard",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
-                name: "Velen Novigrad",
-                to: "velen-novigrad",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
-                name: "Skellige",
-                to: "skellige",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
-                name: "Kaer Morhen",
-                to: "kaer-morhen",
                 location: [83.93, -168.15],
                 bounds: [
                     [83.8, -169.65],
@@ -479,8 +343,8 @@ export const areaConfig = [
         name: "hyrule",
         maxZoom: 15,
         minZoom: 9,
-        zoom: 9,
-        center: [0.8074683870228081,-1.1810302734375002],
+        zoom: 14.97,
+        center: [0.7025662387368882,-0.7162766852252856],
         bounds: [
             [0.5, -0.5],
             [0.9, 0]
@@ -504,13 +368,6 @@ export const areaConfig = [
                 location: [0.6984909381621621, -0.7724546477287465],
                 zoom: 11.53,
                 flex: "100%"
-            },
-            {
-                name: "Deep Akkala",
-                to: "hyrule",
-                location: [0.8044985442005653,-0.5996532952547807],
-                zoom: 14.87,
-                flex: "32%"
             },
             {
                 name: "Depths",
