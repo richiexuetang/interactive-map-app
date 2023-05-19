@@ -1,9 +1,12 @@
 //@ts-nocheck
-import L from "leaflet";
+import React, { useState, useEffect } from "react";
 import * as ReactLeaflet from "react-leaflet";
+import L from "leaflet";
+
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet/dist/leaflet.css";
+
 import Sidebar from "@components/Sidebar/Sidebar";
 import { useMapContext } from "src/context/app-context";
 import { MarkerProvider } from "src/context/marker-context";
@@ -14,6 +17,19 @@ const { MapContainer, useMap } = ReactLeaflet;
 const Map = ({ children, ...rest }) => {
   const { config } = useMapContext();
   const { center, zoom, bounds, minZoom, maxZoom } = config;
+
+  const [mapInfo, setMapInfo] = useState(null);
+
+  useEffect(() => {
+    if (!mapInfo && config) {
+      setMapInfo({...config});
+    }
+  }, [mapInfo, config]);
+
+  if (!mapInfo) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <MapContainer
       style={{ background: "#967959", height: "100vh", width: "100vw" }}

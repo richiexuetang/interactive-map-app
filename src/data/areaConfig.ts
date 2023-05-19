@@ -39,26 +39,8 @@ export const areaConfig = [
                 ]
             },
             {
-                name: "Isle of Mists",
-                to: "isle-of-mists",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
                 name: "Toussaint",
                 to: "toussaint",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
-                name: "Fablesphere",
-                to: "fablesphere",
                 location: [83.93, -168.15],
                 bounds: [
                     [83.8, -169.65],
@@ -107,26 +89,8 @@ export const areaConfig = [
                 ]
             },
             {
-                name: "Isle of Mists",
-                to: "isle-of-mists",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
                 name: "Toussaint",
                 to: "toussaint",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
-                name: "Fablesphere",
-                to: "fablesphere",
                 location: [83.93, -168.15],
                 bounds: [
                     [83.8, -169.65],
@@ -182,24 +146,6 @@ export const areaConfig = [
                     [83.8, -169.65],
                     [84, -167]
                 ]
-            },
-            {
-                name: "Isle of Mists",
-                to: "isle-of-mists",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
-                name: "Fablesphere",
-                to: "fablesphere",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
             }
         ]
     },
@@ -243,26 +189,8 @@ export const areaConfig = [
                 ]
             },
             {
-                name: "Isle of Mists",
-                to: "isle-of-mists",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
                 name: "Toussaint",
                 to: "toussaint",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
-                name: "Fablesphere",
-                to: "fablesphere",
                 location: [83.93, -168.15],
                 bounds: [
                     [83.8, -169.65],
@@ -311,15 +239,6 @@ export const areaConfig = [
                 ]
             },
             {
-                name: "Isle of Mists",
-                to: "isle-of-mists",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            },
-            {
                 name: "Toussaint",
                 to: "toussaint",
                 location: [83.93, -168.15],
@@ -328,15 +247,6 @@ export const areaConfig = [
                     [84, -167]
                 ]
             },
-            {
-                name: "Fablesphere",
-                to: "fablesphere",
-                location: [83.93, -168.15],
-                bounds: [
-                    [83.8, -169.65],
-                    [84, -167]
-                ]
-            }
         ]
     },
     {
