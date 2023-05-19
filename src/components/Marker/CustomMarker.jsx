@@ -20,28 +20,33 @@ const Marker = dynamic(() => import("./DynamicMarker"), {
 });
 
 const CustomMarker = (props) => {
-  const { hideAll, hideCompleted, setHiddenCategories, hiddenCategories } = useMarkerContext();
+  const { hideAll, hideCompleted, setHiddenCategories, hiddenCategories } =
+    useMarkerContext();
   const { area } = useMapContext();
   const { marker, useMap, rank, gameSlug } = props;
 
   const { _id: id, category, title, type, descriptions } = marker;
 
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
-  const completedMarkers = JSON.parse(window.localStorage.getItem(COMPLETED)) || {};
+  const completedMarkers =
+    JSON.parse(window.localStorage.getItem(COMPLETED)) || {};
   const [completed, setCompleted] = useState(completedMarkers[id]);
 
   const shouldHideCompleted = hideCompleted && completedMarkers[id];
   const shouldHideCategory = hiddenCategories[category];
 
   useEffect(() => {
-    if (userSettings && userSettings[SETTING_HIDDEN_CATEGORY][gameSlug][category]) {
+    if (
+      userSettings &&
+      userSettings[SETTING_HIDDEN_CATEGORY][gameSlug][category]
+    ) {
       const currentHidden = userSettings[SETTING_HIDDEN_CATEGORY][gameSlug];
       const targetCategory = currentHidden[category];
-      setHiddenCategories({...currentHidden, [targetCategory]: true})
+      setHiddenCategories({ ...currentHidden, [targetCategory]: true });
     } else {
       const currentHidden = userSettings[SETTING_HIDDEN_CATEGORY][gameSlug];
       const targetCategory = currentHidden[category];
-      setHiddenCategories({...currentHidden, [targetCategory]: false})
+      setHiddenCategories({ ...currentHidden, [targetCategory]: false });
     }
   }, [setHiddenCategories]);
 
@@ -73,7 +78,7 @@ const CustomMarker = (props) => {
           useMap={useMap}
           rank={rank}
         >
-          {({ Popup }) => {
+          {({ Popup, Tooltip }) => {
             const CustomPopup = styled(Popup)`
               border-radius: 0;
               white-space: nowrap;
@@ -109,51 +114,68 @@ const CustomMarker = (props) => {
               }
             `;
 
+            const CustomTooltip = styled(Tooltip)`
+              margin-left: 15px;
+
+              background: #221c0f;
+              border: 1px solid #584835;
+              color: #af894d;
+              overflow: hidden;
+
+              > p {
+                margin-right: 10px;
+                margin-bottom: 10px;
+                margin-top: 15px !important;
+              }
+            `;
             return (
-              <CustomPopup>
-                <HStack justifyContent="space-between">
-                  <Stack mt="3" spacing="3">
-                    <Text
-                      fontSize="1.25rem"
-                      fontWeight="normal"
-                      lineHeight="1.2"
-                      mb="5px !important"
-                      mt="0 !important"
-                      display="flex"
+              <>
+                <CustomPopup>
+                  <HStack justifyContent="space-between">
+                    <Stack mt="3" spacing="3">
+                      <Text
+                        fontSize="1.25rem"
+                        fontWeight="normal"
+                        lineHeight="1.2"
+                        mb="5px !important"
+                        mt="0 !important"
+                        display="flex"
+                      >
+                        {title}
+                        <LinkIcon
+                          mx="5px"
+                          _hover={{ cursor: "pointer" }}
+                          onClick={handleCopyLink}
+                        />
+                      </Text>
+                      <Text
+                        mr="10px !important"
+                        mb="10px !important"
+                        mt="0 !important"
+                        fontSize="11px"
+                      >
+                        {type}
+                      </Text>
+                      {descriptions &&
+                        descriptions.map((desc) => (
+                          <Box fontWeight="500" key={desc} mb="2px">
+                            <div dangerouslySetInnerHTML={{ __html: desc }} />
+                          </Box>
+                        ))}
+                    </Stack>
+                  </HStack>
+                  <Divider />
+                  <Box my={8} textAlign="center" pl={3}>
+                    <Checkbox
+                      isChecked={completed}
+                      onChange={handleCompleteCheck}
                     >
-                      {title}
-                      <LinkIcon
-                        mx="5px"
-                        _hover={{ cursor: "pointer" }}
-                        onClick={handleCopyLink}
-                      />
-                    </Text>
-                    <Text
-                      mr="10px !important"
-                      mb="10px !important"
-                      mt="0 !important"
-                      fontSize="11px"
-                    >
-                      {type}
-                    </Text>
-                    {descriptions &&
-                      descriptions.map((desc) => (
-                        <Box fontWeight="500" key={desc} mb="2px">
-                          <div dangerouslySetInnerHTML={{ __html: desc }} />
-                        </Box>
-                      ))}
-                  </Stack>
-                </HStack>
-                <Divider />
-                <Box my={8} textAlign="center" pl={3}>
-                  <Checkbox
-                    isChecked={completed}
-                    onChange={handleCompleteCheck}
-                  >
-                    Completed
-                  </Checkbox>
-                </Box>
-              </CustomPopup>
+                      Completed
+                    </Checkbox>
+                  </Box>
+                </CustomPopup>
+                <CustomTooltip>{title}</CustomTooltip>
+              </>
             );
           }}
         </Marker>
