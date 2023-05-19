@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Box, chakra, Text, Image  as ChakraImage } from "@chakra-ui/react";
+import { Box, chakra, Text, Image as ChakraImage } from "@chakra-ui/react";
 import useMapObject from "../../hooks/useMapObject";
 import Link from "next/link";
 import Section from "@components/Section/Section";
@@ -65,7 +65,7 @@ const GamePage = ({ config }) => {
                 config.mapOptions.map((option) => (
                   <Box key={option[1]} flex="0 0 25%" px="15px" mt="15px">
                     <Link href={"/map/[slug]"} as={`/map/${option[0]}`}>
-                      <chakra.a 
+                      <chakra.a
                         border="0"
                         background="#e8dfd0 !important"
                         cursor="pointer"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 
 import { Box, HStack, Stack, Text, Checkbox, Divider } from "@chakra-ui/react";
@@ -10,37 +10,46 @@ import {
   initialUserSettings,
   COMPLETED,
   SETTING_HIDDEN_CATEGORY,
-  SETTING_HIDE_ALL,
-  SETTING_HIDE_COMPLETED,
   USER_SETTING,
 } from "@data/LocalStorage";
 import { useMapContext } from "src/context/app-context";
+import { useMarkerContext } from "src/context/marker-context";
 
 const Marker = dynamic(() => import("./DynamicMarker"), {
   ssr: false,
 });
 
 const CustomMarker = (props) => {
+  const { hideAll, hideCompleted, setHiddenCategories, hiddenCategories } = useMarkerContext();
   const { area } = useMapContext();
   const { marker, useMap, rank, gameSlug } = props;
 
   const { _id: id, category, title, type, descriptions } = marker;
 
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
-  const [completedMarkers] = useLocalStorage(COMPLETED, {});
+  const completedMarkers = JSON.parse(window.localStorage.getItem(COMPLETED)) || {};
   const [completed, setCompleted] = useState(completedMarkers[id]);
 
-  const shouldHideInitial =
-    (userSettings[SETTING_HIDE_COMPLETED][gameSlug] && completedMarkers[id]) ||
-    userSettings[SETTING_HIDDEN_CATEGORY][gameSlug][category] ||
-    userSettings[SETTING_HIDE_ALL][gameSlug];
+  const shouldHideCompleted = hideCompleted && completedMarkers[id];
+  const shouldHideCategory = hiddenCategories[category];
 
-  const [shouldHide, setShouldHide] = useState(shouldHideInitial);
+  useEffect(() => {
+    if (userSettings && userSettings[SETTING_HIDDEN_CATEGORY][gameSlug][category]) {
+      const currentHidden = userSettings[SETTING_HIDDEN_CATEGORY][gameSlug];
+      const targetCategory = currentHidden[category];
+      setHiddenCategories({...currentHidden, [targetCategory]: true})
+    } else {
+      const currentHidden = userSettings[SETTING_HIDDEN_CATEGORY][gameSlug];
+      const targetCategory = currentHidden[category];
+      setHiddenCategories({...currentHidden, [targetCategory]: false})
+    }
+  }, [setHiddenCategories]);
 
   const handleCompleteCheck = () => {
     setCompleted(!completed);
     const json = JSON.parse(window.localStorage.getItem(COMPLETED));
 
+    console.log(json);
     let newJson = { ...json, [id]: true };
 
     if (completed) {
@@ -56,7 +65,7 @@ const CustomMarker = (props) => {
 
   return (
     <>
-      {!shouldHide && (
+      {!shouldHideCategory && !hideAll && !shouldHideCompleted && (
         <Marker
           opacity={completed ? 0.5 : 1}
           gameSlug={gameSlug}

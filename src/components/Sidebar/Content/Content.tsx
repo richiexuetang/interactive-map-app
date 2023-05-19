@@ -8,10 +8,13 @@ import { CategoryGroups } from "../CategoryGroup";
 import { SearchInput, SearchResults } from "../Search";
 import { SETTING_HIDE_ALL, SETTING_HIDE_COMPLETED } from "@data/LocalStorage";
 import { useMapContext } from "src/context/app-context";
+import { useMarkerContext } from "src/context/marker-context";
 
 const Content = ({ useMap }) => {
   const router = useRouter();
   const map = useMap();
+
+  const {setHideAll, setHideCompleted, hideCompleted, hideAll} = useMarkerContext();
 
   const { area, game, config } = useMapContext();
   const navSelections = config.subSelections;
@@ -19,13 +22,6 @@ const Content = ({ useMap }) => {
   const [userSettings, setUserSettings] = useLocalStorage(
     "interactive_map_user_setting",
     initialUserSettings
-  );
-
-  const [hideAllMarkers, setHideAllMarkers] = useState(
-    userSettings[SETTING_HIDE_ALL][game]
-  );
-  const [hideCompleted, setHideCompleted] = useState(
-    userSettings[SETTING_HIDE_COMPLETED][game]
   );
 
   const [results, setResults] = useState([]);
@@ -38,7 +34,7 @@ const Content = ({ useMap }) => {
     if (settingKey === SETTING_HIDE_COMPLETED) {
       setHideCompleted(!current);
     } else if (settingKey === SETTING_HIDE_ALL) {
-      setHideAllMarkers(!current);
+      setHideAll(!current);
     }
 
     setUserSettings({ ...copy });
@@ -72,7 +68,7 @@ const Content = ({ useMap }) => {
           variant="underlined"
           fontSize="12px"
         >
-          {hideAllMarkers ? "Show All" : "Hide All"}
+          {hideAll ? "Show All" : "Hide All"}
         </Button>
         <Button
           onClick={() => toggle(SETTING_HIDE_COMPLETED)}

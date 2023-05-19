@@ -2,12 +2,11 @@ import React, { useEffect } from "react";
 import { NextSeo } from "next-seo";
 
 import Map from "@components/Map";
-import CustomMarker from "@components/Marker/CustomMarker";
 import { areaConfig } from "@data/areaConfig";
 import { initialUserSettings } from "@data/LocalStorage/initial";
 import { categoryItemsConfig } from "@data/categoryItemsConfig";
 import { COMPLETED, USER_SETTING } from "@data/LocalStorage";
-import {mapConfig} from "@data/index";
+import { mapConfig } from "@data/index";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { useMapContext } from "src/context/app-context";
 import Markers from "@components/Marker/Markers";
@@ -15,7 +14,9 @@ import Markers from "@components/Marker/Markers";
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
 
-  const res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/api/markers/${areaId}`);
+  const res = await fetch(
+    `${process.env.REACT_APP_API_ENDPOINT}/api/markers/${areaId}`
+  );
   //const res = await fetch(`http://localhost:8080/api/markers/${areaId}`);
 
   const data = await res.json();
@@ -105,19 +106,7 @@ const MapPage = ({
         {({ TileLayer, useMap }) => (
           <>
             <TileLayer url={`/tiles/${areaId}/{z}/{x}/{y}.png`} />
-            <Markers useMap={useMap} gameSlug={config.gameSlug}/>
-            {/* {markers &&
-              markers.map((marker, i) => {
-                return (
-                  <CustomMarker
-                    key={i}
-                    useMap={useMap}
-                    marker={marker}
-                    gameSlug={config.gameSlug}
-                    rank={i}
-                  />
-                );
-              })} */}
+            <Markers useMap={useMap} gameSlug={config.gameSlug} />
           </>
         )}
       </Map>

@@ -2,10 +2,13 @@ import React from "react";
 import { Button, Box, Image } from "@chakra-ui/react";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { initialUserSettings } from "@data/LocalStorage/initial";
+import { useMarkerContext } from "src/context/marker-context";
+import { USER_SETTING } from "@data/LocalStorage";
 
 const MarkerButton = ({ type, num, category, game }) => {
+  const { setHiddenCategories, hiddenCategories } = useMarkerContext();
   const [userSettings, setUserSettings] = useLocalStorage(
-    "interactive_map_user_setting",
+    USER_SETTING,
     initialUserSettings
   );
 
@@ -17,6 +20,7 @@ const MarkerButton = ({ type, num, category, game }) => {
     const copy = { ...userSettings };
     copy.hiddenCategories[game][category] = !current;
     setUserSettings({ ...copy });
+    setHiddenCategories({ ...hiddenCategories, [category]: !current });
   };
 
   return (

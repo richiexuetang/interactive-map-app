@@ -146,17 +146,6 @@ const DynamicMarker = ({
     })();
   }, []);
 
-  // useEffect(() => {
-  //   (async function init() {
-  //     delete L.Icon.Default.prototype._getIconUrl;
-  //     L.Icon.Default.mergeOptions({
-  //       iconUrl: `images/icons/${gameSlug}/${marker.category}.png`,
-  //       iconSize: [66, 89],
-  //       iconAnchor: [33, 45],
-  //     });
-  //   })();
-  // }, []);
-
   return (
       <Marker
         position={marker.coord}

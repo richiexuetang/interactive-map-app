@@ -3,6 +3,7 @@ import * as ReactLeaflet from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import Sidebar from "@components/Sidebar/Sidebar";
 import { useMapContext } from "src/context/app-context";
+import { MarkerProvider } from "src/context/marker-context";
 
 const { MapContainer, useMap } = ReactLeaflet;
 
@@ -25,8 +26,10 @@ const Map = ({ children, ...rest }) => {
       maxZoom={maxZoom}
       {...rest}
     >
-      {children(ReactLeaflet, L)}
-      <Sidebar useMap={useMap} />
+      <MarkerProvider>
+        {children(ReactLeaflet, L)}
+        <Sidebar useMap={useMap} />
+      </MarkerProvider>
     </MapContainer>
   );
 };
