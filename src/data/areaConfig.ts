@@ -312,74 +312,52 @@ export const areaConfig = [
       },
     ],
   },
-//   {
-//     name: "hyrule-surface",
-//     maxZoom: 17,
-//     minZoom: 11,
-//     zoom: 11.53,
-//     center: [0.6984909381621621, -0.7724546477287465],
-//     bounds: [
-//       [0.5, -0.5],
-//       [0.9, 0],
-//     ],
-//     gameSlug: "totk",
-//     subSelections: [
-//       {
-//         name: "Sky",
-//         to: "hyrule",
-//         location: [1.0526990043409699, -0.7615146589836197],
-//         bounds: [
-//           [83.8, -169.65],
-//           [84, -167],
-//         ],
-//         zoom: 11.52,
-//       },
-//       {
-//         name: "Surface",
-//         to: "hyrule",
-//         location: [0.6984909381621621, -0.7724546477287465],
-//         zoom: 11.53,
-//       },
-//       {
-//         name: "Depths",
-//         to: "hyrule",
-//         location: [0.3703973477190078, -0.7705527723557173],
-//         zoom: 11.53,
-//         flex: "100%",
-//       },
-//     ],
-//   },
-//   {
-//     name: "hyrule-depths",
-//     maxZoom: 17,
-//     minZoom: 11,
-//     zoom: 11.53,
-//     center: [0.3703973477190078, -0.7705527723557173],
-//     bounds: [
-//       [0.5, -0.5],
-//       [0.9, 0],
-//     ],
-//     gameSlug: "totk",
-//     subSelections: [
-//       {
-//         name: "Sky",
-//         to: "hyrule",
-//         location: [1.0526990043409699, -0.7615146589836197],
-//         zoom: 11.52,
-//       },
-//       {
-//         name: "Surface",
-//         to: "hyrule",
-//         location: [0.6984909381621621, -0.7724546477287465],
-//         zoom: 11.53,
-//       },
-//       {
-//         name: "Depths",
-//         to: "hyrule",
-//         location: [0.3703973477190078, -0.7705527723557173],
-//         zoom: 11.53,
-//         flex: "100%",
-//       },
-//     ],
-//   },
+  {
+    name: "hyrule-surface",
+    maxZoom: 15,
+    minZoom: 11,
+    zoom: 11.53,
+    center: [0.6984909381621621, -0.7724546477287465],
+    bounds: [
+      [0.5, -0.5],
+      [0.9, 0],
+    ],
+    gameSlug: "totk",
+    subSelections: [
+      {
+        name: "Sky",
+        to: "hyrule-sky",
+        location: [1.0526990043409699, -0.7615146589836197],
+        zoom: 11.52,
+      },
+      {
+        name: "Depths",
+        to: "hyrule-depths",
+        location: [0.3703973477190078, -0.7705527723557173],
+        zoom: 11.53
+      },
+    ],
+  },
+  {
+    name: "hyrule-depths",
+    maxZoom: 15,
+    minZoom: 11,
+    zoom: 11.53,
+    center: [0.3703973477190078, -0.7705527723557173],
+    gameSlug: "totk",
+    subSelections: [
+      {
+        name: "Sky",
+        to: "hyrule-sky",
+        location: [1.0526990043409699, -0.7615146589836197],
+        zoom: 11.52,
+      },
+      {
+        name: "Surface",
+        to: "hyrule-surface",
+        location: [0.6984909381621621, -0.7724546477287465],
+        zoom: 11.53,
+      },
+    ],
+  },
 ];
