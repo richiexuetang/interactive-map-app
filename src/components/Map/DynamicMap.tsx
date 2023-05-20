@@ -38,7 +38,7 @@ const Map = ({ children, ...rest }) => {
       smoothSensitivity={15}
       doubleClickZoom={false}
       attributionControl={false}
-      zoomControl={false}
+      zoomControl={true}
       center={center}
       zoom={zoom}
       bounds={bounds}

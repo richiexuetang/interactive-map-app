@@ -52,8 +52,9 @@ const Content = ({ useMap }) => {
       return;
     }
 
-    // console.log("" + map.getCenter().lat + "," + map.getCenter().lng);
-    // console.log(map.getZoom());
+    console.log("" + map.getCenter().lat + "," + map.getCenter().lng);
+    console.log(map.getZoom());
+    console.log(map.getBounds());
 
     if (to === area) {
       map.flyTo(selection.location, selection.zoom, {
