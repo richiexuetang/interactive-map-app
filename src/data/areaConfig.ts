@@ -251,7 +251,7 @@ export const areaConfig = [
     },
     {
         name: "hyrule",
-        maxZoom: 15,
+        maxZoom: 16,
         minZoom: 9,
         zoom: 14.97,
         center: [0.7025662387368882,-0.7162766852252856],

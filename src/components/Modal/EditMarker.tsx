@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Text,
   Button,
@@ -55,18 +55,11 @@ const MarkerEdit = ({ id, descriptions, onClose, isOpen }) => {
       }
     );
 
-    console.log(data);
-
-    // api
-    //   .updateMarker(id, {
-    //     ...newData,
-    //   })
-    //   .then(() => {
-    //     toast.success("Edit successful");
-    //   })
-    //   .catch(() => {
-    //     toast.error("Something went wrong");
-    //   });
+    if (data.success) {
+        toast.success("Marker description added");
+    } else {
+        toast.error("Something went wrong")
+    }
   };
 
   return (
