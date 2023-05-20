@@ -116,6 +116,8 @@ const CustomMarker = (props) => {
               <>
                 <MapPopup
                   Popup={CustomPopup}
+                  title={title}
+                  type={type}
                   descriptions={descriptions}
                   id={id}
                   setCompleted={setCompleted}
