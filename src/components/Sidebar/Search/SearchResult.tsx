@@ -1,17 +1,51 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box } from "@chakra-ui/react";
 import Image from "next/image";
 import { useMapContext } from "src/context/app-context";
+import L from "leaflet";
 
 const SearchResult = ({ result, useMap }) => {
-  const { game } = useMapContext();
+  const { game, markerRefs } = useMapContext();
   const { _id: id, category, title, coord, descriptions } = result;
   const ref = useRef(null);
   const map = useMap();
+  const [markerOverlays, setMarkerOverlays] = useState({});
 
   const goToPosition = (pos) => {
-    map.flyTo(pos, map.getMinZoom() + 2, { animate: true, duration: 0.5 });
+    map.flyTo(pos, map.getMaxZoom() - 1, { animate: true, duration: 0.5 });
   };
+
+  const handleMouseEnter = () => {
+    const overlay = L.circle(markerRefs[id]._latlng, {
+      radius: (1000 + map.getZoom() * 100) / map.getZoom(),
+    });
+
+    setMarkerOverlays({ ...markerOverlays, [id]: overlay });
+    map.addLayer(overlay);
+  };
+
+  const handleMouseLeave = () => {
+    if (id in markerOverlays) {
+      map.removeLayer(markerOverlays[id]);
+
+      const newData = { ...markerOverlays };
+      delete newData[id];
+      setMarkerOverlays({ ...newData });
+    }
+  };
+
+  useEffect(() => {
+    const el = ref?.current;
+    if (el) {
+      el.addEventListener("mouseenter", handleMouseEnter);
+      el.addEventListener("mouseleave", handleMouseLeave);
+    }
+
+    return () => {
+      el.removeEventListener("mouseenter", handleMouseEnter);
+      el.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  });
 
   return (
     <Box
@@ -36,7 +70,7 @@ const SearchResult = ({ result, useMap }) => {
             height={32}
             src={`/images/icons/${game}/${category}.png`}
             alt={`${game}-${category}`}
-            style={{objectFit: "contain"}}
+            style={{ objectFit: "contain" }}
           />
         </Box>
 

@@ -9,6 +9,7 @@ export function MapProvider({ children }) {
   const [categoryItems, setCategoryItems] = useState({});
   const [categoryCounts, setCategoryCounts] = useState({});
   const [game, setGame] = useState(null);
+  const [markerRefs, setMarkerRefs] = useState({});
 
   return (
     <MapContext.Provider
@@ -24,7 +25,9 @@ export function MapProvider({ children }) {
         categoryCounts,
         setCategoryCounts,
         game, 
-        setGame
+        setGame,
+        markerRefs, 
+        setMarkerRefs
       }}
     >
       {children}

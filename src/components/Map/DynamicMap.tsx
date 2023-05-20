@@ -22,7 +22,7 @@ const Map = ({ children, ...rest }) => {
 
   useEffect(() => {
     if (!mapInfo && config) {
-      setMapInfo({...config});
+      setMapInfo({ ...config });
     }
   }, [mapInfo, config]);
 
@@ -49,7 +49,7 @@ const Map = ({ children, ...rest }) => {
       <MarkerProvider>
         <MarkerClusterGroup
           zoomToBoundsOnClick={true}
-          disableClusteringAtZoom={maxZoom-2}
+          disableClusteringAtZoom={maxZoom - 1}
           maxClusterRadius={25}
         >
           {children(ReactLeaflet, L)}
