@@ -33,9 +33,9 @@ const Map = ({ children, ...rest }) => {
   return (
     <MapContainer
       style={{ background: "#967959", height: "100vh", width: "100vw" }}
-      scrollWheelZoom={false}
       smoothWheelZoom={true}
       smoothSensitivity={15}
+      scrollWheelZoom={false}
       doubleClickZoom={false}
       attributionControl={false}
       zoomControl={true}
