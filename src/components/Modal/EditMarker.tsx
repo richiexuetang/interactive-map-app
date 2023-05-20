@@ -42,12 +42,11 @@ const MarkerEdit = ({ id, descriptions, onClose, isOpen }) => {
     }
 
     setDesc(newData);
-    const empty = []
 
     const { data } = await axios.put(
       `https://maps-server.onrender.com/api/marker/${id}`,
       {
-        descriptions: [],
+        descriptions: [...desc],
       },
       {
         headers: {

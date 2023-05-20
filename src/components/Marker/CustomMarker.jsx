@@ -51,22 +51,9 @@ const CustomMarker = (props) => {
     }
   }, [setHiddenCategories]);
 
-  const handleCompleteCheck = () => {
-    setCompleted(!completed);
-    const json = JSON.parse(window.localStorage.getItem(COMPLETED));
-
-    let newJson = { ...json, [id]: true };
-
-    if (completed) {
-      delete newJson[id];
-    }
-
-    window.localStorage.setItem(COMPLETED, JSON.stringify(newJson));
-  };
-
   return (
     <>
-      {!shouldHideCategory && !hideAll && !shouldHideCompleted && (
+      {(!shouldHideCategory && !hideAll) && !shouldHideCompleted && (
         <Marker
           opacity={completed ? 0.5 : 1}
           gameSlug={gameSlug}
@@ -129,10 +116,10 @@ const CustomMarker = (props) => {
               <>
                 <MapPopup
                   Popup={CustomPopup}
-                  title={title}
-                  type={type}
                   descriptions={descriptions}
                   id={id}
+                  setCompleted={setCompleted}
+                  completed={completed}
                 />
                 <CustomTooltip>{title}</CustomTooltip>
               </>
