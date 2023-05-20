@@ -54,6 +54,7 @@ export const initialUserSettings = {
       shrinequest: false,
       sideadventure: false,
       sidequest: false,
+      vehicle: false,
     },
     witcher3: {
       abandoned: false,
