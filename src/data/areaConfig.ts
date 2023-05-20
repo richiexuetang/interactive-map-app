@@ -270,21 +270,21 @@ export const areaConfig = [
                     [84, -167]
                 ],
                 zoom: 11.52,
-                flex: "100%"
+                flex: "22%"
             },
             {
                 name: "Surface",
                 to: "hyrule",
                 location: [0.6984909381621621, -0.7724546477287465],
                 zoom: 11.53,
-                flex: "100%"
+                flex: "22%"
             },
             {
                 name: "Depths",
                 to: "hyrule",
                 location: [0.3703973477190078, -0.7705527723557173],
                 zoom: 11.53,
-                flex: "100%"
+                flex: "22%"
             }
         ]
     }
