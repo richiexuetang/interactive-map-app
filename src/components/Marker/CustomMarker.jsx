@@ -14,6 +14,7 @@ import {
 } from "@data/LocalStorage";
 import { useMapContext } from "src/context/app-context";
 import { useMarkerContext } from "src/context/marker-context";
+import { MapPopup } from "@components/Popup";
 
 const Marker = dynamic(() => import("./DynamicMarker"), {
   ssr: false,
@@ -54,7 +55,6 @@ const CustomMarker = (props) => {
     setCompleted(!completed);
     const json = JSON.parse(window.localStorage.getItem(COMPLETED));
 
-    console.log(json);
     let newJson = { ...json, [id]: true };
 
     if (completed) {
@@ -62,10 +62,6 @@ const CustomMarker = (props) => {
     }
 
     window.localStorage.setItem(COMPLETED, JSON.stringify(newJson));
-  };
-
-  const handleCopyLink = () => {
-    console.log("link");
   };
 
   return (
@@ -79,6 +75,21 @@ const CustomMarker = (props) => {
           rank={rank}
         >
           {({ Popup, Tooltip }) => {
+            const CustomTooltip = styled(Tooltip)`
+              margin-left: 15px;
+
+              background: #221c0f;
+              border: 1px solid #584835;
+              color: #af894d;
+              overflow: hidden;
+
+              > p {
+                margin-right: 10px;
+                margin-bottom: 10px;
+                margin-top: 15px !important;
+              }
+            `;
+
             const CustomPopup = styled(Popup)`
               border-radius: 0;
               white-space: nowrap;
@@ -114,66 +125,15 @@ const CustomMarker = (props) => {
               }
             `;
 
-            const CustomTooltip = styled(Tooltip)`
-              margin-left: 15px;
-
-              background: #221c0f;
-              border: 1px solid #584835;
-              color: #af894d;
-              overflow: hidden;
-
-              > p {
-                margin-right: 10px;
-                margin-bottom: 10px;
-                margin-top: 15px !important;
-              }
-            `;
             return (
               <>
-                <CustomPopup>
-                  <HStack justifyContent="space-between">
-                    <Stack mt="3" spacing="3">
-                      <Text
-                        fontSize="1.25rem"
-                        fontWeight="normal"
-                        lineHeight="1.2"
-                        mb="5px !important"
-                        mt="0 !important"
-                        display="flex"
-                      >
-                        {title}
-                        <LinkIcon
-                          mx="5px"
-                          _hover={{ cursor: "pointer" }}
-                          onClick={handleCopyLink}
-                        />
-                      </Text>
-                      <Text
-                        mr="10px !important"
-                        mb="10px !important"
-                        mt="0 !important"
-                        fontSize="11px"
-                      >
-                        {type}
-                      </Text>
-                      {descriptions &&
-                        descriptions.map((desc) => (
-                          <Box fontWeight="500" key={desc} mb="2px">
-                            <div dangerouslySetInnerHTML={{ __html: desc }} />
-                          </Box>
-                        ))}
-                    </Stack>
-                  </HStack>
-                  <Divider />
-                  <Box my={8} textAlign="center" pl={3}>
-                    <Checkbox
-                      isChecked={completed}
-                      onChange={handleCompleteCheck}
-                    >
-                      Completed
-                    </Checkbox>
-                  </Box>
-                </CustomPopup>
+                <MapPopup
+                  Popup={CustomPopup}
+                  title={title}
+                  type={type}
+                  descriptions={descriptions}
+                  id={id}
+                />
                 <CustomTooltip>{title}</CustomTooltip>
               </>
             );
