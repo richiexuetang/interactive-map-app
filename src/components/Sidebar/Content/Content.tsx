@@ -18,7 +18,7 @@ const Content = ({ useMap }) => {
   const router = useRouter();
   const map = useMap();
 
-  const { setHideAll, setHideCompleted, hideCompleted, hideAll } =
+  const { setHideAll, setHideCompleted, hideCompleted, hideAll, setHiddenCategories } =
     useMarkerContext();
 
   const { area, game, config } = useMapContext();
@@ -41,7 +41,12 @@ const Content = ({ useMap }) => {
     } else if (settingKey === SETTING_HIDE_ALL) {
       setHideAll(!current);
       const hiddenCategories = userSettings["hiddenCategories"][game];
+      for (const key in hiddenCategories) {
+        console.log(key);
+        hiddenCategories[key] = !current;
+      }
       console.log(hiddenCategories)
+      setHiddenCategories({...hiddenCategories});
     }
 
     setUserSettings({ ...copy });
