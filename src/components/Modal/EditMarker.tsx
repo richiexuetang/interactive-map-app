@@ -21,7 +21,6 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import dynamic from "next/dynamic";
 import { MarkerInfo } from "src/types/markerInfo";
-import { marker } from "leaflet";
 
 const RichEditor = dynamic(() => import("../Editor/RichEditor"), {
   ssr: false,
