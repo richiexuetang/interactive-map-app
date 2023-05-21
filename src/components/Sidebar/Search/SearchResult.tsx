@@ -72,7 +72,7 @@ const SearchResult = ({ result, useMap }) => {
             height={32}
             src={`/images/icons/${game}/${category}.png`}
             alt={`${game}-${category}`}
-            style={{ objectFit: "contain" }}
+            style={{ objectFit: "contain", width: 'auto', height: 'auto' }}
           />
         </Box>
 

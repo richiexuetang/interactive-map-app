@@ -56,6 +56,9 @@ export const initialUserSettings = {
       well: false,
       caveentrance: false,
       lore: false,
+      fallingplatform: false,
+      hudsonsign: false,
+      cookingpot: false,
     },
     witcher3: {
       abandoned: false,
