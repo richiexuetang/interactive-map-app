@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Text,
   Button,
   Modal,
   ModalBody,
@@ -15,8 +14,8 @@ import draftToHtml from "draftjs-to-html";
 import { EditorState, convertToRaw } from "draft-js";
 import { toast } from "react-toastify";
 
-import dynamic from "next/dynamic";
 import axios from "axios";
+import dynamic from "next/dynamic";
 
 const RichEditor = dynamic(() => import("../Editor/RichEditor"), {
   ssr: false,
@@ -28,7 +27,6 @@ const MarkerEdit = ({ id, descriptions, onClose, isOpen }) => {
   );
 
   const [desc, setDesc] = useState(descriptions);
-  const [editMessage, setEditMessage] = useState("");
 
   const handleEditMarker = async () => {
     let newData = { ...desc };
@@ -37,7 +35,7 @@ const MarkerEdit = ({ id, descriptions, onClose, isOpen }) => {
       const rawRichText = draftToHtml(
         convertToRaw(editorState.getCurrentContent())
       );
-        console.log(rawRichText)
+
       newData = [...desc, rawRichText];
     }
 
@@ -84,7 +82,6 @@ const MarkerEdit = ({ id, descriptions, onClose, isOpen }) => {
           <Button variant="ghost" onClick={onClose}>
             Cancel
           </Button>
-          <Text>{editMessage}</Text>
         </ModalFooter>
       </ModalContent>
     </Modal>

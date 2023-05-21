@@ -1,10 +1,7 @@
-import { Container } from "@components/Container";
-
-import styles from "./Footer.module.scss";
 import { Box, Icon, chakra } from "@chakra-ui/react";
 import { FaGithub } from "react-icons/fa";
 
-const Footer = ({ ...rest }) => {
+const Footer = () => {
   return (
     <chakra.footer bg="#221c0f" fontSize={18} p="3rem">
       <Box w="100%" px="15px" mx="auto" pt="1rem" pb="0.25rem">

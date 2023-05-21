@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+
 import { LinkIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -9,13 +10,27 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { COMPLETED } from "@data/LocalStorage";
-import MarkerEdit from "@components/Modal/EditMarker";
+import { toast } from "react-toastify";
 
-const MapPopup = ({ Popup, title, type, descriptions, id, setCompleted, completed }) => {
+import MarkerEdit from "@components/Modal/EditMarker";
+import { useMapContext } from "@context/app-context";
+import { COMPLETED } from "@data/LocalStorage";
+import useCopyToClipboard from "@hooks/useCopyToClipboard";
+
+const MapPopup = ({
+  Popup,
+  title,
+  type,
+  descriptions,
+  id,
+  setCompleted,
+  completed,
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  console.log(descriptions)
+  const [value, copy] = useCopyToClipboard();
+  const { area } = useMapContext();
+
   const handleCompleteCheck = () => {
     setCompleted(!completed);
     const json = JSON.parse(window.localStorage.getItem(COMPLETED));
@@ -30,7 +45,8 @@ const MapPopup = ({ Popup, title, type, descriptions, id, setCompleted, complete
   };
 
   const handleCopyLink = () => {
-    console.log("link");
+    copy(`${process.env.REACT_APP_URL}/${area}?markerId=${id}`);
+    toast.success(`Link copied ${value}`);
   };
 
   if (isOpen) {
@@ -70,7 +86,6 @@ const MapPopup = ({ Popup, title, type, descriptions, id, setCompleted, complete
           </Text>
           <Text
             mr="10px !important"
-            mb="10px !important"
             mt="0 !important"
             fontSize="11px"
           >
@@ -78,9 +93,7 @@ const MapPopup = ({ Popup, title, type, descriptions, id, setCompleted, complete
           </Text>
           {descriptions &&
             descriptions.map((desc) => (
-              <Box fontWeight="500" key={desc} mb="2px">
-                <div dangerouslySetInnerHTML={{ __html: desc }} />
-              </Box>
+              <div dangerouslySetInnerHTML={{ __html: desc }} />
             ))}
         </Stack>
       </HStack>

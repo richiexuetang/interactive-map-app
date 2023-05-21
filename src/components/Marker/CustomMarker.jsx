@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 
-import { Box, HStack, Stack, Text, Checkbox, Divider } from "@chakra-ui/react";
-import { LinkIcon } from "@chakra-ui/icons";
 import styled from "@emotion/styled";
 
 import useLocalStorage from "@hooks/useLocalStorage";
@@ -12,8 +10,7 @@ import {
   SETTING_HIDDEN_CATEGORY,
   USER_SETTING,
 } from "@data/LocalStorage";
-import { useMapContext } from "src/context/app-context";
-import { useMarkerContext } from "src/context/marker-context";
+import { useMarkerContext } from "@context/marker-context";
 import { MapPopup } from "@components/Popup";
 
 const Marker = dynamic(() => import("./DynamicMarker"), {
@@ -23,7 +20,7 @@ const Marker = dynamic(() => import("./DynamicMarker"), {
 const CustomMarker = (props) => {
   const { hideAll, hideCompleted, setHiddenCategories, hiddenCategories } =
     useMarkerContext();
-  const { area } = useMapContext();
+
   const { marker, useMap, rank, gameSlug } = props;
 
   const { _id: id, category, title, type, descriptions } = marker;
@@ -83,8 +80,13 @@ const CustomMarker = (props) => {
               min-width: 350px;
               max-width: 450px;
               white-space: initial;
-              bottom: 45px !important;
+              bottom: 15px !important;
 
+              .leaflet-popup-content {
+                p {
+                  margin-top: 0 !important;
+                }
+              }
               .leaflet-popup-content-wrapper {
                 border-radius: 0;
                 background: #221c0f;
