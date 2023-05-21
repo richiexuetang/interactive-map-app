@@ -54,7 +54,7 @@ const MapPopup = ({
       <MarkerEdit
         onClose={onClose}
         isOpen={isOpen}
-        markerInfo={{id: id, descriptions: descriptions}}
+        markerInfo={{id: id, descriptions: descriptions, title: title}}
       />
     );
   }
