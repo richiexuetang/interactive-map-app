@@ -16,7 +16,6 @@ const { MapContainer, useMap } = ReactLeaflet;
 
 const Map = ({ children, ...rest }) => {
   const { config } = useMapContext();
-  const { center, zoom, bounds, minZoom, maxZoom } = config;
 
   const [mapInfo, setMapInfo] = useState(null);
 
@@ -39,17 +38,17 @@ const Map = ({ children, ...rest }) => {
       doubleClickZoom={false}
       attributionControl={false}
       zoomControl={true}
-      center={center}
-      zoom={zoom}
-      bounds={bounds}
-      minZoom={minZoom}
-      maxZoom={maxZoom}
+      center={mapInfo.center}
+      zoom={mapInfo.zoom}
+      bounds={mapInfo.bounds}
+      minZoom={mapInfo.minZoom}
+      maxZoom={mapInfo.maxZoom}
       {...rest}
     >
       <MarkerProvider>
         <MarkerClusterGroup
           zoomToBoundsOnClick={true}
-          disableClusteringAtZoom={maxZoom - 1}
+          disableClusteringAtZoom={mapInfo.maxZoom - 1}
           maxClusterRadius={15}
         >
           {children(ReactLeaflet, L)}
