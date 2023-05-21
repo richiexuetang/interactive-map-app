@@ -48,6 +48,7 @@ export async function getStaticProps(context) {
       categoryItems,
       categoryCounts,
     },
+    revalidate: 60
   };
 }
 

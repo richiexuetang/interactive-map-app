@@ -3,29 +3,28 @@ import dynamic from "next/dynamic";
 
 import styled from "@emotion/styled";
 
-import useLocalStorage from "@hooks/useLocalStorage";
+import { MapPopup } from "@components/Popup";
+import { useMarkerContext } from "@context/marker-context";
 import {
   initialUserSettings,
   COMPLETED,
   SETTING_HIDDEN_CATEGORY,
   USER_SETTING,
 } from "@data/LocalStorage";
-import { useMarkerContext } from "@context/marker-context";
-import { MapPopup } from "@components/Popup";
+import useLocalStorage from "@hooks/useLocalStorage";
 
 const Marker = dynamic(() => import("./DynamicMarker"), {
   ssr: false,
 });
 
 const CustomMarker = (props) => {
-  const { hideAll, hideCompleted, setHiddenCategories, hiddenCategories } =
-    useMarkerContext();
-
   const { marker, useMap, rank, gameSlug } = props;
-
   const { _id: id, category, title, type, descriptions } = marker;
 
+  const { hideAll, hideCompleted, setHiddenCategories, hiddenCategories } =
+    useMarkerContext();
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
+
   const completedMarkers =
     JSON.parse(window.localStorage.getItem(COMPLETED)) || {};
   const [completed, setCompleted] = useState(completedMarkers[id]);
@@ -50,7 +49,7 @@ const CustomMarker = (props) => {
 
   return (
     <>
-      {(!shouldHideCategory && !hideAll) && !shouldHideCompleted && (
+      {!shouldHideCategory && !hideAll && !shouldHideCompleted && (
         <Marker
           opacity={completed ? 0.5 : 1}
           gameSlug={gameSlug}
