@@ -33,38 +33,38 @@ const ImageLayout: React.FC<ImageLayoutPropsType> = ({
             cursor="pointer"
             _hover={{ opacity: 0.8 }}
           >
-            <Link href={`/${routeType}/[slug]`} as={`/${routeType}/${path}`} >
             <chakra.a
-              
+              as={Link}
+              href={`/${routeType}/${path}`}
               display="flex"
               flexDirection="column"
               overflow="hidden"
               background="#e8dfd0 !important"
               pos="relative"
-              h={{ lg: "300px", md: "250px", sm: "200px" }}
+              h="100%"
             >
               <Image
                 src={`${imagePath}`}
                 alt={`${imagePath}`}
                 placeholder="blur"
                 blurDataURL={`${blurDataUrl}`}
-                fill
-                style={{ objectFit: "cover" }}
+                width={170}
+                height={250}
+                style={{ width: "auto", height: "auto" }}
               />
+              <Box textAlign="center" background="#e8dfd0 !important">
+                <Text
+                  m="0 !important"
+                  color="#173936"
+                  fontWeight="400"
+                  fontSize="1.2rem"
+                  p="1rem"
+                  transition="all .2s ease-in-out"
+                >
+                  {name}
+                </Text>
+              </Box>
             </chakra.a>
-            </Link>
-            <Box textAlign="center" background="#e8dfd0 !important">
-              <Text
-                m="0 !important"
-                color="#173936"
-                fontWeight="400"
-                fontSize="1.2rem"
-                p="1rem"
-                transition="all .2s ease-in-out"
-              >
-                {name}
-              </Text>
-            </Box>
           </Box>
         ))}
       </Box>
