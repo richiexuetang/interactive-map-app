@@ -11,17 +11,16 @@ import useLocalStorage from "@hooks/useLocalStorage";
 import { useMapContext } from "src/context/app-context";
 import Markers from "@components/Marker/Markers";
 
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
   const areaId = context.params.slug;
 
   const res = await fetch(
-    `${process.env.REACT_APP_API_ENDPOINT}/api/markers/${areaId}`
+    `${process.env.REACT_APP_API_ENDPOINT}/markers/?area=${areaId}`
   );
-  //const res = await fetch(`http://localhost:8080/api/markers/${areaId}`);
 
-  const data = await res.json();
-  const markers = data.data;
+  const markers = await res.json();
 
+  console.log(markers);
   const sortedMarkers = [...markers];
   sortedMarkers.sort((a, b) => b.coord[0] - a.coord[0]);
 
@@ -47,25 +46,24 @@ export async function getStaticProps(context) {
       config,
       categoryItems,
       categoryCounts,
-    },
-    revalidate: 20
+    }
   };
 }
 
-export async function getStaticPaths() {
-  const paths = [];
+// export async function getStaticPaths() {
+//   const paths = [];
 
-  mapConfig.map((conf) => {
-    conf.mapOptions.map((option) => {
-      paths.push(`/map/${option.path}`);
-    });
-  });
+//   mapConfig.map((conf) => {
+//     conf.mapOptions.map((option) => {
+//       paths.push(`/map/${option.path}`);
+//     });
+//   });
 
-  return {
-    paths,
-    fallback: false,
-  };
-}
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// }
 
 const MapPage = ({
   markers,
