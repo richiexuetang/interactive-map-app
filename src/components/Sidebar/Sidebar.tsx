@@ -1,18 +1,19 @@
 import React, { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Drawer,
   DrawerBody,
   DrawerContent,
+  DrawerHeader,
   IconButton,
-  Box,
-  DrawerHeader
 } from "@chakra-ui/react";
-import Link from "next/link";
 
-import Content from "./Content/Content";
-import { useMapContext } from "src/context/app-context";
-import Image from "next/image";
+import { Content } from "./Content";
+import { useMapContext } from "@context/app-context";
 
 const Sidebar = ({ useMap }) => {
   const { game } = useMapContext();
@@ -73,13 +74,13 @@ const Sidebar = ({ useMap }) => {
             />
           </Box>
           <DrawerHeader textAlign="center" _hover={{ cursor: "pointer" }}>
-            <Link href="/">
+            <Link href={`/game/${game}`}>
               <Image
                 width={360}
                 height={60}
                 src={`/images/logos/${game}/logo.png`}
                 alt="logo"
-                style={{objectFit: "contain"}}
+                style={{ objectFit: "contain" }}
               />
             </Link>
           </DrawerHeader>

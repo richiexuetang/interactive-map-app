@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box } from "@chakra-ui/react";
 import Image from "next/image";
-import { useMapContext } from "src/context/app-context";
 import L from "leaflet";
+
+import { Box } from "@chakra-ui/react";
+
+import { useMapContext } from "src/context/app-context";
 
 const SearchResult = ({ result, useMap }) => {
   const { game, markerRefs } = useMapContext();

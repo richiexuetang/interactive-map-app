@@ -16,15 +16,23 @@ import { toast } from "react-toastify";
 
 import axios from "axios";
 import dynamic from "next/dynamic";
+import { MarkerInfo } from "src/types/markerInfo";
 
 const RichEditor = dynamic(() => import("../Editor/RichEditor"), {
   ssr: false,
 });
 
-const MarkerEdit = ({ id, descriptions, onClose, isOpen }) => {
+interface MarkerEditPropsType {
+  markerInfo: MarkerInfo;
+  onClose: any;
+  isOpen: boolean;
+}
+
+const MarkerEdit: React.FC<MarkerEditPropsType> = ({ markerInfo, onClose, isOpen }) => {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+  const {id, descriptions} = markerInfo;
 
   const [desc, setDesc] = useState(descriptions);
 
@@ -67,7 +75,7 @@ const MarkerEdit = ({ id, descriptions, onClose, isOpen }) => {
         <ModalHeader>Edit marker</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Box paddingInline="1rem" border="1px solid" h="400px">
+          <Box border="1px solid" h="100%">
             <RichEditor
               editorState={editorState}
               setEditorState={setEditorState}
@@ -76,10 +84,10 @@ const MarkerEdit = ({ id, descriptions, onClose, isOpen }) => {
         </ModalBody>
 
         <ModalFooter>
-          <Button onClick={handleEditMarker} type="submit">
+          <Button onClick={handleEditMarker} type="submit" mr={4}>
             Submit
           </Button>
-          <Button variant="ghost" onClick={onClose}>
+          <Button onClick={onClose}>
             Cancel
           </Button>
         </ModalFooter>

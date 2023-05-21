@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {Input} from "@chakra-ui/react";
-import { useMapContext } from "src/context/app-context";
+
+import { useMapContext } from "@context/app-context";
 
 const SearchInput = ({results, setResults}) => {
     const {markers} = useMapContext();
