@@ -152,6 +152,14 @@ export const categoryItemsConfig = [
       "npc",
       "vehicle",
       "well",
+      "hudsonsign",
+      "well",
+      "enemycamp",
+      "lore",
+      "cookingpot",
+      "fallingplatform",
+      "npc",
+      "caveentrance"
     ],
   },
   {

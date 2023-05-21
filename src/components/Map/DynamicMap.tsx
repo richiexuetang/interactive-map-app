@@ -3,16 +3,12 @@ import React, { useState, useEffect } from "react";
 import * as ReactLeaflet from "react-leaflet";
 import L from "leaflet";
 
+import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
-import "leaflet/dist/leaflet.css";
 
-import Sidebar from "@components/Sidebar/Sidebar";
-import { useMapContext } from "src/context/app-context";
-import { MarkerProvider } from "src/context/marker-context";
-import MarkerClusterGroup from "@components/Marker/MarkerClusterGroup";
-import { FullscreenControl } from "react-leaflet-fullscreen";
-
+import {Sidebar, MarkerClusterGroup} from "@components/.";
+import { useMapContext, MarkerProvider } from "@context/.";
 
 const { MapContainer, useMap } = ReactLeaflet;
 

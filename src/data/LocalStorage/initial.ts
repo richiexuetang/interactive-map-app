@@ -1,8 +1,4 @@
 export const initialUserSettings = {
-  hideAllMarkers: {
-    totk: false,
-    witcher3: false,
-  },
   hideCompletedMarkers: {
     totk: false,
     witcher3: false,
@@ -55,6 +51,11 @@ export const initialUserSettings = {
       sideadventure: false,
       sidequest: false,
       vehicle: false,
+      enemycamp: false,
+      npc: false,
+      well: false,
+      caveentrance: false,
+      lore: false,
     },
     witcher3: {
       abandoned: false,

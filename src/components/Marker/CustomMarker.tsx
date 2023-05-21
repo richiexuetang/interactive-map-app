@@ -49,7 +49,7 @@ const CustomMarker = (props) => {
 
   return (
     <>
-      {!shouldHideCategory && !hideAll && !shouldHideCompleted && (
+      {!shouldHideCategory && !shouldHideCompleted && (
         <Marker
           opacity={completed ? 0.5 : 1}
           gameSlug={gameSlug}

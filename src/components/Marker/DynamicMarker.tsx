@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { useEffect } from "react";
-import L from "leaflet";
 import * as ReactLeaflet from "react-leaflet";
+import L from "leaflet";
 
 import "leaflet/dist/leaflet.css";
 import { useMapContext } from "@context/app-context";

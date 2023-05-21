@@ -11,18 +11,10 @@ import {
 } from "@data/LocalStorage";
 
 const Markers = (props) => {
-  const { setHideAll, setHideCompleted } = useMarkerContext();
+  const { setHideCompleted } = useMarkerContext();
   const { useMap, gameSlug } = props;
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
   const { markers } = useMapContext();
-  
-  useEffect(() => {
-    if (userSettings && userSettings[SETTING_HIDE_ALL][gameSlug]) {
-      setHideAll(true);
-    } else {
-      setHideAll(false);
-    }
-  }, [setHideAll]);
 
   useEffect(() => {
     if (userSettings && userSettings[SETTING_HIDE_COMPLETED][gameSlug]) {

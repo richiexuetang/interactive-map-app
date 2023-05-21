@@ -1,7 +1,8 @@
 import React from "react";
+
 import { CategoryGroup } from ".";
+import { useMapContext } from "@context/app-context";
 import useMapObject from "@hooks/useMapObject";
-import { useMapContext } from "src/context/app-context";
 
 const CategoryGroups = () => {
   const {categoryItems, game} = useMapContext();

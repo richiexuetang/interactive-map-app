@@ -12,8 +12,8 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 
-import { Content } from "./Content";
-import { useMapContext } from "@context/app-context";
+import { Content } from ".";
+import { useMapContext } from "@context/.";
 
 const Sidebar = ({ useMap }) => {
   const { game } = useMapContext();
