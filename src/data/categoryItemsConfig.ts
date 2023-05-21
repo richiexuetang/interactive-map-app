@@ -77,10 +77,14 @@ export const categoryItemsConfig = [
           ["sidequest", "Side Quest"],
         ],
       },
+      // {
+      //   name: "enemies",
+      //   members: ["enemycamp", "Enemy Camp"],
+      // },
       {
         name: "other",
-        groupId: 6,
         members: [
+          ["caveentrance", "Cave Entrance"],
           ["vehicle", "Vehicle"],
         ],
       },

@@ -40,6 +40,8 @@ const Content = ({ useMap }) => {
       setHideCompleted(!current);
     } else if (settingKey === SETTING_HIDE_ALL) {
       setHideAll(!current);
+      const hiddenCategories = userSettings["hiddenCategories"][game];
+      console.log(hiddenCategories)
     }
 
     setUserSettings({ ...copy });

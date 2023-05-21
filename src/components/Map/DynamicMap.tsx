@@ -50,7 +50,7 @@ const Map = ({ children, ...rest }) => {
         <MarkerClusterGroup
           zoomToBoundsOnClick={true}
           disableClusteringAtZoom={maxZoom - 1}
-          maxClusterRadius={25}
+          maxClusterRadius={15}
         >
           {children(ReactLeaflet, L)}
         </MarkerClusterGroup>
