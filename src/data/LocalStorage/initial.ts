@@ -41,6 +41,7 @@ export const initialUserSettings = {
       npc: false,
       paragliderfabric: false,
       poi: false,
+      poe: false,
       sageswill: false,
       seed: false,
       settlement: false,
