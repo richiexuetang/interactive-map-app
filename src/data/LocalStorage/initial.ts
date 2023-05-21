@@ -39,6 +39,7 @@ export const initialUserSettings = {
       merchant: false,
       minigame: false,
       npc: false,
+      paragliderfabric: false,
       poi: false,
       sageswill: false,
       seed: false,
@@ -59,6 +60,8 @@ export const initialUserSettings = {
       zonaicharge: false,
       zonaicomponent: false,
       zonairelief: false,
+      schematicstone: false, 
+      yigaschematic: false
     },
     witcher3: {
       abandoned: false,
