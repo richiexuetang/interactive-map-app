@@ -87,7 +87,13 @@ export const categoryItemsConfig = [
         groupId: 7,
         members: [
           ["caveentrance", "Cave Entrance"],
+          ["cookingpot", "Cooking Pot"],
+          ["fallingplatform", "Falling Platform"],
+          ["hudsonsign", "Hudson Sign"],
+          ["lore", "Lore"],
+          ["npc", "NPC"],
           ["vehicle", "Vehicle"],
+          ["well", "Well"],
         ],
       },
     ],
