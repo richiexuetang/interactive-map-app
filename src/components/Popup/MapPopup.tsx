@@ -13,10 +13,9 @@ import { COMPLETED } from "@data/LocalStorage";
 import MarkerEdit from "@components/Modal/EditMarker";
 
 const MapPopup = ({ Popup, title, type, descriptions, id, setCompleted, completed }) => {
-  const completedMarkers =
-    JSON.parse(window.localStorage.getItem(COMPLETED)) || {};
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  console.log(descriptions)
   const handleCompleteCheck = () => {
     setCompleted(!completed);
     const json = JSON.parse(window.localStorage.getItem(COMPLETED));
