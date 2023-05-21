@@ -48,7 +48,7 @@ export async function getStaticProps(context) {
       categoryItems,
       categoryCounts,
     },
-    revalidate: 60
+    revalidate: 20
   };
 }
 
@@ -107,7 +107,7 @@ const MapPage = ({
         {({ TileLayer, useMap }) => (
           <>
             <TileLayer url={`/tiles/${areaId}/{z}/{x}/{y}.png`} />
-            <Markers useMap={useMap} gameSlug={config.gameSlug} />
+            <Markers useMap={useMap} gameSlug={config.gameSlug}/>
           </>
         )}
       </Map>

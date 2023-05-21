@@ -15,7 +15,7 @@ const Markers = (props) => {
   const { useMap, gameSlug } = props;
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
   const { markers } = useMapContext();
-
+  
   useEffect(() => {
     if (userSettings && userSettings[SETTING_HIDE_ALL][gameSlug]) {
       setHideAll(true);

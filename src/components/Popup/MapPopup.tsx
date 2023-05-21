@@ -96,8 +96,9 @@ const MapPopup = ({
             ))}
         </Stack>
       </HStack>
+      
       <Divider />
-      <Box my={8} textAlign="center" pl={3}>
+      <Box my={4} textAlign="center" pl={3}>
         <Checkbox isChecked={completed} onChange={handleCompleteCheck}>
           Completed
         </Checkbox>

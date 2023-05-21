@@ -316,7 +316,7 @@ export const areaConfig = [
   },
   {
     name: "hyrule-surface",
-    maxZoom: 15,
+    maxZoom: 17,
     minZoom: 11,
     zoom: 11.53,
     center: [0.6984909381621621, -0.7724546477287465],

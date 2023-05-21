@@ -152,7 +152,7 @@ const DynamicMarker = ({
         new L.icon({
           iconUrl: `/images/icons/${gameSlug}/${category}.png`,
           iconSize: [35, 45],
-          iconAnchor: [17, 22.5],
+          iconAnchor: [17, 45],
         })
       }
       zIndexOffset={100 + rank}

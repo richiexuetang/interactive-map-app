@@ -11,6 +11,8 @@ import Sidebar from "@components/Sidebar/Sidebar";
 import { useMapContext } from "src/context/app-context";
 import { MarkerProvider } from "src/context/marker-context";
 import MarkerClusterGroup from "@components/Marker/MarkerClusterGroup";
+import { FullscreenControl } from "react-leaflet-fullscreen";
+
 
 const { MapContainer, useMap } = ReactLeaflet;
 
@@ -18,6 +20,13 @@ const Map = ({ children, ...rest }) => {
   const { config } = useMapContext();
 
   const [mapInfo, setMapInfo] = useState(null);
+
+  useEffect(() => {
+    if (typeof window === undefined) {
+      console.log('herro')
+      return;
+    }
+  }, [window]);
 
   useEffect(() => {
     if (!mapInfo && config) {
@@ -37,12 +46,12 @@ const Map = ({ children, ...rest }) => {
       scrollWheelZoom={false}
       doubleClickZoom={false}
       attributionControl={false}
-      zoomControl={true}
-      center={mapInfo.center}
-      zoom={mapInfo.zoom}
-      bounds={mapInfo.bounds}
-      minZoom={mapInfo.minZoom}
-      maxZoom={mapInfo.maxZoom}
+      zoomControl={false}
+      center={config.center}
+      zoom={config.zoom}
+      bounds={config.bounds}
+      minZoom={config.minZoom}
+      maxZoom={config.maxZoom}
       {...rest}
     >
       <MarkerProvider>
