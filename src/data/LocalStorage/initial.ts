@@ -61,7 +61,7 @@ export const initialUserSettings = {
       zonaicharge: false,
       zonaicomponent: false,
       zonairelief: false,
-      schematicstone: false, 
+      schemastone: false, 
       yigaschematic: false
     },
     witcher3: {

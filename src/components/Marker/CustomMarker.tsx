@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { useSearchParams } from "next/navigation";
 
 import styled from "@emotion/styled";
 
@@ -12,17 +13,22 @@ import {
   USER_SETTING,
 } from "@data/LocalStorage";
 import useLocalStorage from "@hooks/useLocalStorage";
+import { useMapContext } from "@context/app-context";
 
 const Marker = dynamic(() => import("./DynamicMarker"), {
   ssr: false,
 });
 
 const CustomMarker = (props) => {
-  const { marker, useMap, rank, gameSlug } = props;
-  const { _id: id, category, title, type, descriptions } = marker;
+  const params = useSearchParams();
+  const markerSearchParam = params.get("markerId");
 
-  const { hideAll, hideCompleted, setHiddenCategories, hiddenCategories } =
+  const { marker, useMap, rank, gameSlug } = props;
+  const { _id: id, category, title, type, descriptions, coord } = marker;
+
+  const { hideCompleted, setHiddenCategories, hiddenCategories } =
     useMarkerContext();
+  const { markerRefs } = useMapContext();
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
 
   const completedMarkers =
@@ -31,6 +37,17 @@ const CustomMarker = (props) => {
 
   const shouldHideCompleted = hideCompleted && completedMarkers[id];
   const shouldHideCategory = hiddenCategories[category];
+
+  const map = useMap();
+
+  useEffect(() => {
+    if (markerSearchParam && markerSearchParam === id) {
+      map.flyTo(coord, map.getMaxZoom(), {
+        animate: true,
+        duration: 0.5,
+      });
+    }
+  }, [markerSearchParam]);
 
   useEffect(() => {
     if (

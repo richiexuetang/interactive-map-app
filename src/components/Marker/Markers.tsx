@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
+
 import { useMapContext } from "src/context/app-context";
 import CustomMarker from "./CustomMarker";
 import { useMarkerContext } from "src/context/marker-context";
 import useLocalStorage from "@hooks/useLocalStorage";
 import {
-  SETTING_HIDE_ALL,
   SETTING_HIDE_COMPLETED,
   USER_SETTING,
   initialUserSettings,

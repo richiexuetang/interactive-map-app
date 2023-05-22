@@ -1,4 +1,5 @@
 import React from "react";
+import { usePathname } from "next/navigation";
 
 import { LinkIcon, EditIcon } from "@chakra-ui/icons";
 import {
@@ -26,6 +27,7 @@ const MapPopup = ({
   setCompleted,
   completed,
 }) => {
+  const pathname = usePathname();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [value, copy] = useCopyToClipboard();
@@ -45,8 +47,9 @@ const MapPopup = ({
   };
 
   const handleCopyLink = () => {
-    copy(`${process.env.REACT_APP_URL}/${area}?markerId=${id}`);
-    toast.success(`Link copied ${value}`);
+    // copy(`http://localhost:3000/${pathname}?markerId=${id}`);
+    copy(`${process.env.REACT_APP_URL}/${pathname}?markerId=${id}`);
+    toast.success(`Link copied`);
   };
 
   if (isOpen) {
@@ -91,8 +94,8 @@ const MapPopup = ({
             {type}
           </Text>
           {descriptions &&
-            descriptions.map((desc) => (
-              <div dangerouslySetInnerHTML={{ __html: desc }} />
+            descriptions.map((desc, i) => (
+              <div key={i} dangerouslySetInnerHTML={{ __html: desc }} />
             ))}
         </Stack>
       </HStack>

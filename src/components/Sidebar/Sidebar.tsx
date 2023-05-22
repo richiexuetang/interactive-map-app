@@ -81,6 +81,7 @@ const Sidebar = ({ useMap }) => {
                 src={`/images/logos/${game}/logo.png`}
                 alt="logo"
                 style={{ objectFit: "contain", height: 'auto' }}
+                priority={true}
               />
             </Link>
           </DrawerHeader>

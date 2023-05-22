@@ -139,7 +139,7 @@ export const categoryItemsConfig = [
       "paragliderfabric",
       "poe",
       "poi",
-      "schematicstone",
+      "schemastone",
       "sageswill",
       "seed",
       "settlement",
