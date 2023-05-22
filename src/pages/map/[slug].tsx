@@ -20,7 +20,6 @@ export async function getServerSideProps(context) {
 
   const markers = await res.json();
 
-  console.log(markers);
   const sortedMarkers = [...markers];
   sortedMarkers.sort((a, b) => b.coord[0] - a.coord[0]);
 

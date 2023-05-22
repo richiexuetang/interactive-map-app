@@ -18,13 +18,6 @@ const Map = ({ children, ...rest }) => {
   const [mapInfo, setMapInfo] = useState(null);
 
   useEffect(() => {
-    if (typeof window === undefined) {
-      console.log('herro')
-      return;
-    }
-  }, [window]);
-
-  useEffect(() => {
     if (!mapInfo && config) {
       setMapInfo({ ...config });
     }
