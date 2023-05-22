@@ -46,35 +46,33 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
   const [title, setTitle] = useState(initialTitle);
 
   const handleEditMarker = async () => {
-    let newData = [...desc];
-
-    if (editorState.getCurrentContent().hasText()) {
-      const rawRichText = draftToHtml(
-        convertToRaw(editorState.getCurrentContent())
-      );
-
-      newData = [...desc, rawRichText];
-    }
-
-    setDesc(newData);
-
-    const { data } = await axios.put(
-      `https://maps-server.onrender.com/api/marker/${id}`,
-      {
-        descriptions: [...newData],
-        title: title,
-      },
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
+    const rawRichText = draftToHtml(
+      convertToRaw(editorState.getCurrentContent())
     );
 
-    if (data.success) {
-      toast.success("Marker description added");
-    } else {
-      toast.error("Something went wrong");
+    setDesc((prevState) => [...prevState, rawRichText]);
+
+    try {
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + id,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            title,
+            descriptions: desc,
+          }),
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const result = await response.json();
+
+      console.log(result);
+      toast.success("Marker update success");
+    } catch (errorMessage: any) {
+      toast.error(errorMessage);
     }
   };
 

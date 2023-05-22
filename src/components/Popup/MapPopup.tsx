@@ -1,7 +1,7 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 
-import { LinkIcon, EditIcon } from "@chakra-ui/icons";
+import { LinkIcon, EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
   Box,
   Checkbox,
@@ -30,8 +30,8 @@ const MapPopup = ({
   const pathname = usePathname();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const { setMarkers, markers } = useMapContext();
   const [value, copy] = useCopyToClipboard();
-  const { area } = useMapContext();
 
   const handleCompleteCheck = () => {
     setCompleted(!completed);
@@ -42,7 +42,6 @@ const MapPopup = ({
     if (completed) {
       delete newJson[id];
     }
-
     window.localStorage.setItem(COMPLETED, JSON.stringify(newJson));
   };
 
@@ -56,11 +55,31 @@ const MapPopup = ({
       <MarkerEdit
         onClose={onClose}
         isOpen={isOpen}
-        markerInfo={{id: id, descriptions: descriptions, title: title}}
+        markerInfo={{ id: id, descriptions: descriptions, title: title }}
       />
     );
   }
 
+  const handleDelete = async () => {
+    try {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/deleteMarker?id=` + id,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setMarkers(markers.filter((marker) => marker._id !== id));
+
+      toast.success("Delete Successful");
+    } catch (errorMessage: any) {
+      toast.error(errorMessage);
+    }
+  };
   return (
     <Popup>
       <HStack justifyContent="space-between">
@@ -84,12 +103,13 @@ const MapPopup = ({
               _hover={{ cursor: "pointer" }}
               onClick={onOpen}
             />
+            <DeleteIcon
+              mx="5px"
+              _hover={{ cursor: "pointer" }}
+              onClick={handleDelete}
+            />
           </Text>
-          <Text
-            mr="10px !important"
-            mt="0 !important"
-            fontSize="11px"
-          >
+          <Text mr="10px !important" mt="0 !important" fontSize="11px">
             {type}
           </Text>
           {descriptions &&
@@ -98,7 +118,7 @@ const MapPopup = ({
             ))}
         </Stack>
       </HStack>
-      
+
       <Divider />
       <Box my={4} textAlign="center" pl={3}>
         <Checkbox isChecked={completed} onChange={handleCompleteCheck}>

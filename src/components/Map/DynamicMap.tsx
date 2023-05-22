@@ -9,12 +9,12 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 import {Sidebar, MarkerClusterGroup} from "@components/.";
 import { useMapContext, MarkerProvider } from "@context/.";
+import NoteMarkers from "@components/Marker/NoteMarker/NoteMarkers";
 
 const { MapContainer, useMap } = ReactLeaflet;
 
 const Map = ({ children, ...rest }) => {
-  const { config } = useMapContext();
-
+  const { config, noteMarkers } = useMapContext();
   const [mapInfo, setMapInfo] = useState(null);
 
   useEffect(() => {
@@ -52,6 +52,7 @@ const Map = ({ children, ...rest }) => {
           {children(ReactLeaflet, L)}
         </MarkerClusterGroup>
         <Sidebar useMap={useMap} />
+        <NoteMarkers setRefresh={false} noteMarkers={noteMarkers}/>
       </MarkerProvider>
     </MapContainer>
   );

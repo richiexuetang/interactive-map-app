@@ -12,6 +12,8 @@ import Markers from "@components/Marker/Markers";
 import { Loader } from "@components/Loader";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { useRouter } from "next/router";
+import { AddMarkerControl } from "@components/Control";
+import NoteMarkers from "@components/Marker/NoteMarker/NoteMarkers";
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
@@ -128,8 +130,8 @@ const MapPage = ({
         {({ TileLayer, useMap }) => (
           <>
             <TileLayer url={`/tiles/${areaId}/{z}/{x}/{y}.png`} noWrap bounds={config.bounds}/>
-            {/* noWrap bounds={config.bounds} */}
             <Markers useMap={useMap} gameSlug={config.gameSlug} />
+            <AddMarkerControl useMap={useMap} />
           </>
         )}
       </Map>

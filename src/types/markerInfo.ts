@@ -1,4 +1,5 @@
 export interface MarkerInfo {
+    area?: string;
     id?: string;
     category?: string;
     descriptions?: string[];

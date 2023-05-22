@@ -13,7 +13,6 @@ import {
   USER_SETTING,
 } from "@data/LocalStorage";
 import useLocalStorage from "@hooks/useLocalStorage";
-import { useMapContext } from "@context/app-context";
 
 const Marker = dynamic(() => import("./DynamicMarker"), {
   ssr: false,
@@ -28,7 +27,7 @@ const CustomMarker = (props) => {
 
   const { hideCompleted, setHiddenCategories, hiddenCategories } =
     useMarkerContext();
-  const { markerRefs } = useMapContext();
+    
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
 
   const completedMarkers =
