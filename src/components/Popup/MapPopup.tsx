@@ -47,8 +47,7 @@ const MapPopup = ({
   };
 
   const handleCopyLink = () => {
-    // copy(`http://localhost:3000/${pathname}?markerId=${id}`);
-    copy(`${process.env.REACT_APP_URL}/${pathname}?markerId=${id}`);
+    copy(`${process.env.BASE_URL}${pathname}?markerId=${id}`);
     toast.success(`Link copied`);
   };
 
