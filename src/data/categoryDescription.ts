@@ -50,6 +50,7 @@ export const categoryDescriptions: CategoryDescriptionsType[] = [
       ["paragliderfabric", ""],
       ["poe", ""],
       ["poi", ""],
+      ["objective", ""],
       ["schemastone", ""],
       ["sageswill", "A small stone believed to have belonged to a sage. Allows you to power up one of the Sage abilities for every four spent."],
       ["seed", "Korok poop"],

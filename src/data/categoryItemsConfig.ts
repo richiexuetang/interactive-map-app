@@ -76,6 +76,7 @@ export const categoryItemsConfig = [
         members: [
           ["mainquest", "Main Quest"],
           ["memory", "Memory"],
+          ["objective", "Quest Objective"],
           ["shrinequest", "Shrine Quest"],
           ["sideadventure", "Side Adventure"],
           ["sidequest", "Side Quest"],
@@ -144,6 +145,7 @@ export const categoryItemsConfig = [
       "paragliderfabric",
       "poe",
       "poi",
+      "objective",
       "schemastone",
       "sageswill",
       "seed",
