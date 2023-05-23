@@ -112,6 +112,8 @@ const CreateMarker = ({ coordX, coordY, setRefresh, isOpen, onClose }) => {
       convertToRaw(editorState.getCurrentContent())
     );
 
+    setEditorState(EditorState.createWithContent(editorState.getCurrentContent()));
+
     setMarker((prevState) => {
       return Object.assign({}, prevState, {
         descriptions: [...prevState.descriptions, rawRichText],
