@@ -63,7 +63,6 @@ const MapPopup = ({
     toast.success(`Link copied`);
   };
 
-  console.log("session", session);
   if (isOpen) {
     return (
       <MarkerEdit

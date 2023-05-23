@@ -54,7 +54,7 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
     const newDesc = [...desc];
     newDesc.push(rawRichText);
     setDesc([...newDesc]);
-    
+
     try {
       let response = await fetch(
         `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + id,
@@ -72,7 +72,6 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
       );
       const result = await response.json();
 
-      console.log(result);
       toast.success("Marker update success");
     } catch (errorMessage: any) {
       toast.error(errorMessage);
@@ -83,14 +82,6 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
     const newDesc = [...desc];
     newDesc[i] = e.target.value;
     setDesc([...newDesc]);
-  };
-
-  const handleEditorChange = (e) => {
-    console.log(e.target.value);
-    setEditorState(
-      EditorState.createWithContent(convertFromRaw(JSON.parse(e.target.value)))
-    );
-    console.log(editorState);
   };
 
   return (

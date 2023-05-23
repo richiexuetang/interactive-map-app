@@ -68,7 +68,6 @@ const CreateMarker = ({ coordX, coordY, setRefresh, isOpen, onClose }) => {
   useEffect(() => {
     if (!marker && categoryTypeMap && categoryTypeMap["seed"]) {
       const value = categoryTypeMap["seed"];
-      console.log(value);
       setMarker({
         ...marker,
         area: areaId,
@@ -142,7 +141,6 @@ const CreateMarker = ({ coordX, coordY, setRefresh, isOpen, onClose }) => {
       );
       const { insertedId } = await response.json();
 
-      console.log(markers.length);
       setMarkers((prevState) => [
         ...prevState,
         {
