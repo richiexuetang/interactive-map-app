@@ -1,7 +1,5 @@
-import React from "react";
-import { usePathname } from "next/navigation";
-
-import { LinkIcon, EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import React, { useState } from "react";
+import { LinkIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Box,
   Checkbox,
@@ -11,27 +9,13 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { toast } from "react-toastify";
-
-import MarkerEdit from "@components/Modal/EditMarker";
-import { useMapContext } from "@context/app-context";
 import { COMPLETED } from "@data/LocalStorage";
-import useCopyToClipboard from "@hooks/useCopyToClipboard";
+import MarkerEdit from "@components/Modal/EditMarker";
 
-const MapPopup = ({
-  Popup,
-  title,
-  type,
-  descriptions,
-  id,
-  setCompleted,
-  completed,
-}) => {
-  const pathname = usePathname();
+const MapPopup = ({ Popup, title, type, descriptions, id, setCompleted, completed }) => {
+  const completedMarkers =
+    JSON.parse(window.localStorage.getItem(COMPLETED)) || {};
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const { setMarkers, markers } = useMapContext();
-  const [value, copy] = useCopyToClipboard();
 
   const handleCompleteCheck = () => {
     setCompleted(!completed);
@@ -42,12 +26,12 @@ const MapPopup = ({
     if (completed) {
       delete newJson[id];
     }
+
     window.localStorage.setItem(COMPLETED, JSON.stringify(newJson));
   };
 
   const handleCopyLink = () => {
-    copy(`${process.env.BASE_URL}${pathname}?markerId=${id}`);
-    toast.success(`Link copied`);
+    console.log("link");
   };
 
   if (isOpen) {
@@ -55,31 +39,12 @@ const MapPopup = ({
       <MarkerEdit
         onClose={onClose}
         isOpen={isOpen}
-        markerInfo={{ id: id, descriptions: descriptions, title: title }}
+        id={id}
+        descriptions={descriptions}
       />
     );
   }
 
-  const handleDelete = async () => {
-    try {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/deleteMarker?id=` + id,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      setMarkers(markers.filter((marker) => marker._id !== id));
-
-      toast.success("Delete Successful");
-    } catch (errorMessage: any) {
-      toast.error(errorMessage);
-    }
-  };
   return (
     <Popup>
       <HStack justifyContent="space-between">
@@ -103,24 +68,25 @@ const MapPopup = ({
               _hover={{ cursor: "pointer" }}
               onClick={onOpen}
             />
-            <DeleteIcon
-              mx="5px"
-              _hover={{ cursor: "pointer" }}
-              onClick={handleDelete}
-            />
           </Text>
-          <Text mr="10px !important" mt="0 !important" fontSize="11px">
+          <Text
+            mr="10px !important"
+            mb="10px !important"
+            mt="0 !important"
+            fontSize="11px"
+          >
             {type}
           </Text>
           {descriptions &&
-            descriptions.map((desc, i) => (
-              <div key={i} dangerouslySetInnerHTML={{ __html: desc }} />
+            descriptions.map((desc) => (
+              <Box fontWeight="500" key={desc} mb="2px">
+                <div dangerouslySetInnerHTML={{ __html: desc }} />
+              </Box>
             ))}
         </Stack>
       </HStack>
-
       <Divider />
-      <Box my={4} textAlign="center" pl={3}>
+      <Box my={8} textAlign="center" pl={3}>
         <Checkbox isChecked={completed} onChange={handleCompleteCheck}>
           Completed
         </Checkbox>

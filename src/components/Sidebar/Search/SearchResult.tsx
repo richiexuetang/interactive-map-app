@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import L from "leaflet";
-
 import { Box } from "@chakra-ui/react";
-
+import Image from "next/image";
 import { useMapContext } from "src/context/app-context";
+import L from "leaflet";
 
 const SearchResult = ({ result, useMap }) => {
   const { game, markerRefs } = useMapContext();
@@ -72,7 +70,7 @@ const SearchResult = ({ result, useMap }) => {
             height={32}
             src={`/images/icons/${game}/${category}.png`}
             alt={`${game}-${category}`}
-            style={{ objectFit: "contain", width: 'auto', height: 'auto' }}
+            style={{ objectFit: "contain" }}
           />
         </Box>
 

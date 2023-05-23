@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { NextSeo } from "next-seo";
 
 import Map from "@components/Map";
@@ -7,18 +7,17 @@ import { initialUserSettings } from "@data/LocalStorage/initial";
 import { categoryItemsConfig } from "@data/categoryItemsConfig";
 import { COMPLETED, USER_SETTING } from "@data/LocalStorage";
 import { mapConfig } from "@data/index";
+import useLocalStorage from "@hooks/useLocalStorage";
 import { useMapContext } from "src/context/app-context";
 import Markers from "@components/Marker/Markers";
-import { Loader } from "@components/Loader";
-import useLocalStorage from "@hooks/useLocalStorage";
-import { useRouter } from "next/router";
-import { AddMarkerControl } from "@components/Control";
-import NoteMarkers from "@components/Marker/NoteMarker/NoteMarkers";
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}`);
+  const res = await fetch(
+    `${process.env.REACT_APP_API_ENDPOINT}/api/markers/${areaId}`
+  );
+  //const res = await fetch(`http://localhost:8080/api/markers/${areaId}`);
 
   const data = await res.json();
   const markers = data.data;
@@ -49,7 +48,6 @@ export async function getStaticProps(context) {
       categoryItems,
       categoryCounts,
     },
-    revalidate: 20,
   };
 }
 
@@ -80,25 +78,6 @@ const MapPage = ({
     useLocalStorage(COMPLETED, {});
   }
 
-  const router = useRouter();
-
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const handleStart = (url) => url !== router.asPath && setLoading(true);
-    const handleComplete = (url) => url === router.asPath && setLoading(false);
-
-    router.events.on("routeChangeStart", handleStart);
-    router.events.on("routeChangeComplete", handleComplete);
-    router.events.on("routeChangeError", handleComplete);
-
-    return () => {
-      router.events.off("routeChangeStart", handleStart);
-      router.events.off("routeChangeComplete", handleComplete);
-      router.events.off("routeChangeError", handleComplete);
-    };
-  });
-
   const {
     setArea,
     setConfig,
@@ -117,9 +96,6 @@ const MapPage = ({
     setMarkers(markers);
   }, [areaId, config, categoryItems, categoryCounts]);
 
-  if (loading) {
-    return <Loader loading={loading} />;
-  }
   return (
     <>
       <NextSeo
@@ -129,9 +105,8 @@ const MapPage = ({
       <Map markers={markers}>
         {({ TileLayer, useMap }) => (
           <>
-            <TileLayer url={`/tiles/${areaId}/{z}/{x}/{y}.png`} noWrap bounds={config.bounds}/>
+            <TileLayer url={`/tiles/${areaId}/{z}/{x}/{y}.png`} />
             <Markers useMap={useMap} gameSlug={config.gameSlug} />
-            <AddMarkerControl useMap={useMap} />
           </>
         )}
       </Map>

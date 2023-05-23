@@ -1,12 +1,15 @@
-import {LogoContainer} from '@components/Container';
+import Link from 'next/link';
+import { FaGithub } from 'react-icons/fa';
 
-import { chakra } from '@chakra-ui/react';
+import {Container, LogoContainer} from '@components/Container';
+
+import styles from './Header.module.scss';
 
 const Header = () => {
   return (
-    <chakra.header w='100%' fontSize='1em' color='app.text' bg='app.background' p='1em 0' m='0'>
+    <header className={styles.header}>
         <LogoContainer />
-    </chakra.header>
+    </header>
   );
 };
 

@@ -5,9 +5,6 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 const nextConfig = {
   reactStrictMode: true,
-  env: {
-    BASE_URL: process.env.NEXT_PUBLIC_APP_URL,
-  },
   images: {
     remotePatterns: [
       {

@@ -3,18 +3,21 @@ import React, { useState, useEffect } from "react";
 import * as ReactLeaflet from "react-leaflet";
 import L from "leaflet";
 
-import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+import "leaflet/dist/leaflet.css";
 
-import {Sidebar, MarkerClusterGroup} from "@components/.";
-import { useMapContext, MarkerProvider } from "@context/.";
-import NoteMarkers from "@components/Marker/NoteMarker/NoteMarkers";
+import Sidebar from "@components/Sidebar/Sidebar";
+import { useMapContext } from "src/context/app-context";
+import { MarkerProvider } from "src/context/marker-context";
+import MarkerClusterGroup from "@components/Marker/MarkerClusterGroup";
 
 const { MapContainer, useMap } = ReactLeaflet;
 
 const Map = ({ children, ...rest }) => {
-  const { config, noteMarkers } = useMapContext();
+  const { config } = useMapContext();
+  const { center, zoom, bounds, minZoom, maxZoom } = config;
+
   const [mapInfo, setMapInfo] = useState(null);
 
   useEffect(() => {
@@ -35,24 +38,23 @@ const Map = ({ children, ...rest }) => {
       scrollWheelZoom={false}
       doubleClickZoom={false}
       attributionControl={false}
-      zoomControl={false}
-      center={config.center}
-      zoom={config.zoom}
-      bounds={config.bounds}
-      minZoom={config.minZoom}
-      maxZoom={config.maxZoom}
+      zoomControl={true}
+      center={center}
+      zoom={zoom}
+      bounds={bounds}
+      minZoom={minZoom}
+      maxZoom={maxZoom}
       {...rest}
     >
       <MarkerProvider>
         <MarkerClusterGroup
           zoomToBoundsOnClick={true}
-          disableClusteringAtZoom={mapInfo.minZoom + 2}
-          maxClusterRadius={15}
+          disableClusteringAtZoom={maxZoom - 1}
+          maxClusterRadius={25}
         >
           {children(ReactLeaflet, L)}
         </MarkerClusterGroup>
         <Sidebar useMap={useMap} />
-        <NoteMarkers setRefresh={false} noteMarkers={noteMarkers}/>
       </MarkerProvider>
     </MapContainer>
   );

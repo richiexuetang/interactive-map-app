@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
-import Layout from "@components/Layout";
-import { mapConfig } from "@data/.";
-import useMapObject from "@hooks/useMapObject";
+import useMapObject from "../../hooks/useMapObject";
+import Layout from "@components/Layout/Layout";
+import { mapConfig } from "@data/index";
 import { ImageLayout } from "@layout/Image";
 
 export async function getStaticProps(context) {

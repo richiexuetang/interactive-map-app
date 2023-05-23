@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Text,
   Button,
   Modal,
   ModalBody,
@@ -9,77 +10,56 @@ import {
   ModalHeader,
   ModalOverlay,
   Box,
-  Input,
-  FormControl,
-  FormLabel,
-  Textarea,
 } from "@chakra-ui/react";
 import draftToHtml from "draftjs-to-html";
 import { EditorState, convertToRaw } from "draft-js";
 import { toast } from "react-toastify";
 
-import axios from "axios";
 import dynamic from "next/dynamic";
-import { MarkerInfo } from "src/types/markerInfo";
+import axios from "axios";
 
 const RichEditor = dynamic(() => import("../Editor/RichEditor"), {
   ssr: false,
 });
 
-interface MarkerEditPropsType {
-  markerInfo: MarkerInfo;
-  onClose: any;
-  isOpen: boolean;
-}
-
-const MarkerEdit: React.FC<MarkerEditPropsType> = ({
-  markerInfo,
-  onClose,
-  isOpen,
-}) => {
+const MarkerEdit = ({ id, descriptions, onClose, isOpen }) => {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
-  const { id, descriptions, title: initialTitle } = markerInfo;
 
-  const [desc, setDesc] = useState<string[]>([...descriptions]);
-  const [title, setTitle] = useState(initialTitle);
+  const [desc, setDesc] = useState(descriptions);
+  const [editMessage, setEditMessage] = useState("");
 
   const handleEditMarker = async () => {
-    const rawRichText = draftToHtml(
-      convertToRaw(editorState.getCurrentContent())
+    let newData = { ...desc };
+
+    if (editorState.getCurrentContent().hasText()) {
+      const rawRichText = draftToHtml(
+        convertToRaw(editorState.getCurrentContent())
+      );
+        console.log(rawRichText)
+      newData = [...desc, rawRichText];
+    }
+
+    setDesc(newData);
+
+    const { data } = await axios.put(
+      `https://maps-server.onrender.com/api/marker/${id}`,
+      {
+        descriptions: [...desc],
+      },
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
     );
 
-    setDesc((prevState) => [...prevState, rawRichText]);
-
-    try {
-      let response = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + id,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            title,
-            descriptions: desc,
-          }),
-          headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const result = await response.json();
-
-      console.log(result);
-      toast.success("Marker update success");
-    } catch (errorMessage: any) {
-      toast.error(errorMessage);
+    if (data.success) {
+        toast.success("Marker description added");
+    } else {
+        toast.error("Something went wrong")
     }
-  };
-
-  const handleDescriptionChange = (e, i) => {
-    const newDesc = [...desc];
-    newDesc[i] = e.target.value;
-    setDesc([...newDesc]);
   };
 
   return (
@@ -89,27 +69,7 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
         <ModalHeader>Edit marker</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <FormControl>
-            <FormLabel mt={5}>Title:</FormLabel>
-            <Input
-              id="title"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-
-            <FormLabel mt={5}>Descriptions:</FormLabel>
-            {desc &&
-              desc.map((value, i) => (
-                <Textarea
-                  id={i.toString()}
-                  key={i}
-                  value={desc[i]}
-                  onChange={(e) => handleDescriptionChange(e, i)}
-                />
-              ))}
-          </FormControl>
-          <Box border="1px solid" h="100%">
+          <Box paddingInline="1rem" border="1px solid" h="400px">
             <RichEditor
               editorState={editorState}
               setEditorState={setEditorState}
@@ -118,10 +78,13 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
         </ModalBody>
 
         <ModalFooter>
-          <Button onClick={handleEditMarker} type="submit" mr={4}>
+          <Button onClick={handleEditMarker} type="submit">
             Submit
           </Button>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" onClick={onClose}>
+            Cancel
+          </Button>
+          <Text>{editMessage}</Text>
         </ModalFooter>
       </ModalContent>
     </Modal>

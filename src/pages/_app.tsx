@@ -2,9 +2,7 @@ import "@styles/globals.scss";
 import theme from "@styles/theme";
 import { ChakraProvider } from "@chakra-ui/react";
 import { ToastContainer } from "react-toastify";
-
 import "react-toastify/dist/ReactToastify.css";
-
 import { MapProvider } from "../context/app-context";
 
 function MyApp({ Component, pageProps }) {
@@ -22,6 +20,7 @@ function MyApp({ Component, pageProps }) {
         pauseOnHover
         theme="dark"
       />
+
       <MapProvider>
         <ChakraProvider theme={theme}>
           <Component {...pageProps} />

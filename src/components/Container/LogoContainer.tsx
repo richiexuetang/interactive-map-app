@@ -27,8 +27,6 @@ const LogoContainer = () => {
             alt={logo[0].src}
             width={200}
             height={50}
-            style={{ width: 'auto', height: 'auto' }}
-            priority={true}
           />
           <Text fontSize={16}>Interactive Game Maps</Text>
         </Box>
