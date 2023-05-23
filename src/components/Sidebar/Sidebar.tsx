@@ -7,7 +7,6 @@ import {
   Box,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerHeader,
   IconButton,
@@ -27,14 +26,12 @@ const Sidebar = ({ useMap }) => {
           <IconButton
             icon={
               sidebarOpen ? (
-                <ChevronRightIcon w="23px" h="48px" />
-              ) : (
                 <ChevronLeftIcon w="23px" h="48px" />
+              ) : (
+                <ChevronRightIcon w="23px" h="48px" />
               )
             }
             zIndex="1000"
-            float="right"
-            right={0}
             top="8px"
             bg="#221c0f"
             pos="absolute"
@@ -49,7 +46,7 @@ const Sidebar = ({ useMap }) => {
       <Drawer
         variant="aside"
         isOpen={sidebarOpen}
-        placement="right"
+        placement="left"
         colorScheme="sidebar.content"
         onClose={() => setSidebarOpen(false)}
         closeOnOverlayClick={false}
@@ -58,7 +55,6 @@ const Sidebar = ({ useMap }) => {
         size={"xs"}
       >
         <DrawerContent>
-          <DrawerCloseButton />
           <Box bg="#221c0f" position="absolute" left="100%" top="8px">
             <IconButton
               icon={

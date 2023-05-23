@@ -15,9 +15,10 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import draftToHtml from "draftjs-to-html";
-import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
 import { toast } from "react-toastify";
 
+import axios from "axios";
 import dynamic from "next/dynamic";
 import { MarkerInfo } from "src/types/markerInfo";
 
@@ -49,11 +50,7 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
       convertToRaw(editorState.getCurrentContent())
     );
 
-    setEditorState(EditorState.createWithContent(editorState.getCurrentContent()));
-
-    const newDesc = [...desc];
-    newDesc.push(rawRichText);
-    setDesc([...newDesc]);
+    setDesc((prevState) => [...prevState, rawRichText]);
 
     try {
       let response = await fetch(
@@ -62,7 +59,7 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
           method: "POST",
           body: JSON.stringify({
             title,
-            descriptions: newDesc,
+            descriptions: desc,
           }),
           headers: {
             Accept: "application/json, text/plain, */*",
@@ -72,6 +69,7 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
       );
       const result = await response.json();
 
+      console.log(result);
       toast.success("Marker update success");
     } catch (errorMessage: any) {
       toast.error(errorMessage);

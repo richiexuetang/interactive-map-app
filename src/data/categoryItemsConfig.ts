@@ -76,7 +76,6 @@ export const categoryItemsConfig = [
         members: [
           ["mainquest", "Main Quest"],
           ["memory", "Memory"],
-          ["objective", "Quest Objective"],
           ["shrinequest", "Shrine Quest"],
           ["sideadventure", "Side Adventure"],
           ["sidequest", "Side Quest"],
@@ -85,11 +84,7 @@ export const categoryItemsConfig = [
       {
         name: "enemies",
         groupId: 6,
-        members: [
-          ["enemycamp", "Enemy Camp"],
-          ["lynel", "Lynel"],
-          ["talus", "Talus"],
-        ],
+        members: [["enemycamp", "Enemy Camp"]],
       },
       {
         name: "other",
@@ -135,7 +130,6 @@ export const categoryItemsConfig = [
       "lighthouse",
       "lightroot",
       "lore",
-      "lynel",
       "mainquest",
       "mastersword",
       "memory",
@@ -145,7 +139,6 @@ export const categoryItemsConfig = [
       "paragliderfabric",
       "poe",
       "poi",
-      "objective",
       "schemastone",
       "sageswill",
       "seed",
@@ -156,7 +149,6 @@ export const categoryItemsConfig = [
       "sidequest",
       "stable",
       "surveyteambase",
-      "talus",
       "techlab",
       "temple",
       "tower",

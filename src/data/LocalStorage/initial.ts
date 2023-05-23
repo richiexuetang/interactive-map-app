@@ -42,7 +42,6 @@ export const initialUserSettings = {
       paragliderfabric: false,
       poi: false,
       poe: false,
-      objective: false,
       sageswill: false,
       seed: false,
       settlement: false,
@@ -63,9 +62,7 @@ export const initialUserSettings = {
       zonaicomponent: false,
       zonairelief: false,
       schemastone: false, 
-      yigaschematic: false,
-      lynel: false,
-      talus: false,
+      yigaschematic: false
     },
     witcher3: {
       abandoned: false,

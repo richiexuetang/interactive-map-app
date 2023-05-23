@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Box, Image } from "@chakra-ui/react";
 
 import { useMarkerContext } from "@context/marker-context";
@@ -7,21 +7,21 @@ import useLocalStorage from "@hooks/useLocalStorage";
 
 const MarkerButton = ({ type, num, category, game, groupHide }) => {
   const { setHiddenCategories, hiddenCategories } = useMarkerContext();
-  const [userSettings] = useLocalStorage(
+  const [userSettings, setUserSettings] = useLocalStorage(
     USER_SETTING,
     initialUserSettings
   );
-  const [hidden, setHidden] = useState(hiddenCategories[category] || groupHide);
 
   const toggleCategoryHide = () => {
     const current = userSettings[SETTING_HIDDEN_CATEGORY][game][category];
     const copy = { ...userSettings };
     copy.hiddenCategories[game][category] = !current;
     
-    window.localStorage.setItem(USER_SETTING, JSON.stringify(copy));
+    setUserSettings({ ...copy });
     setHiddenCategories({ ...hiddenCategories, [category]: !current });
-    setHidden(!current);
   };
+
+  const hidden = hiddenCategories[category] || groupHide;
 
   return (
     <Button
