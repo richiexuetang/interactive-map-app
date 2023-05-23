@@ -1,4 +1,5 @@
 import React from "react";
+import {useSession} from "next-auth/react";
 
 import {Box} from "@chakra-ui/react";
 import {EditIcon} from "@chakra-ui/icons";
@@ -6,6 +7,7 @@ import {EditIcon} from "@chakra-ui/icons";
 import { useMapContext } from "@context/app-context";
 
 const AddMarkerControl = ({useMap}) => {
+    const { data: session, status } = useSession();
     const map = useMap();
     const {noteMarkers, setNoteMarkers} = useMapContext();
 
@@ -17,15 +19,18 @@ const AddMarkerControl = ({useMap}) => {
     return (
         <Box className="leaflet-top leaflet-left" mt="90px">
             <Box className="leaflet-control leaflet-bar" bg="app.text">
-                <EditIcon
-                    minW="30px !important"
-                    w="30px"
-                    h="30px"
-                    p="0"
-                    color="app.background"
-                    onClick={handleEditToggle}
-                    _hover={{cursor: "pointer", color: "app.modal"}}
-                />
+            {status === "authenticated" && (
+              <EditIcon
+              minW="30px !important"
+              w="30px"
+              h="30px"
+              p="0"
+              color="app.background"
+              onClick={handleEditToggle}
+              _hover={{cursor: "pointer", color: "app.modal"}}
+          />
+            )}
+                
             </Box>
         </Box>
     );

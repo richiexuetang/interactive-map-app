@@ -2,14 +2,15 @@ import "@styles/globals.scss";
 import theme from "@styles/theme";
 import { ChakraProvider } from "@chakra-ui/react";
 import { ToastContainer } from "react-toastify";
+import { SessionProvider } from "next-auth/react";
 
 import "react-toastify/dist/ReactToastify.css";
 
 import { MapProvider } from "../context/app-context";
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps: {session, ...pageProps} }) {
   return (
-    <>
+    <SessionProvider session={session}>
       <ToastContainer
         position="top-right"
         autoClose={500}
@@ -27,7 +28,7 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
         </ChakraProvider>
       </MapProvider>
-    </>
+    </SessionProvider>
   );
 }
 

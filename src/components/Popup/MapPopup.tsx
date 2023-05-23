@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 import { LinkIcon, EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
@@ -34,6 +35,7 @@ const MapPopup = ({
   const pathname = usePathname();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { game } = useMapContext();
+  const { data: session, status } = useSession();
 
   const helperDescriptions = categoryDescriptions.filter(
     (item) => item.gameSlug === game
@@ -61,6 +63,7 @@ const MapPopup = ({
     toast.success(`Link copied`);
   };
 
+  console.log("session", session);
   if (isOpen) {
     return (
       <MarkerEdit
@@ -110,16 +113,20 @@ const MapPopup = ({
               _hover={{ cursor: "pointer" }}
               onClick={handleCopyLink}
             />
-            <EditIcon
-              mx="5px"
-              _hover={{ cursor: "pointer" }}
-              onClick={onOpen}
-            />
-            <DeleteIcon
-              mx="5px"
-              _hover={{ cursor: "pointer" }}
-              onClick={handleDelete}
-            />
+            {status === "authenticated" && (
+              <>
+                <EditIcon
+                  mx="5px"
+                  _hover={{ cursor: "pointer" }}
+                  onClick={onOpen}
+                />
+                <DeleteIcon
+                  mx="5px"
+                  _hover={{ cursor: "pointer" }}
+                  onClick={handleDelete}
+                />
+              </>
+            )}
           </Text>
           <Text mr="10px !important" mt="0 !important" fontSize="11px">
             {type}
@@ -129,12 +136,7 @@ const MapPopup = ({
               <div key={i} dangerouslySetInnerHTML={{ __html: desc }} />
             ))}
           {helperDesc && (
-            <chakra.p
-            mb='1em'
-              fontSize="90%"
-              fontStyle="italic"
-              opacity="0.8"
-            >
+            <chakra.p mb="1em" fontSize="90%" fontStyle="italic" opacity="0.8">
               {helperDesc}
             </chakra.p>
           )}
