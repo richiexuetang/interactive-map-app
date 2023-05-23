@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { LinkIcon, EditIcon, DeleteIcon } from "@chakra-ui/icons";
@@ -9,6 +9,7 @@ import {
   HStack,
   Stack,
   Text,
+  chakra,
   useDisclosure,
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
@@ -17,6 +18,8 @@ import MarkerEdit from "@components/Modal/EditMarker";
 import { useMapContext } from "@context/app-context";
 import { COMPLETED } from "@data/LocalStorage";
 import useCopyToClipboard from "@hooks/useCopyToClipboard";
+import { categoryDescriptions } from "@data/categoryDescription";
+import useMapObject from "@hooks/useMapObject";
 
 const MapPopup = ({
   Popup,
@@ -26,10 +29,18 @@ const MapPopup = ({
   id,
   setCompleted,
   completed,
+  category,
 }) => {
   const pathname = usePathname();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { game } = useMapContext();
 
+  const helperDescriptions = categoryDescriptions.filter(
+    (item) => item.gameSlug === game
+  )[0].categoryDescriptions;
+  const [categoryDescription] = useMapObject(helperDescriptions);
+
+  const [helperDesc] = useState(categoryDescription.get(category));
   const { setMarkers, markers } = useMapContext();
   const [value, copy] = useCopyToClipboard();
 
@@ -80,10 +91,11 @@ const MapPopup = ({
       toast.error(errorMessage);
     }
   };
+
   return (
     <Popup>
-      <HStack justifyContent="space-between">
-        <Stack mt="3" spacing="3">
+      <HStack justifyContent="space-between" mb={2}>
+        <Stack mt={3} spacing="3">
           <Text
             fontSize="1.25rem"
             fontWeight="normal"
@@ -116,6 +128,16 @@ const MapPopup = ({
             descriptions.map((desc, i) => (
               <div key={i} dangerouslySetInnerHTML={{ __html: desc }} />
             ))}
+          {helperDesc && (
+            <chakra.p
+            mb='1em'
+              fontSize="90%"
+              fontStyle="italic"
+              opacity="0.8"
+            >
+              {helperDesc}
+            </chakra.p>
+          )}
         </Stack>
       </HStack>
 

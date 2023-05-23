@@ -84,7 +84,11 @@ export const categoryItemsConfig = [
       {
         name: "enemies",
         groupId: 6,
-        members: [["enemycamp", "Enemy Camp"]],
+        members: [
+          ["enemycamp", "Enemy Camp"],
+          ["lynel", "Lynel"],
+          ["talus", "Talus"],
+        ],
       },
       {
         name: "other",
@@ -130,6 +134,7 @@ export const categoryItemsConfig = [
       "lighthouse",
       "lightroot",
       "lore",
+      "lynel",
       "mainquest",
       "mastersword",
       "memory",
@@ -149,6 +154,7 @@ export const categoryItemsConfig = [
       "sidequest",
       "stable",
       "surveyteambase",
+      "talus",
       "techlab",
       "temple",
       "tower",

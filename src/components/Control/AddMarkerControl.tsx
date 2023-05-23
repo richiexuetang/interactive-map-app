@@ -15,7 +15,7 @@ const AddMarkerControl = ({useMap}) => {
     };
 
     return (
-        <Box className="leaflet-top leaflet-right" mt="90px">
+        <Box className="leaflet-top leaflet-left" mt="90px">
             <Box className="leaflet-control leaflet-bar" bg="app.text">
                 <EditIcon
                     minW="30px !important"

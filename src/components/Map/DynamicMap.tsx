@@ -29,13 +29,11 @@ const Map = ({ children, ...rest }) => {
 
   return (
     <MapContainer
-      style={{ background: "#967959", height: "100vh", width: "100vw" }}
+      style={{ background: "black", height: "100vh", width: "100vw" }}
       smoothWheelZoom={true}
       smoothSensitivity={15}
       scrollWheelZoom={false}
-      doubleClickZoom={false}
       attributionControl={false}
-      zoomControl={false}
       center={config.center}
       zoom={config.zoom}
       bounds={config.bounds}

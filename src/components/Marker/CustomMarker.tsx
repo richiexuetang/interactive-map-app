@@ -95,7 +95,7 @@ const CustomMarker = (props) => {
               min-width: 350px;
               max-width: 450px;
               white-space: initial;
-              bottom: 15px !important;
+              bottom: 35px !important;
 
               .leaflet-popup-content {
                 p {
@@ -140,6 +140,7 @@ const CustomMarker = (props) => {
                   id={id}
                   setCompleted={setCompleted}
                   completed={completed}
+                  category={category}
                 />
                 <CustomTooltip>{title}</CustomTooltip>
               </>

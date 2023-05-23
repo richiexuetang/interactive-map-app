@@ -15,10 +15,9 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import draftToHtml from "draftjs-to-html";
-import { EditorState, convertToRaw } from "draft-js";
+import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import { toast } from "react-toastify";
 
-import axios from "axios";
 import dynamic from "next/dynamic";
 import { MarkerInfo } from "src/types/markerInfo";
 
@@ -50,8 +49,12 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
       convertToRaw(editorState.getCurrentContent())
     );
 
-    setDesc((prevState) => [...prevState, rawRichText]);
+    setEditorState(EditorState.createWithContent(editorState.getCurrentContent()));
 
+    const newDesc = [...desc];
+    newDesc.push(rawRichText);
+    setDesc([...newDesc]);
+    
     try {
       let response = await fetch(
         `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + id,
@@ -59,7 +62,7 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
           method: "POST",
           body: JSON.stringify({
             title,
-            descriptions: desc,
+            descriptions: newDesc,
           }),
           headers: {
             Accept: "application/json, text/plain, */*",
@@ -80,6 +83,14 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
     const newDesc = [...desc];
     newDesc[i] = e.target.value;
     setDesc([...newDesc]);
+  };
+
+  const handleEditorChange = (e) => {
+    console.log(e.target.value);
+    setEditorState(
+      EditorState.createWithContent(convertFromRaw(JSON.parse(e.target.value)))
+    );
+    console.log(editorState);
   };
 
   return (

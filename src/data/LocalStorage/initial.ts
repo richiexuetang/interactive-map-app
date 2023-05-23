@@ -62,7 +62,9 @@ export const initialUserSettings = {
       zonaicomponent: false,
       zonairelief: false,
       schemastone: false, 
-      yigaschematic: false
+      yigaschematic: false,
+      lynel: false,
+      talus: false,
     },
     witcher3: {
       abandoned: false,
