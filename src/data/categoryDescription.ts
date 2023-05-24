@@ -32,7 +32,7 @@ export const categoryDescriptions: CategoryDescriptionsType[] = [
       ["generalstore", ""],
       ["goddess", ""],
       ["hestu", ""],
-      ["hudsonsign", ""],
+      ["hudsonsign", "Signposts that Addison tries to scatter across Hyrule. Use the nearby materials to build a free-standing structure that supports the sign."],
       ["inn", ""],
       ["jewelry", ""],
       ["keyitem", ""],

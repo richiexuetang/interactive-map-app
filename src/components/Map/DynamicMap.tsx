@@ -4,10 +4,8 @@ import * as ReactLeaflet from "react-leaflet";
 import L from "leaflet";
 
 import "leaflet/dist/leaflet.css";
-import "leaflet.markercluster/dist/MarkerCluster.css";
-import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
-import {Sidebar, MarkerClusterGroup} from "@components/.";
+import { Sidebar } from "@components/.";
 import { useMapContext, MarkerProvider } from "@context/.";
 import NoteMarkers from "@components/Marker/NoteMarker/NoteMarkers";
 
@@ -42,15 +40,9 @@ const Map = ({ children, ...rest }) => {
       {...rest}
     >
       <MarkerProvider>
-        <MarkerClusterGroup
-          zoomToBoundsOnClick={true}
-          disableClusteringAtZoom={mapInfo.minZoom + 2}
-          maxClusterRadius={15}
-        >
-          {children(ReactLeaflet, L)}
-        </MarkerClusterGroup>
+        {children(ReactLeaflet, L)}
         <Sidebar useMap={useMap} />
-        <NoteMarkers setRefresh={false} noteMarkers={noteMarkers}/>
+        <NoteMarkers setRefresh={false} noteMarkers={noteMarkers} />
       </MarkerProvider>
     </MapContainer>
   );
