@@ -23,7 +23,7 @@ const CustomMarker = (props) => {
   const markerSearchParam = params.get("markerId");
 
   const { marker, useMap, rank, gameSlug } = props;
-  const { _id: id, category, title, type, descriptions, coord } = marker;
+  const { _id: id, category, title, descriptions, coord } = marker;
 
   const { hideCompleted, setHiddenCategories, hiddenCategories } =
     useMarkerContext();
@@ -135,7 +135,6 @@ const CustomMarker = (props) => {
                 <MapPopup
                   Popup={CustomPopup}
                   title={title}
-                  type={type}
                   descriptions={descriptions}
                   id={id}
                   setCompleted={setCompleted}

@@ -1,1 +1,1 @@
-export {default as MarkerClusterGroup} from './MarkerClusterGroup'
+export {default as CustomMarker} from "./CustomMarker";

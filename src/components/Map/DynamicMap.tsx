@@ -29,7 +29,7 @@ const Map = ({ children, ...rest }) => {
       style={{ background: "black", height: "100vh", width: "100vw" }}
       smoothWheelZoom={true}
       smoothSensitivity={15}
-      scrollWheelZoom={true}
+      scrollWheelZoom={false}
       attributionControl={false}
       center={config.center}
       zoom={config.zoom}

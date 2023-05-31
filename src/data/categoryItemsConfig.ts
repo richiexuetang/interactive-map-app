@@ -15,7 +15,7 @@ export const categoryItemsConfig = [
           ["lighthouse", "Lighthouse"],
           ["lightroot", "Lightroot"],
           ["poi", "Point of Interest"],
-          ["settlement", "Point of Interest"],
+          ["settlement", "Settlement"],
           ["shrine", "Shrine"],
           ["tower", "Skyview Tower"],
           ["techlab", "Tech Lab"],

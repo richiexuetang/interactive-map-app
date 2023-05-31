@@ -19,13 +19,10 @@ import MarkerEdit from "@components/Modal/EditMarker";
 import { useMapContext } from "@context/app-context";
 import { COMPLETED } from "@data/LocalStorage";
 import useCopyToClipboard from "@hooks/useCopyToClipboard";
-import { categoryDescriptions } from "@data/categoryDescription";
-import useMapObject from "@hooks/useMapObject";
 
 const MapPopup = ({
   Popup,
   title,
-  type,
   descriptions,
   id,
   setCompleted,
@@ -37,12 +34,12 @@ const MapPopup = ({
   const { game } = useMapContext();
   const { data: session, status } = useSession();
 
-  const helperDescriptions = categoryDescriptions.filter(
-    (item) => item.gameSlug === game
-  )[0].categoryDescriptions;
-  const [categoryDescription] = useMapObject(helperDescriptions);
+  // const helperDescriptions = categoryDescriptions.filter(
+  //   (item) => item.gameSlug === game
+  // )[0].categoryDescriptions;
+  // const [categoryDescription] = useMapObject(helperDescriptions);
 
-  const [helperDesc] = useState(categoryDescription.get(category));
+  // const [helperDesc] = useState(categoryDescription.get(category));
   const { setMarkers, markers } = useMapContext();
   const [value, copy] = useCopyToClipboard();
 
@@ -128,17 +125,17 @@ const MapPopup = ({
             )}
           </Text>
           <Text mr="10px !important" mt="0 !important" fontSize="11px">
-            {type}
+            {category.charAt(0).toUpperCase() + category.substring(1)}
           </Text>
           {descriptions &&
             descriptions.map((desc, i) => (
               <div key={i} dangerouslySetInnerHTML={{ __html: desc }} />
             ))}
-          {helperDesc && (
+          {/* {helperDesc && (
             <chakra.p mb="1em" fontSize="90%" fontStyle="italic" opacity="0.8">
               {helperDesc}
             </chakra.p>
-          )}
+          )} */}
         </Stack>
       </HStack>
 
