@@ -14,7 +14,6 @@ import { Loader } from "@components/Loader";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { useRouter } from "next/router";
 import { AddMarkerControl } from "@components/Control";
-import NoteMarkers from "@components/Marker/NoteMarker/NoteMarkers";
 
 const PolyLines = dynamic(() => import("@components/Line/PolyLines"), {
   ssr: false,
@@ -23,7 +22,9 @@ const PolyLines = dynamic(() => import("@components/Line/PolyLines"), {
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}`
+  );
 
   const data = await res.json();
   const markers = data.data;
@@ -37,22 +38,12 @@ export async function getStaticProps(context) {
     (o) => o.gameSlug === config.gameSlug
   );
 
-  const categoryCounts = {};
-  markers.map(({ category }) => {
-    if (!categoryCounts[category]) {
-      categoryCounts[category] = 1;
-    } else {
-      categoryCounts[category]++;
-    }
-  });
-
   return {
     props: {
       markers: sortedMarkers,
       areaId,
       config,
       categoryItems,
-      categoryCounts,
     },
     revalidate: 20,
   };
@@ -77,8 +68,7 @@ const MapPage = ({
   markers,
   areaId,
   config,
-  categoryItems,
-  categoryCounts,
+  categoryItems
 }) => {
   if (typeof window !== "undefined") {
     useLocalStorage(USER_SETTING, initialUserSettings);
@@ -109,7 +99,6 @@ const MapPage = ({
     setConfig,
     setGame,
     setCategoryItems,
-    setCategoryCounts,
     setMarkers,
   } = useMapContext();
 
@@ -118,9 +107,8 @@ const MapPage = ({
     setConfig(config);
     setGame(config.gameSlug);
     setCategoryItems(categoryItems);
-    setCategoryCounts(categoryCounts);
     setMarkers(markers);
-  }, [areaId, config, categoryItems, categoryCounts]);
+  }, [areaId, config, categoryItems]);
 
   if (loading) {
     return <Loader loading={loading} />;
@@ -134,7 +122,11 @@ const MapPage = ({
       <Map markers={markers}>
         {({ TileLayer, useMap }) => (
           <>
-            <TileLayer url={`/tiles/${areaId}/{z}/{x}/{y}.png`} noWrap bounds={config.bounds}/>
+            <TileLayer
+              url={`/tiles/${areaId}/{z}/{x}/{y}.png`}
+              noWrap
+              bounds={config.bounds}
+            />
             <Markers useMap={useMap} gameSlug={config.gameSlug} />
             <AddMarkerControl useMap={useMap} />
             <PolyLines />
