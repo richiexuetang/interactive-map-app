@@ -10,7 +10,6 @@ const CategoryGroups = () => {
   return (
     <>
       {categoryGroups.map((categoryGroup) => {
-        // eslint-disable-next-line
         const [members] = useMapObject<string, string>(categoryGroup.members);
         const categories = [];
         Array.from(members.entries()).map(([key]) => {

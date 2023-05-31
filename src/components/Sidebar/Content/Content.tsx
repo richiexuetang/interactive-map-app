@@ -74,6 +74,7 @@ const Content = ({ useMap }) => {
       for (const key in hiddenCategories) {
         hiddenCategories[key] = hide;
       }
+      
       setHiddenCategories({...hiddenCategories});
       const copy = { ...userSettings };
       copy[SETTING_HIDDEN_CATEGORY][game] = {...hiddenCategories};

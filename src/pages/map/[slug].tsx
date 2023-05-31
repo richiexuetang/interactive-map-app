@@ -1,5 +1,6 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NextSeo } from "next-seo";
+import dynamic from "next/dynamic";
 
 import Map from "@components/Map";
 import { areaConfig } from "@data/areaConfig";
@@ -14,6 +15,10 @@ import useLocalStorage from "@hooks/useLocalStorage";
 import { useRouter } from "next/router";
 import { AddMarkerControl } from "@components/Control";
 import NoteMarkers from "@components/Marker/NoteMarker/NoteMarkers";
+
+const PolyLines = dynamic(() => import("@components/Line/PolyLines"), {
+  ssr: false,
+});
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
@@ -132,6 +137,7 @@ const MapPage = ({
             <TileLayer url={`/tiles/${areaId}/{z}/{x}/{y}.png`} noWrap bounds={config.bounds}/>
             <Markers useMap={useMap} gameSlug={config.gameSlug} />
             <AddMarkerControl useMap={useMap} />
+            <PolyLines />
           </>
         )}
       </Map>

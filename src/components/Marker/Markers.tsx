@@ -12,9 +12,9 @@ import {
 
 const Markers = (props) => {
   const { setHideCompleted } = useMarkerContext();
-  const { useMap, gameSlug } = props;
+  const { useMap } = props;
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
-  const { markers } = useMapContext();
+  const { markers, game: gameSlug, canvasCategories } = useMapContext();
 
   useEffect(() => {
     if (userSettings && userSettings[SETTING_HIDE_COMPLETED][gameSlug]) {
@@ -28,7 +28,9 @@ const Markers = (props) => {
     <>
       {markers &&
         markers.map((marker, i) => {
+          const inCanvas = canvasCategories.includes(marker.category);
           return (
+            !inCanvas &&
             <CustomMarker
               key={i}
               useMap={useMap}
