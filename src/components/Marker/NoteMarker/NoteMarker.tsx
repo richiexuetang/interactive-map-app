@@ -56,8 +56,8 @@ const NoteMarker = ({position, setRefresh}) => {
                             mt="0 !important"
                             display="flex"
                         >
-                            <Text fontSize="15px">Current Latitude: {lat}</Text>
-                            <Text fontSize="15px">Current Longitude: {lng}</Text>
+                            <Text fontSize="15px">Current Latitude: {lat.toFixed(10)}</Text>
+                            <Text fontSize="15px">Current Longitude: {lng.toFixed(10)}</Text>
                             <EditIcon mx="5px" _hover={{cursor: "pointer"}} onClick={onOpen} />
                         </Box>
                         <Box m="5px -10px 0" overflow="hidden" textAlign="center" pb="10px">
