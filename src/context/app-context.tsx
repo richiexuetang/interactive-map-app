@@ -7,7 +7,6 @@ export function MapProvider({ children }) {
   const [markers, setMarkers] = useState({});
   const [config, setConfig] = useState({});
   const [categoryItems, setCategoryItems] = useState({});
-  const [categoryCounts, setCategoryCounts] = useState({});
   const [game, setGame] = useState(null);
   const [markerRefs, setMarkerRefs] = useState({});
   const [noteMarkers, setNoteMarkers] = useState([]);
@@ -24,8 +23,6 @@ export function MapProvider({ children }) {
         setConfig,
         categoryItems,
         setCategoryItems,
-        categoryCounts,
-        setCategoryCounts,
         game, 
         setGame,
         markerRefs, 

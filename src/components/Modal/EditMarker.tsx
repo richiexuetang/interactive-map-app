@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Modal,
@@ -13,6 +13,7 @@ import {
   FormControl,
   FormLabel,
   Textarea,
+  Select,
 } from "@chakra-ui/react";
 import draftToHtml from "draftjs-to-html";
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
@@ -20,6 +21,10 @@ import { toast } from "react-toastify";
 
 import dynamic from "next/dynamic";
 import { MarkerInfo } from "src/types/markerInfo";
+import { marker } from "leaflet";
+import useMapObject from "@hooks/useMapObject";
+import { categoryItemsConfig } from "@data/index";
+import { useMapContext } from "@context/app-context";
 
 const RichEditor = dynamic(() => import("../Editor/RichEditor"), {
   ssr: false,
@@ -39,14 +44,39 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
-  const { id, descriptions, title: initialTitle } = markerInfo;
+  const { id, descriptions, title: initialTitle, category } = markerInfo;
+  const {game} = useMapContext();
 
+  const [markerCategory, markerCategoryActions] = useMapObject<string, string>(
+    []
+  );
   const [desc, setDesc] = useState<string[]>([...descriptions]);
   const [title, setTitle] = useState(initialTitle);
+  const [categoryTypeMap, setCategoryTypeMap] = useState({});
+  const [marker, setMarker] = useState(null);
 
+  useEffect(() => {
+    if (!markerCategory.size) {
+      categoryItemsConfig.map((entry) => {
+        if (entry.gameSlug === game) {
+          entry.categoryGroups.map(({ members }) => {
+            Array.from(members.entries()).map(([key, value]) => {
+              const [category, type] = [...value];
+              markerCategoryActions.set(category, type);
+
+              setCategoryTypeMap((prevState) => {
+                return Object.assign({}, prevState, { [category]: type });
+              });
+            });
+          });
+        }
+      });
+    }
+  }, [markerCategory]);
+  
   const handleEditMarker = async () => {
     const newDesc = [...desc];
-    
+
     if (editorState.getCurrentContent().hasText()) {
       const rawRichText = draftToHtml(
         convertToRaw(editorState.getCurrentContent())
@@ -61,7 +91,7 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
     setDesc([...newDesc]);
 
     try {
-      let response = await fetch(
+      const response = await fetch(
         `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + id,
         {
           method: "POST",
@@ -89,6 +119,15 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
     setDesc([...newDesc]);
   };
 
+  const handleCategoryChange = (e) => {
+    setMarker((prevState) => {
+      return Object.assign({}, prevState, {
+        category: e.target.value,
+        type: categoryTypeMap[e.target.value],
+      });
+    });
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
       <ModalOverlay />
@@ -105,6 +144,19 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
               onChange={(e) => setTitle(e.target.value)}
             />
 
+            <Select
+              id="category"
+              value={category}
+              placeholder="Select the category from dropdown"
+              onChange={(e) => handleCategoryChange(e)}
+            >
+              {Array.from(markerCategory.entries()).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ))}
+            </Select>
+            
             <FormLabel mt={5}>Descriptions:</FormLabel>
             {desc &&
               desc.map((value, i) => (
