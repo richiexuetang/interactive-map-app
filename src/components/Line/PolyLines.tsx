@@ -32,6 +32,38 @@ const PolyLines = () => {
       endLong: -0.6839506294042931,
       category: "seed",
     },
+    {
+        startLat: 0.7998354503416558,
+        startLong: -0.6628629845017998,
+        id: "646946576fda291c35936397",
+        endLat: 0.7950415432894103,
+        endLong: -0.6782221982743254,
+        category: "seed",
+    },
+    {
+        startLat: 0.7983278911846298,
+        startLong: -0.7778745325304071,
+        id: "646946526fda291c3593614f",
+        endLat: 0.8002569026445439,
+        endLong: -0.7794739540712172,
+        category: "seed",
+    },
+    {
+        startLat: 0.7945085387167313,
+        startLong: -0.7940958314638903,
+        id: "646c464a6fda291c3593785f",
+        endLat: 0.795089059258667,
+        endLong: -0.7933071239006707,
+        category: "seed",
+    },
+    // {
+    //     startLat: ,
+    //     startLong: ,
+    //     id: "",
+    //     endLat: ,
+    //     endLong: ,
+    //     category: "seed",
+    // }
   ];
 
   return (

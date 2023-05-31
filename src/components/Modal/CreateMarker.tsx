@@ -108,17 +108,27 @@ const CreateMarker = ({ coordX, coordY, setRefresh, isOpen, onClose }) => {
   };
 
   const handleCreateMarker = async () => {
-    const rawRichText = draftToHtml(
-      convertToRaw(editorState.getCurrentContent())
+    setEditorState(
+      EditorState.createWithContent(editorState.getCurrentContent())
     );
 
-    setEditorState(EditorState.createWithContent(editorState.getCurrentContent()));
+    if (editorState.getCurrentContent().hasText()) {
+      const rawRichText = draftToHtml(
+        convertToRaw(editorState.getCurrentContent())
+      );
 
-    setMarker((prevState) => {
-      return Object.assign({}, prevState, {
-        descriptions: [...prevState.descriptions, rawRichText],
+      setMarker((prevState) => {
+        return Object.assign({}, prevState, {
+          descriptions: [...prevState.descriptions, rawRichText],
+        });
       });
-    });
+    } else {
+      setMarker((prevState) => {
+        return Object.assign({}, prevState, {
+          descriptions: [...prevState.descriptions],
+        });
+      });
+    }
 
     const { title, category, descriptions, area, coord, type } = marker;
 
