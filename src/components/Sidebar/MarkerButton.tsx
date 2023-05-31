@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Box, Image } from "@chakra-ui/react";
 
 import { useMarkerContext } from "@context/marker-context";
@@ -23,6 +23,14 @@ const MarkerButton = ({ type, num, category, game, groupHide }) => {
     setHidden(!current);
   };
 
+  useEffect(() => {
+    if (hiddenCategories[category]) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+  }, [hiddenCategories]);
+  
   return (
     <Button
       display="flex"

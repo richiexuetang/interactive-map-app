@@ -45,14 +45,19 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
   const [title, setTitle] = useState(initialTitle);
 
   const handleEditMarker = async () => {
-    const rawRichText = draftToHtml(
-      convertToRaw(editorState.getCurrentContent())
-    );
-
-    setEditorState(EditorState.createWithContent(editorState.getCurrentContent()));
-
     const newDesc = [...desc];
-    newDesc.push(rawRichText);
+    
+    if (editorState.getCurrentContent().hasText()) {
+      const rawRichText = draftToHtml(
+        convertToRaw(editorState.getCurrentContent())
+      );
+
+      setEditorState(
+        EditorState.createWithContent(editorState.getCurrentContent())
+      );
+      newDesc.push(rawRichText);
+    }
+
     setDesc([...newDesc]);
 
     try {

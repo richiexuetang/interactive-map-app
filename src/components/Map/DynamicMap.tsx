@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import * as ReactLeaflet from "react-leaflet";
 import L from "leaflet";
-
 import "leaflet/dist/leaflet.css";
 
 import { Sidebar } from "@components/.";
@@ -30,7 +29,7 @@ const Map = ({ children, ...rest }) => {
       style={{ background: "black", height: "100vh", width: "100vw" }}
       smoothWheelZoom={true}
       smoothSensitivity={15}
-      scrollWheelZoom={false}
+      scrollWheelZoom={true}
       attributionControl={false}
       center={config.center}
       zoom={config.zoom}
