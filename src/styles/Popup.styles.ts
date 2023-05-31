@@ -7,7 +7,7 @@ export const CustomPopup = styled(Popup)`
   min-width: 350px;
   max-width: 450px;
   white-space: initial;
-  bottom: 35px !important;
+  bottom: 25px !important;
 
   .leaflet-popup-content {
     p {
