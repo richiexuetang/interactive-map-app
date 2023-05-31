@@ -26,6 +26,8 @@ const MarkerButton = ({ type, num, category, game, groupHide }) => {
   useEffect(() => {
     if (hiddenCategories[category]) {
       setHidden(true);
+    } else {
+      setHidden(false);
     }
   }, [hiddenCategories]);
   
