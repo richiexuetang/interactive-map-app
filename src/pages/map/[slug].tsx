@@ -55,6 +55,7 @@ export async function getStaticProps(context) {
       categoryItems,
       categoryCounts,
     },
+    revalidate: 10
   };
 }
 
@@ -70,7 +71,6 @@ export async function getStaticPaths() {
   return {
     paths,
     fallback: false,
-    revalidate: 10
   };
 }
 
