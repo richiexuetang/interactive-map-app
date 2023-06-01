@@ -3,7 +3,7 @@ import { Box, HStack, VStack, Button } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 import { CategoryGroups, SearchInput, SearchResults } from "@components/Sidebar";
-import { useMapContext, useMarkerContext } from "@context/index";
+import { useMapContext } from "@context/index";
 import {
   SETTING_HIDDEN_CATEGORY,
   SETTING_HIDE_ALL,
@@ -17,9 +17,6 @@ const Content = ({ useMap }) => {
   const router = useRouter();
   const map = useMap();
 
-  const { setHideCompleted, hideCompleted } =
-    useMarkerContext();
-
   const { area, game, config } = useMapContext();
   const navSelections = config.subSelections;
 
@@ -27,6 +24,8 @@ const Content = ({ useMap }) => {
     USER_SETTING,
     initialUserSettings
   );
+  const [hideCompleted, setHideCompleted] =
+    useState(userSettings["hideCompletedMarkers"][game]);
 
   const [results, setResults] = useState([]);
 

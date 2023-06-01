@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import styled from "@emotion/styled";
 
 import { MapPopup } from "@components/Popup";
-import { useMarkerContext } from "@context/marker-context";
 import {
   initialUserSettings,
   COMPLETED,
@@ -24,9 +23,8 @@ const CustomMarker = (props) => {
   const { marker, useMap, rank, gameSlug } = props;
   const { _id: id, category, title, descriptions, coord } = marker;
 
-  const { hideCompleted } = useMarkerContext();
-
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
+  const [hideCompleted] = useState(userSettings["hideCompletedMarkers"][gameSlug]);
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
 
   const [completed, setCompleted] = useState(completedMarkers[id]);
