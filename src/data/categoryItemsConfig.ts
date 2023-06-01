@@ -86,6 +86,7 @@ export const categoryItemsConfig = [
         groupId: 6,
         members: [
           ["enemycamp", "Enemy Camp"],
+          ["gleeok", "Gleeok"],
           ["lynel", "Lynel"],
           ["talus", "Talus"],
         ],
@@ -112,6 +113,13 @@ export const categoryItemsConfig = [
           ["healingfairy", "Fairy"],
         ],
       },
+      {
+        name: "creatures",
+        groupId: 9,
+        members: [
+          ["razorclawcrab", "Razorclaw Crab"],
+        ],
+      },
     ],
     categories: [
       "armor",
@@ -134,6 +142,7 @@ export const categoryItemsConfig = [
       "fairy",
       "fallingplatform",
       "generalstore",
+      "gleeok",
       "goddess",
       "hestu",
       "hudsonsign",
@@ -156,6 +165,7 @@ export const categoryItemsConfig = [
       "poe",
       "poi",
       "objective",
+      "razorclawcrab",
       "schemastone",
       "sageswill",
       "seed",
