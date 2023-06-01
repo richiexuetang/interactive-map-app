@@ -1,36 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { Button, Box, Image } from "@chakra-ui/react";
 
-import { useMarkerContext } from "@context/marker-context";
-import { SETTING_HIDDEN_CATEGORY, USER_SETTING, initialUserSettings} from "@data/LocalStorage";
+import {
+  SETTING_HIDDEN_CATEGORY,
+  USER_SETTING,
+  initialUserSettings,
+} from "@data/LocalStorage";
 import useLocalStorage from "@hooks/useLocalStorage";
 
 const MarkerButton = ({ type, num, category, game, groupHide }) => {
-  const { setHiddenCategories, hiddenCategories } = useMarkerContext();
-  const [userSettings] = useLocalStorage(
+  const [userSettings, setUserSettings] = useLocalStorage(
     USER_SETTING,
     initialUserSettings
   );
-  const [hidden, setHidden] = useState(hiddenCategories[category] || groupHide);
+  const [hidden, setHidden] = useState(
+    userSettings["hiddenCategories"][game][category] || groupHide
+  );
 
   const toggleCategoryHide = () => {
     const current = userSettings[SETTING_HIDDEN_CATEGORY][game][category];
-    const copy = { ...userSettings };
-    copy.hiddenCategories[game][category] = !current;
-    
-    window.localStorage.setItem(USER_SETTING, JSON.stringify(copy));
-    setHiddenCategories({ ...hiddenCategories, [category]: !current });
+
+    setUserSettings((prev) => ({
+      ...prev,
+      hiddenCategories: {
+        ...prev.hiddenCategories,
+        [game]: {
+          ...prev.hiddenCategories[game],
+          [category]: !current,
+        },
+      },
+    }));
+
     setHidden(!current);
   };
 
   useEffect(() => {
-    if (hiddenCategories[category]) {
+    if (userSettings[SETTING_HIDDEN_CATEGORY][game][category]) {
       setHidden(true);
     } else {
       setHidden(false);
     }
-  }, [hiddenCategories]);
-  
+  }, [userSettings]);
+
   return (
     <Button
       display="flex"

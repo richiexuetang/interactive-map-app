@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import * as ReactLeaflet from "react-leaflet";
 import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 
+import "leaflet/dist/leaflet.css";
 import { Sidebar } from "@components/.";
 import { useMapContext, MarkerProvider } from "@context/.";
 import NoteMarkers from "@components/Marker/NoteMarker/NoteMarkers";
@@ -29,7 +29,7 @@ const Map = ({ children, ...rest }) => {
       style={{ background: "black", height: "100vh", width: "100vw" }}
       smoothWheelZoom={true}
       smoothSensitivity={15}
-      scrollWheelZoom={true}
+      scrollWheelZoom={false}
       attributionControl={false}
       center={config.center}
       zoom={config.zoom}

@@ -17,7 +17,7 @@ const Content = ({ useMap }) => {
   const router = useRouter();
   const map = useMap();
 
-  const { setHideCompleted, hideCompleted, setHiddenCategories } =
+  const { setHideCompleted, hideCompleted } =
     useMarkerContext();
 
   const { area, game, config } = useMapContext();
@@ -37,15 +37,30 @@ const Content = ({ useMap }) => {
 
     if (settingKey === SETTING_HIDE_COMPLETED) {
       setHideCompleted(!current);
+      setUserSettings(prev => ({
+        ...prev, 
+        hideCompletedMarkers: {
+          ...prev.hideCompletedMarkers,
+          [game]: !current,
+        }
+      }));
     } else if (settingKey === SETTING_HIDE_ALL) {
-      const hiddenCategories = userSettings[SETTING_HIDDEN_CATEGORY][game];
-      for (const key in hiddenCategories) {
-        hiddenCategories[key] = !current;
+      const newHidden = userSettings[SETTING_HIDDEN_CATEGORY][game];
+      for (const key in newHidden) {
+        newHidden[key] = !current;
       }
-      setHiddenCategories({...hiddenCategories});
-    }
 
-    setUserSettings({ ...copy });
+      setUserSettings((prev) => ({
+        ...prev,
+        hiddenCategories: {
+          ...prev.hiddenCategories,
+          [game]: {
+            ...prev.hiddenCategories[game],
+            ...newHidden,
+          },
+        },
+      }));
+    }
   };
 
   const navigateToArea = (selection) => {
@@ -70,15 +85,21 @@ const Content = ({ useMap }) => {
   };
 
   const handleHideShowAll = (hide: boolean) => {
-    const hiddenCategories = userSettings[SETTING_HIDDEN_CATEGORY][game];
-      for (const key in hiddenCategories) {
-        hiddenCategories[key] = hide;
+    const newHidden = userSettings[SETTING_HIDDEN_CATEGORY][game];
+      for (const key in newHidden) {
+        newHidden[key] = hide;
       }
       
-      setHiddenCategories({...hiddenCategories});
-      const copy = { ...userSettings };
-      copy[SETTING_HIDDEN_CATEGORY][game] = {...hiddenCategories};
-      window.localStorage.setItem(USER_SETTING, JSON.stringify(copy));
+      setUserSettings((prev) => ({
+        ...prev,
+        hiddenCategories: {
+          ...prev.hiddenCategories,
+          [game]: {
+            ...prev.hiddenCategories[game],
+            ...newHidden,
+          },
+        },
+      }));
   }
 
   return (

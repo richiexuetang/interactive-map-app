@@ -4,15 +4,12 @@ const MarkerContext = createContext(undefined);
 
 export function MarkerProvider({ children }) {
   const [hideCompleted, setHideCompleted] = useState(null);
-  const [hiddenCategories, setHiddenCategories] = useState({});
 
   return (
     <MarkerContext.Provider
       value={{
         hideCompleted,
         setHideCompleted,
-        hiddenCategories,
-        setHiddenCategories,
       }}
     >
       {children}

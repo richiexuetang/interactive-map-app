@@ -26,9 +26,8 @@ export async function getStaticProps(context) {
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}`
   );
 
-  const data = await res.json();
-  const markers = data.data;
-
+  const {data: markers} = await res.json();
+  
   const sortedMarkers = [...markers];
   sortedMarkers.sort((a, b) => b.coord[0] - a.coord[0]);
 
@@ -44,8 +43,7 @@ export async function getStaticProps(context) {
       areaId,
       config,
       categoryItems,
-    },
-    revalidate: 20,
+    }
   };
 }
 

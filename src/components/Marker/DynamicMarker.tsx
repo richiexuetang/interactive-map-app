@@ -1,17 +1,16 @@
 //@ts-nocheck
+import L from "leaflet";
 import { useEffect } from "react";
 import * as ReactLeaflet from "react-leaflet";
-import L from "leaflet";
 
-import "leaflet/dist/leaflet.css";
 import { useMapContext } from "@context/app-context";
+import "leaflet/dist/leaflet.css";
 
 const { Marker } = ReactLeaflet;
 
 const DynamicMarker = ({
   children,
   marker,
-  gameSlug,
   useMap,
   rank,
   ...rest
@@ -19,7 +18,7 @@ const DynamicMarker = ({
   const { category, _id: id, coord } = marker;
 
   const map = useMap();
-  const { markerRefs } = useMapContext();
+  const { markerRefs, game: gameSlug } = useMapContext();
 
   useEffect(() => {
     (async function init() {
@@ -28,10 +27,11 @@ const DynamicMarker = ({
         smoothSensitivity: 1,
       });
 
+      //eslint-ignore
       L.Map.SmoothWheelZoom = L.Handler.extend({
         addHooks: function () {
           L.DomEvent.on(
-            this._map._container,
+            map._container,
             "wheel",
             this._onWheelScroll,
             this
@@ -40,7 +40,7 @@ const DynamicMarker = ({
 
         removeHooks: function () {
           L.DomEvent.off(
-            this._map._container,
+            map._container,
             "wheel",
             this._onWheelScroll,
             this
@@ -88,7 +88,7 @@ const DynamicMarker = ({
           ) {
             this._goalZoom = map._limitZoom(this._goalZoom);
           }
-          this._wheelMousePosition = this._map.mouseEventToContainerPoint(e);
+          this._wheelMousePosition = map.mouseEventToContainerPoint(e);
 
           clearTimeout(this._timeoutId);
           this._timeoutId = setTimeout(this._onWheelEnd.bind(this), 200);
@@ -148,11 +148,10 @@ const DynamicMarker = ({
     <Marker
       ref={(ref) => (markerRefs[id] = ref)}
       position={marker.coord}
-      icon={
-        new L.icon({
+      icon={L.icon({
           iconUrl: `/images/icons/${gameSlug}/${category}.png`,
-          iconSize: [26, 36],
-          iconAnchor: [13, 36],
+          iconSize: [26, 34],
+          iconAnchor: [13, 34],
         })
       }
       zIndexOffset={100 + rank}

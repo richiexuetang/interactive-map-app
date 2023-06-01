@@ -3,9 +3,14 @@ import React, { useEffect, useState } from "react";
 import { VStack, HStack, Button } from "@chakra-ui/react";
 
 import { MarkerButton } from "@components/Sidebar/.";
-import { useMarkerContext, useMapContext } from "@context/.";
-import { SETTING_HIDDEN_CATEGORY, USER_SETTING } from "@data/LocalStorage";
+import { useMapContext } from "@context/.";
+import {
+  SETTING_HIDDEN_CATEGORY,
+  USER_SETTING,
+  initialUserSettings,
+} from "@data/LocalStorage";
 import useMapObject, { MapOrEntries } from "@hooks/useMapObject";
+import useLocalStorage from "@hooks/useLocalStorage";
 
 interface CategoryGroupPropsType {
   group: string;
@@ -21,8 +26,11 @@ const CategoryGroup = ({
   const [members] = useMapObject<string, string>(categoryMap);
   const [categories, setCategories] = useState([]);
   const { markers } = useMapContext();
-  const { hiddenCategories, setHiddenCategories } = useMarkerContext();
   const [categoryCounts, setCategoryCounts] = useState(null);
+  const [userSettings, setUserSettings] = useLocalStorage(
+    USER_SETTING,
+    initialUserSettings
+  );
 
   useEffect(() => {
     if (!categoryCounts) {
@@ -35,7 +43,7 @@ const CategoryGroup = ({
         }
       });
 
-      setCategoryCounts({...counts});
+      setCategoryCounts({ ...counts });
     }
   });
 
@@ -49,18 +57,23 @@ const CategoryGroup = ({
   }, [categories, members]);
 
   const toggleGroupCategories = () => {
-    const newHidden = { ...hiddenCategories };
-    const newSetting = JSON.parse(window.localStorage.getItem(USER_SETTING));
+    const newHidden = {};
+
     Array.from(members.entries()).map(([key]) => {
-      const prev = hiddenCategories[key];
+      const prev = userSettings["hiddenCategories"][game][key];
       newHidden[key] = !prev;
     });
-    newSetting[SETTING_HIDDEN_CATEGORY][game] = newHidden;
-    setHiddenCategories({ ...newHidden });
-    window.localStorage.setItem(
-      USER_SETTING,
-      JSON.stringify({ ...newSetting })
-    );
+
+    setUserSettings((prev) => ({
+      ...prev,
+      hiddenCategories: {
+        ...prev.hiddenCategories,
+        [game]: {
+          ...prev.hiddenCategories[game],
+          ...newHidden,
+        },
+      },
+    }));
   };
 
   return (
@@ -77,14 +90,15 @@ const CategoryGroup = ({
       </HStack>
       {Array.from(members.entries()).map(([key, value]) => {
         return (
-          categoryCounts && categoryCounts[key] && (
+          categoryCounts &&
+          categoryCounts[key] && (
             <MarkerButton
               key={key}
               game={game}
               type={value}
               num={categoryCounts[key]}
               category={key}
-              groupHide={hiddenCategories[key]}
+              groupHide={userSettings["hiddenCategories"][game][key]}
             />
           )
         );
