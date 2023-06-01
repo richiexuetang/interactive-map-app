@@ -111,6 +111,7 @@ const MapPage = ({
   if (loading) {
     return <Loader loading={loading} />;
   }
+  
   return (
     <>
       <NextSeo

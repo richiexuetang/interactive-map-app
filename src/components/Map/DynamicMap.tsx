@@ -5,7 +5,7 @@ import L from "leaflet";
 
 import "leaflet/dist/leaflet.css";
 import { Sidebar } from "@components/.";
-import { useMapContext, MarkerProvider } from "@context/.";
+import { useMapContext } from "@context/.";
 import NoteMarkers from "@components/Marker/NoteMarker/NoteMarkers";
 
 const { MapContainer, useMap } = ReactLeaflet;
@@ -38,11 +38,9 @@ const Map = ({ children, ...rest }) => {
       maxZoom={config.maxZoom}
       {...rest}
     >
-      <MarkerProvider>
         {children(ReactLeaflet, L)}
         <Sidebar useMap={useMap} />
         <NoteMarkers setRefresh={false} noteMarkers={noteMarkers} />
-      </MarkerProvider>
     </MapContainer>
   );
 };

@@ -1,25 +1,37 @@
 import { Polyline } from "react-leaflet";
 
-import { pointsData } from "@data/index";
+import {
+  SETTING_HIDDEN_CATEGORY,
+  SETTING_HIDE_COMPLETED,
+  USER_SETTING,
+  initialUserSettings,
+  pointsData,
+} from "@data/index";
 import { useMapContext } from "@context/app-context";
-import { useMarkerContext } from "@context/marker-context";
 import { COMPLETED } from "@data/index";
+import useLocalStorage from "@hooks/useLocalStorage";
 
 const PolyLines = () => {
-  const { game, areaId } = useMapContext();
-  const { hideCompleted, hiddenCategories } =
-    useMarkerContext();
-  const completedMarkers =
-    JSON.parse(window.localStorage.getItem(COMPLETED)) || {};
+  const { game, area } = useMapContext();
+  const [completedMarkers] = useLocalStorage(COMPLETED, {});
+  const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
+
+  console.log(game, area);
 
   return (
     <>
-      {game === "totk" && areaId === "hyrule-surface" &&
+      {game === "totk" &&
+        area === "hyrule-surface" &&
         pointsData.map(
           ({ startLat, startLong, id, endLat, endLong, category }) => {
-            const shouldHide =
-              (hideCompleted && completedMarkers[id]) ||
-              hiddenCategories[category];
+            const hideCategory =
+              userSettings[SETTING_HIDDEN_CATEGORY][game][category];
+
+            const hideComplete =
+              userSettings[SETTING_HIDE_COMPLETED][game] &&
+              completedMarkers[id];
+              
+            const shouldHide = hideCategory || hideComplete;
 
             if (!shouldHide) {
               return (
@@ -30,6 +42,7 @@ const PolyLines = () => {
                     [endLat, endLong],
                   ]}
                   color={"white"}
+                  weight={1}
                 />
               );
             }
