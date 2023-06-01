@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
+import React, { useState } from "react";
 
-import { LinkIcon, EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, LinkIcon } from "@chakra-ui/icons";
 import {
   Box,
   Checkbox,
@@ -10,7 +10,6 @@ import {
   HStack,
   Stack,
   Text,
-  chakra,
   useDisclosure,
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
@@ -19,44 +18,32 @@ import MarkerEdit from "@components/Modal/EditMarker";
 import { useMapContext } from "@context/app-context";
 import { COMPLETED } from "@data/LocalStorage";
 import useCopyToClipboard from "@hooks/useCopyToClipboard";
+import useLocalStorage from "@hooks/useLocalStorage";
 
-const MapPopup = ({
-  Popup,
-  title,
-  descriptions,
-  id,
-  setCompleted,
-  completed,
-  category,
-}) => {
+const MapPopup = ({ Popup, setCompleted, markerInfo }) => {
   const pathname = usePathname();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { game } = useMapContext();
   const { data: session, status } = useSession();
+  const [completedMarkers, setCompletedMarkers] = useLocalStorage(
+    COMPLETED,
+    {}
+  );
 
-  // const helperDescriptions = categoryDescriptions.filter(
-  //   (item) => item.gameSlug === game
-  // )[0].categoryDescriptions;
-  // const [categoryDescription] = useMapObject(helperDescriptions);
-
-  // const [helperDesc] = useState(categoryDescription.get(category));
   const { setMarkers, markers } = useMapContext();
   const [value, copy] = useCopyToClipboard();
+  const [completed] = useState(completedMarkers[markerInfo.id]);
 
-  const handleCompleteCheck = () => {
-    setCompleted(!completed);
-    const json = JSON.parse(window.localStorage.getItem(COMPLETED));
+  const handleCompleteCheck = (e) => {
+    setCompleted(e.target.checked);
 
-    let newJson = { ...json, [id]: true };
-
-    if (completed) {
-      delete newJson[id];
-    }
-    window.localStorage.setItem(COMPLETED, JSON.stringify(newJson));
+    setCompletedMarkers((prev) => ({
+      ...prev,
+      [markerInfo.id]: e.target.checked,
+    }));
   };
 
   const handleCopyLink = () => {
-    copy(`${process.env.BASE_URL}${pathname}?markerId=${id}`);
+    copy(`${process.env.BASE_URL}${pathname}?markerId=${markerInfo.id}`);
     toast.success(`Link copied`);
   };
 
@@ -65,7 +52,12 @@ const MapPopup = ({
       <MarkerEdit
         onClose={onClose}
         isOpen={isOpen}
-        markerInfo={{ id: id, descriptions: descriptions, title: title, category: category }}
+        markerInfo={{
+          id: markerInfo.id,
+          descriptions: markerInfo.descriptions,
+          title: markerInfo.title,
+          category: markerInfo.category,
+        }}
       />
     );
   }
@@ -73,7 +65,8 @@ const MapPopup = ({
   const handleDelete = async () => {
     try {
       await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/deleteMarker?id=` + id,
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/deleteMarker?id=` +
+          markerInfo.id,
         {
           method: "POST",
           headers: {
@@ -83,8 +76,7 @@ const MapPopup = ({
         }
       );
 
-      setMarkers(markers.filter((marker) => marker._id !== id));
-
+      setMarkers(markers.filter((marker) => marker._id !== markerInfo.id));
       toast.success("Delete Successful");
     } catch (errorMessage: any) {
       toast.error(errorMessage);
@@ -103,7 +95,7 @@ const MapPopup = ({
             mt="0 !important"
             display="flex"
           >
-            {title}
+            {markerInfo.title}
             <LinkIcon
               mx="5px"
               _hover={{ cursor: "pointer" }}
@@ -125,23 +117,22 @@ const MapPopup = ({
             )}
           </Text>
           <Text mr="10px !important" mt="0 !important" fontSize="11px">
-            {category.charAt(0).toUpperCase() + category.substring(1)}
+            {markerInfo.category.charAt(0).toUpperCase() +
+              markerInfo.category.substring(1)}
           </Text>
-          {descriptions &&
-            descriptions.map((desc, i) => (
+          {markerInfo.descriptions &&
+            markerInfo.descriptions.map((desc, i) => (
               <div key={i} dangerouslySetInnerHTML={{ __html: desc }} />
             ))}
-          {/* {helperDesc && (
-            <chakra.p mb="1em" fontSize="90%" fontStyle="italic" opacity="0.8">
-              {helperDesc}
-            </chakra.p>
-          )} */}
         </Stack>
       </HStack>
 
       <Divider />
       <Box my={4} textAlign="center" pl={3}>
-        <Checkbox isChecked={completed} onChange={handleCompleteCheck}>
+        <Checkbox
+          isChecked={completed}
+          onChange={(e) => handleCompleteCheck(e)}
+        >
           Completed
         </Checkbox>
       </Box>

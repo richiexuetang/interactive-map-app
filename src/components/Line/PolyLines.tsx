@@ -3,23 +3,18 @@ import { Polyline } from "react-leaflet";
 import { pointsData } from "@data/index";
 import { useMapContext } from "@context/app-context";
 import { useMarkerContext } from "@context/marker-context";
-import { COMPLETED, USER_SETTING, initialUserSettings } from "@data/index";
-import useLocalStorage from "@hooks/useLocalStorage";
+import { COMPLETED } from "@data/index";
 
 const PolyLines = () => {
-  const { game } = useMapContext();
-  const { hideCompleted, setHiddenCategories, hiddenCategories } =
+  const { game, areaId } = useMapContext();
+  const { hideCompleted, hiddenCategories } =
     useMarkerContext();
   const completedMarkers =
     JSON.parse(window.localStorage.getItem(COMPLETED)) || {};
-  const [userSettings, setUserSettings] = useLocalStorage(
-    USER_SETTING,
-    initialUserSettings
-  );
 
   return (
     <>
-      {game === "totk" &&
+      {game === "totk" && areaId === "hyrule-surface" &&
         pointsData.map(
           ({ startLat, startLong, id, endLat, endLong, category }) => {
             const shouldHide =

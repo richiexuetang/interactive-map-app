@@ -9,7 +9,6 @@ import { useMarkerContext } from "@context/marker-context";
 import {
   initialUserSettings,
   COMPLETED,
-  SETTING_HIDDEN_CATEGORY,
   USER_SETTING,
 } from "@data/LocalStorage";
 import useLocalStorage from "@hooks/useLocalStorage";
@@ -25,17 +24,19 @@ const CustomMarker = (props) => {
   const { marker, useMap, rank, gameSlug } = props;
   const { _id: id, category, title, descriptions, coord } = marker;
 
-  const { hideCompleted, setHiddenCategories, hiddenCategories } =
-    useMarkerContext();
-    
-  const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
+  const { hideCompleted } = useMarkerContext();
 
-  const completedMarkers =
-    JSON.parse(window.localStorage.getItem(COMPLETED)) || {};
+  const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
+  const [completedMarkers] = useLocalStorage(COMPLETED, {});
+
   const [completed, setCompleted] = useState(completedMarkers[id]);
 
   const shouldHideCompleted = hideCompleted && completedMarkers[id];
-  const shouldHideCategory = hiddenCategories[category];
+  const shouldHideCategory =
+    userSettings["hiddenCategories"][gameSlug][category];
+  const [hidden, setHidden] = useState(
+    shouldHideCategory || shouldHideCompleted
+  );
 
   const map = useMap();
 
@@ -50,22 +51,21 @@ const CustomMarker = (props) => {
 
   useEffect(() => {
     if (
-      userSettings &&
-      userSettings[SETTING_HIDDEN_CATEGORY][gameSlug][category]
+      completedMarkers[id] &&
+      userSettings["hideCompletedMarkers"][gameSlug]
     ) {
-      const currentHidden = userSettings[SETTING_HIDDEN_CATEGORY][gameSlug];
-      const targetCategory = currentHidden[category];
-      setHiddenCategories({ ...currentHidden, [targetCategory]: true });
-    } else {
-      const currentHidden = userSettings[SETTING_HIDDEN_CATEGORY][gameSlug];
-      const targetCategory = currentHidden[category];
-      setHiddenCategories({ ...currentHidden, [targetCategory]: false });
+      setHidden(true);
     }
-  }, [setHiddenCategories]);
+    if (userSettings["hiddenCategories"][gameSlug][category]) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+  }, [completedMarkers, userSettings]);
 
   return (
     <>
-      {!shouldHideCategory && !shouldHideCompleted && (
+      {!hidden && (
         <Marker
           opacity={completed ? 0.5 : 1}
           gameSlug={gameSlug}
@@ -134,12 +134,13 @@ const CustomMarker = (props) => {
               <>
                 <MapPopup
                   Popup={CustomPopup}
-                  title={title}
-                  descriptions={descriptions}
-                  id={id}
+                  markerInfo={{
+                    title: title,
+                    descriptions: descriptions,
+                    id: id,
+                    category: category,
+                  }}
                   setCompleted={setCompleted}
-                  completed={completed}
-                  category={category}
                 />
                 <CustomTooltip>{title}</CustomTooltip>
               </>

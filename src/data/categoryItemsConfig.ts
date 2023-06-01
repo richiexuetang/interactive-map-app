@@ -12,15 +12,13 @@ export const categoryItemsConfig = [
           ["goddess", "Goddess Statue"],
           ["fairy", "Great Fairy"],
           ["landmark", "Landmark"],
-          ["lighthouse", "Lighthouse"],
           ["lightroot", "Lightroot"],
           ["poi", "Point of Interest"],
           ["settlement", "Settlement"],
           ["shrine", "Shrine"],
           ["tower", "Skyview Tower"],
           ["techlab", "Tech Lab"],
-          ["temple", "Temple"],
-          ["surveyteambase", "Zonai Survey Team Base"],
+          ["temple", "Temple"]
         ],
       },
       {
