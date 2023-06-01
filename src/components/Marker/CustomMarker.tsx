@@ -14,7 +14,6 @@ import {
 } from "@data/LocalStorage";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { useMapContext } from "@context/app-context";
-import { useMapEvents } from "react-leaflet";
 
 const Marker = dynamic(() => import("./DynamicMarker"), {
   ssr: false,
@@ -26,7 +25,7 @@ const CustomMarker = (props) => {
   const params = useSearchParams();
   const markerSearchParam = params.get("markerId");
 
-  const { marker, useMap, rank, gameSlug } = props;
+  const { marker, useMap, rank, gameSlug, useMapEvents } = props;
   const { _id: id, category, title, descriptions, coord } = marker;
 
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);

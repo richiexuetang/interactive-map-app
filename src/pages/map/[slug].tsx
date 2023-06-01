@@ -137,15 +137,15 @@ const MapPage = ({
         description="Interactive Map for Zelda: Tears of the Kingdom totk | Witcher 3"
       />
       <Map markers={markers}>
-        {({ TileLayer, useMap }) => (
+        {({ TileLayer, useMap, useMapEvents }) => (
           <>
             <TileLayer
               url={`/tiles/${areaId}/{z}/{x}/{y}.png`}
               noWrap
               bounds={config.bounds}
             />
-            <Markers useMap={useMap} gameSlug={config.gameSlug} />
-            <AddMarkerControl useMap={useMap} />
+            <Markers useMap={useMap} gameSlug={config.gameSlug} useMapEvents={useMapEvents}/>
+            <AddMarkerControl useMap={useMap}/>
             <PolyLines />
           </>
         )}

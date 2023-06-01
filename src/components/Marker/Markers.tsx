@@ -11,7 +11,7 @@ import {
 } from "@data/LocalStorage";
 
 const Markers = (props) => {
-  const { useMap } = props;
+  const { useMap, useMapEvents } = props;
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
   const { markers, game: gameSlug } = useMapContext();
@@ -31,6 +31,7 @@ const Markers = (props) => {
                 marker={marker}
                 rank={i}
                 gameSlug={gameSlug}
+                useMapEvents={useMapEvents}
               />
             )
           );
