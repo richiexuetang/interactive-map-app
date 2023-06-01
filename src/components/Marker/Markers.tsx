@@ -14,13 +14,12 @@ const Markers = (props) => {
   const { useMap } = props;
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
-  const { markers, game: gameSlug, canvasCategories } = useMapContext();
+  const { markers, game: gameSlug } = useMapContext();
 
   return (
     <>
       {markers &&
         markers.map((marker, i) => {
-          // const inCanvas = canvasCategories.includes(marker.category);
           const hide =
             completedMarkers[marker._id] &&
             userSettings[SETTING_HIDE_COMPLETED][gameSlug];

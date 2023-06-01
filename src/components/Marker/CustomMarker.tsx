@@ -98,6 +98,7 @@ const CustomMarker = (props) => {
               .leaflet-popup-content {
                 p {
                   margin-top: 0 !important;
+                  margin-bottom: 0.5em !important;
                   line-height: 1.5em;
                 }
               }

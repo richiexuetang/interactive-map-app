@@ -98,7 +98,7 @@ const CategoryGroup = ({
               type={value}
               num={categoryCounts[key]}
               category={key}
-              groupHide={userSettings["hiddenCategories"][game][key]}
+              groupHide={userSettings[SETTING_HIDDEN_CATEGORY][game][key]}
             />
           )
         );

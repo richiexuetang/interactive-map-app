@@ -25,7 +25,7 @@ const Content = ({ useMap }) => {
     initialUserSettings
   );
   const [hideCompleted, setHideCompleted] =
-    useState(userSettings["hideCompletedMarkers"][game]);
+    useState(userSettings[SETTING_HIDE_COMPLETED][game]);
 
   const [results, setResults] = useState([]);
 
@@ -52,9 +52,9 @@ const Content = ({ useMap }) => {
       setUserSettings((prev) => ({
         ...prev,
         hiddenCategories: {
-          ...prev.hiddenCategories,
+          ...prev[SETTING_HIDDEN_CATEGORY],
           [game]: {
-            ...prev.hiddenCategories[game],
+            ...prev[SETTING_HIDDEN_CATEGORY][game],
             ...newHidden,
           },
         },
