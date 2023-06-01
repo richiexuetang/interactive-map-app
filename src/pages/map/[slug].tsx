@@ -26,8 +26,8 @@ export async function getStaticProps(context) {
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}`
   );
 
-  const {data: markers} = await res.json();
-  
+  const { data: markers } = await res.json();
+
   const sortedMarkers = [...markers];
   sortedMarkers.sort((a, b) => b.coord[0] - a.coord[0]);
 
@@ -37,13 +37,25 @@ export async function getStaticProps(context) {
     (o) => o.gameSlug === config.gameSlug
   );
 
+  const categoryCounts = {};
+  const limitCategory = new Set();
+
+  markers.map(({ category }) => {
+    categoryCounts[category] = categoryCounts[category] + 1 || 1;
+    if (categoryCounts[category] >= 250 && !limitCategory.has(category)) {
+      limitCategory.add(category);
+    }
+  });
+
   return {
     props: {
       markers: sortedMarkers,
       areaId,
       config,
       categoryItems,
-    }
+      categoryCounts,
+      limitCategories: Array.from(limitCategory),
+    },
   };
 }
 
@@ -66,7 +78,9 @@ const MapPage = ({
   markers,
   areaId,
   config,
-  categoryItems
+  categoryItems,
+  limitCategories,
+  categoryCounts,
 }) => {
   if (typeof window !== "undefined") {
     useLocalStorage(USER_SETTING, initialUserSettings);
@@ -98,6 +112,8 @@ const MapPage = ({
     setGame,
     setCategoryItems,
     setMarkers,
+    setCategoryCounts,
+    setLimitCategories,
   } = useMapContext();
 
   useEffect(() => {
@@ -106,12 +122,14 @@ const MapPage = ({
     setGame(config.gameSlug);
     setCategoryItems(categoryItems);
     setMarkers(markers);
+    setCategoryCounts(categoryCounts);
+    setLimitCategories(limitCategories);
   }, [areaId, config, categoryItems]);
 
   if (loading) {
     return <Loader loading={loading} />;
   }
-  
+
   return (
     <>
       <NextSeo

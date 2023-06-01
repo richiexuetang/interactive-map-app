@@ -10,6 +10,9 @@ export function MapProvider({ children }) {
   const [game, setGame] = useState(null);
   const [markerRefs, setMarkerRefs] = useState({});
   const [noteMarkers, setNoteMarkers] = useState([]);
+  const [limitCategories, setLimitCategories] = useState([]);
+  const [categoryCounts, setCategoryCounts] = useState({});
+
   const [canvasCategories, setCanvasCategories] = useState([]);
 
   return (
@@ -30,7 +33,11 @@ export function MapProvider({ children }) {
         noteMarkers,
         setNoteMarkers,
         canvasCategories,
-        setCanvasCategories
+        setCanvasCategories,
+        limitCategories,
+        setLimitCategories,
+        categoryCounts,
+        setCategoryCounts
       }}
     >
       {children}

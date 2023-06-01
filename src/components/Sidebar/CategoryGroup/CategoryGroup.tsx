@@ -26,24 +26,19 @@ const CategoryGroup = ({
   const [members] = useMapObject<string, string>(categoryMap);
   const [categories, setCategories] = useState([]);
   const { markers } = useMapContext();
-  const [categoryCounts, setCategoryCounts] = useState(null);
+  const [categoryCounts, setCategoryCounts] = useState({});
   const [userSettings, setUserSettings] = useLocalStorage(
     USER_SETTING,
     initialUserSettings
   );
 
   useEffect(() => {
-    if (!categoryCounts) {
-      const counts = {};
+    if (!Object.keys(categoryCounts).length) {
+      const counts = {...categoryCounts}
       markers.map(({ category }) => {
-        if (!counts[category]) {
-          counts[category] = 1;
-        } else {
-          counts[category]++;
-        }
+        counts[category] = (counts[category] + 1) || 1;
       });
-
-      setCategoryCounts({ ...counts });
+      setCategoryCounts({...counts})
     }
   });
 
@@ -60,7 +55,7 @@ const CategoryGroup = ({
     const newHidden = {};
 
     Array.from(members.entries()).map(([key]) => {
-      const prev = userSettings["hiddenCategories"][game][key];
+      const prev = userSettings[SETTING_HIDDEN_CATEGORY][game][key];
       newHidden[key] = !prev;
     });
 

@@ -17,13 +17,12 @@ import { toast } from "react-toastify";
 import MarkerEdit from "@components/Modal/EditMarker";
 import { useMapContext } from "@context/app-context";
 import { COMPLETED } from "@data/LocalStorage";
-import useCopyToClipboard from "@hooks/useCopyToClipboard";
-import useLocalStorage from "@hooks/useLocalStorage";
+import {useCopyToClipboard, useLocalStorage} from "@hooks/index";
 
 const MapPopup = ({ Popup, setCompleted, markerInfo }) => {
   const pathname = usePathname();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [completedMarkers, setCompletedMarkers] = useLocalStorage(
     COMPLETED,
     {}
@@ -115,10 +114,6 @@ const MapPopup = ({ Popup, setCompleted, markerInfo }) => {
                 />
               </>
             )}
-          </Text>
-          <Text mr="10px !important" mt="0 !important" fontSize="11px">
-            {markerInfo.category.charAt(0).toUpperCase() +
-              markerInfo.category.substring(1)}
           </Text>
           {markerInfo.descriptions &&
             markerInfo.descriptions.map((desc, i) => (

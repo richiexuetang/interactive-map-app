@@ -16,8 +16,6 @@ const PolyLines = () => {
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
 
-  console.log(game, area);
-
   return (
     <>
       {game === "totk" &&

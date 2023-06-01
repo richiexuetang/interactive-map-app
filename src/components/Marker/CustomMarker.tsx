@@ -9,14 +9,20 @@ import {
   initialUserSettings,
   COMPLETED,
   USER_SETTING,
+  SETTING_HIDE_COMPLETED,
+  SETTING_HIDDEN_CATEGORY,
 } from "@data/LocalStorage";
 import useLocalStorage from "@hooks/useLocalStorage";
+import { useMapContext } from "@context/app-context";
+import { useMapEvents } from "react-leaflet";
 
 const Marker = dynamic(() => import("./DynamicMarker"), {
   ssr: false,
 });
 
 const CustomMarker = (props) => {
+  const { limitCategories } = useMapContext();
+
   const params = useSearchParams();
   const markerSearchParam = params.get("markerId");
 
@@ -24,19 +30,37 @@ const CustomMarker = (props) => {
   const { _id: id, category, title, descriptions, coord } = marker;
 
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
-  const [hideCompleted] = useState(userSettings["hideCompletedMarkers"][gameSlug]);
+  const [hideCompleted] = useState(
+    userSettings[SETTING_HIDE_COMPLETED][gameSlug]
+  );
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
 
   const [completed, setCompleted] = useState(completedMarkers[id]);
 
   const shouldHideCompleted = hideCompleted && completedMarkers[id];
   const shouldHideCategory =
-    userSettings["hiddenCategories"][gameSlug][category];
+    userSettings[SETTING_HIDDEN_CATEGORY][gameSlug][category];
+
   const [hidden, setHidden] = useState(
-    shouldHideCategory || shouldHideCompleted
+    shouldHideCategory ||
+      shouldHideCompleted ||
+      limitCategories.includes(category)
   );
 
   const map = useMap();
+
+  useMapEvents({
+    zoomend() {
+      if (
+        limitCategories.includes(category) &&
+        map.getZoom() < map.getMaxZoom() - 2
+      ) {
+        setHidden(true);
+      } else {
+        setHidden(false);
+      }
+    },
+  });
 
   useEffect(() => {
     if (markerSearchParam && markerSearchParam === id) {
@@ -49,12 +73,12 @@ const CustomMarker = (props) => {
 
   useEffect(() => {
     if (
-      completedMarkers[id] &&
-      userSettings["hideCompletedMarkers"][gameSlug]
+      (completedMarkers[id] &&
+        userSettings[SETTING_HIDE_COMPLETED][gameSlug]) ||
+      userSettings[SETTING_HIDDEN_CATEGORY][gameSlug][category] ||
+      (limitCategories.includes(category) &&
+        map.getZoom() < map.getMaxZoom() - 2)
     ) {
-      setHidden(true);
-    }
-    if (userSettings["hiddenCategories"][gameSlug][category]) {
       setHidden(true);
     } else {
       setHidden(false);
