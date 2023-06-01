@@ -45,7 +45,7 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
     EditorState.createEmpty()
   );
   const { id, descriptions, title: initialTitle, category } = markerInfo;
-  const {game} = useMapContext();
+  const { game } = useMapContext();
 
   const [markerCategory, markerCategoryActions] = useMapObject<string, string>(
     []
@@ -54,6 +54,7 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
   const [title, setTitle] = useState(initialTitle);
   const [categoryTypeMap, setCategoryTypeMap] = useState({});
   const [marker, setMarker] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(category);
 
   useEffect(() => {
     if (!markerCategory.size) {
@@ -73,7 +74,7 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
       });
     }
   }, [markerCategory]);
-  
+
   const handleEditMarker = async () => {
     const newDesc = [...desc];
 
@@ -91,13 +92,15 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
     setDesc([...newDesc]);
 
     try {
-      const response = await fetch(
+      await fetch(
         `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + id,
         {
           method: "POST",
           body: JSON.stringify({
             title,
             descriptions: newDesc,
+            category: selectedCategory,
+            type: categoryTypeMap[selectedCategory]
           }),
           headers: {
             Accept: "application/json, text/plain, */*",
@@ -105,7 +108,6 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
           },
         }
       );
-      const result = await response.json();
 
       toast.success("Marker update success");
     } catch (errorMessage: any) {
@@ -120,6 +122,7 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
   };
 
   const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
     setMarker((prevState) => {
       return Object.assign({}, prevState, {
         category: e.target.value,
@@ -144,9 +147,10 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
               onChange={(e) => setTitle(e.target.value)}
             />
 
+            <FormLabel mt={5}>Category:</FormLabel>
             <Select
               id="category"
-              value={category}
+              value={selectedCategory}
               placeholder="Select the category from dropdown"
               onChange={(e) => handleCategoryChange(e)}
             >
@@ -156,7 +160,7 @@ const MarkerEdit: React.FC<MarkerEditPropsType> = ({
                 </option>
               ))}
             </Select>
-            
+
             <FormLabel mt={5}>Descriptions:</FormLabel>
             {desc &&
               desc.map((value, i) => (

@@ -6,7 +6,7 @@ export default async (req, res) => {
     const client = await clientPromise;
     const db = client.db("test");
     const { id } = req.query;
-    const { title, descriptions } = req.body;
+    const { title, descriptions, category, type } = req.body;
 
     const marker = await db.collection("markers").updateOne(
       {
@@ -16,6 +16,8 @@ export default async (req, res) => {
         $set: {
           descriptions: descriptions,
           title: title,
+          category: category,
+          type: type
         },
       }
     );

@@ -20,6 +20,7 @@ export const initialUserSettings = {
       dragontear: false,
       dyeshop: false,
       enemycamp: false,
+      healingfairy: true,
       fairy: false,
       fallingplatform: false,
       generalstore: false,

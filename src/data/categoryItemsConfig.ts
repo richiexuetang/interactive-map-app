@@ -47,6 +47,7 @@ export const categoryItemsConfig = [
           ["keyitem", "Key Item"],
           ["seed", "Korok Seed"],
           ["mastersword", "Master Sword"],
+          ["oldmap", "Old Map"],
           ["paragliderfabric", "Paraglider Fabric"],
           ["sageswill", "Sage's Will"],
           ["schemastone", "Schema Stone"],
@@ -103,6 +104,13 @@ export const categoryItemsConfig = [
           ["well", "Well"],
         ],
       },
+      {
+        name: "materials",
+        groupId: 8,
+        members: [
+          ["healingfairy", "Fairy"],
+        ],
+      },
     ],
     categories: [
       "armor",
@@ -140,6 +148,7 @@ export const categoryItemsConfig = [
       "merchant",
       "minigame",
       "npc",
+      "oldmap",
       "paragliderfabric",
       "poe",
       "poi",
@@ -153,7 +162,6 @@ export const categoryItemsConfig = [
       "sideadventure",
       "sidequest",
       "stable",
-      "surveyteambase",
       "talus",
       "techlab",
       "temple",
