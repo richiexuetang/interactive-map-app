@@ -108,6 +108,7 @@ export const categoryItemsConfig = [
         name: "materials",
         groupId: 8,
         members: [
+          ["bombflower", "Bomb Flower"],
           ["healingfairy", "Fairy"],
         ],
       },
@@ -118,6 +119,7 @@ export const categoryItemsConfig = [
       "arrows",
       "bargainer",
       "blupee",
+      "bombflower",
       "building",
       "cave",
       "caveentrance",
@@ -128,6 +130,7 @@ export const categoryItemsConfig = [
       "dragontear",
       "dyeshop",
       "enemycamp",
+      "healingfairy",
       "fairy",
       "fallingplatform",
       "generalstore",

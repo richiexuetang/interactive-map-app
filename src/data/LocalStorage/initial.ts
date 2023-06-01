@@ -10,6 +10,7 @@ export const initialUserSettings = {
       arrows: false,
       bargainer: false,
       blupee: false,
+      bombflower: true,
       building: false,
       cave: false,
       caveentrance: false,

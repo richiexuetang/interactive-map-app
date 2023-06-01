@@ -8,13 +8,7 @@ import "leaflet/dist/leaflet.css";
 
 const { Marker } = ReactLeaflet;
 
-const DynamicMarker = ({
-  children,
-  marker,
-  useMap,
-  rank,
-  ...rest
-}) => {
+const DynamicMarker = ({ children, marker, useMap, rank, ...rest }) => {
   const { category, _id: id, coord } = marker;
 
   const map = useMap();
@@ -30,21 +24,11 @@ const DynamicMarker = ({
       //eslint-ignore
       L.Map.SmoothWheelZoom = L.Handler.extend({
         addHooks: function () {
-          L.DomEvent.on(
-            map._container,
-            "wheel",
-            this._onWheelScroll,
-            this
-          );
+          L.DomEvent.on(map._container, "wheel", this._onWheelScroll, this);
         },
 
         removeHooks: function () {
-          L.DomEvent.off(
-            map._container,
-            "wheel",
-            this._onWheelScroll,
-            this
-          );
+          L.DomEvent.off(map._container, "wheel", this._onWheelScroll, this);
         },
 
         _onWheelScroll: function (e) {
@@ -149,11 +133,10 @@ const DynamicMarker = ({
       ref={(ref) => (markerRefs[id] = ref)}
       position={marker.coord}
       icon={L.icon({
-          iconUrl: `/images/icons/${gameSlug}/${category}.png`,
-          iconSize: [26, 34],
-          iconAnchor: [13, 34],
-        })
-      }
+        iconUrl: `/images/icons/${gameSlug}/${category}.png`,
+        iconSize: [35, 45],
+        iconAnchor: [17, 45],
+      })}
       zIndexOffset={100 + rank}
       eventHandlers={{
         click: () => {

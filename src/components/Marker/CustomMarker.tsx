@@ -41,25 +41,23 @@ const CustomMarker = (props) => {
     userSettings[SETTING_HIDDEN_CATEGORY][gameSlug][category];
 
   const [hidden, setHidden] = useState(
-    shouldHideCategory ||
-      shouldHideCompleted ||
-      limitCategories.includes(category)
+    shouldHideCategory || shouldHideCompleted
   );
 
   const map = useMap();
 
-  useMapEvents({
-    zoomend() {
-      if (
-        limitCategories.includes(category) &&
-        map.getZoom() < map.getMaxZoom() - 2
-      ) {
-        setHidden(true);
-      } else {
-        setHidden(false);
-      }
-    },
-  });
+  // useMapEvents({
+  //   zoomend() {
+  //     if (
+  //       limitCategories.includes(category) &&
+  //       map.getZoom() < map.getMaxZoom() - 2
+  //     ) {
+  //       setHidden(true);
+  //     } else {
+  //       setHidden(false);
+  //     }
+  //   },
+  // });
 
   useEffect(() => {
     if (markerSearchParam && markerSearchParam === id) {
@@ -74,9 +72,7 @@ const CustomMarker = (props) => {
     if (
       (completedMarkers[id] &&
         userSettings[SETTING_HIDE_COMPLETED][gameSlug]) ||
-      userSettings[SETTING_HIDDEN_CATEGORY][gameSlug][category] ||
-      (limitCategories.includes(category) &&
-        map.getZoom() < map.getMaxZoom() - 2)
+      userSettings[SETTING_HIDDEN_CATEGORY][gameSlug][category]
     ) {
       setHidden(true);
     } else {

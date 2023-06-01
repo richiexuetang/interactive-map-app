@@ -38,13 +38,13 @@ export async function getStaticProps(context) {
   );
 
   const categoryCounts = {};
-  const limitCategory = new Set();
+  // const limitCategory = new Set();
 
   markers.map(({ category }) => {
     categoryCounts[category] = categoryCounts[category] + 1 || 1;
-    if (categoryCounts[category] >= 250 && !limitCategory.has(category)) {
-      limitCategory.add(category);
-    }
+    // if (categoryCounts[category] >= 250 && !limitCategory.has(category)) {
+    //   limitCategory.add(category);
+    // }
   });
 
   return {
@@ -54,7 +54,6 @@ export async function getStaticProps(context) {
       config,
       categoryItems,
       categoryCounts,
-      limitCategories: Array.from(limitCategory),
     },
   };
 }
@@ -79,7 +78,6 @@ const MapPage = ({
   areaId,
   config,
   categoryItems,
-  limitCategories,
   categoryCounts,
 }) => {
   if (typeof window !== "undefined") {
@@ -113,7 +111,6 @@ const MapPage = ({
     setCategoryItems,
     setMarkers,
     setCategoryCounts,
-    setLimitCategories,
   } = useMapContext();
 
   useEffect(() => {
@@ -123,7 +120,6 @@ const MapPage = ({
     setCategoryItems(categoryItems);
     setMarkers(markers);
     setCategoryCounts(categoryCounts);
-    setLimitCategories(limitCategories);
   }, [areaId, config, categoryItems]);
 
   if (loading) {
@@ -144,8 +140,12 @@ const MapPage = ({
               noWrap
               bounds={config.bounds}
             />
-            <Markers useMap={useMap} gameSlug={config.gameSlug} useMapEvents={useMapEvents}/>
-            <AddMarkerControl useMap={useMap}/>
+            <Markers
+              useMap={useMap}
+              gameSlug={config.gameSlug}
+              useMapEvents={useMapEvents}
+            />
+            <AddMarkerControl useMap={useMap} />
             <PolyLines />
           </>
         )}
