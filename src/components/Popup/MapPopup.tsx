@@ -22,7 +22,7 @@ import {useCopyToClipboard, useLocalStorage} from "@hooks/index";
 const MapPopup = ({ Popup, setCompleted, markerInfo }) => {
   const pathname = usePathname();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const [completedMarkers, setCompletedMarkers] = useLocalStorage(
     COMPLETED,
     {}
@@ -87,12 +87,13 @@ const MapPopup = ({ Popup, setCompleted, markerInfo }) => {
       <HStack justifyContent="space-between" mb={2}>
         <Stack mt={3} spacing="3">
           <Text
-            fontSize="1.25rem"
+            fontSize="1rem"
             fontWeight="normal"
             lineHeight="1.2"
             mb="5px !important"
             mt="0 !important"
             display="flex"
+            alignItems='center'
           >
             {markerInfo.title}
             <LinkIcon
@@ -114,6 +115,10 @@ const MapPopup = ({ Popup, setCompleted, markerInfo }) => {
                 />
               </>
             )}
+          </Text>
+          <Text mr="10px !important" mt="0 !important" fontSize="11px">
+            {markerInfo.category.charAt(0).toUpperCase() +
+              markerInfo.category.substring(1)}
           </Text>
           {markerInfo.descriptions &&
             markerInfo.descriptions.map((desc, i) => (
