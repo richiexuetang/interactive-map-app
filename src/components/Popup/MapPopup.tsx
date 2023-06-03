@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { DeleteIcon, EditIcon, LinkIcon } from "@chakra-ui/icons";
 import {
@@ -17,20 +17,48 @@ import { toast } from "react-toastify";
 import MarkerEdit from "@components/Modal/EditMarker";
 import { useMapContext } from "@context/app-context";
 import { COMPLETED } from "@data/LocalStorage";
-import {useCopyToClipboard, useLocalStorage} from "@hooks/index";
+import { useCopyToClipboard, useLocalStorage } from "@hooks/index";
 
-const MapPopup = ({ Popup, setCompleted, markerInfo }) => {
+const MapPopup = ({
+  Popup,
+  setCompleted,
+  markerInfo,
+  fetchInfo,
+  setFetchInfo,
+}) => {
   const pathname = usePathname();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [completedMarkers, setCompletedMarkers] = useLocalStorage(
     COMPLETED,
     {}
   );
 
-  const { setMarkers, markers } = useMapContext();
+  const { setMarkers, markers, markerRefs } = useMapContext();
   const [value, copy] = useCopyToClipboard();
   const [completed] = useState(completedMarkers[markerInfo.id]);
+  const [details, setDetails] = useState(null);
+
+  useEffect(() => {
+    if (fetchInfo) {
+      markerRefs[markerInfo.id].openPopup();
+      fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/marker-detail?id=` +
+          markerInfo.id,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((json) => setDetails({ ...json }));
+    }
+  }, [fetchInfo]);
 
   const handleCompleteCheck = (e) => {
     setCompleted(e.target.checked);
@@ -93,7 +121,7 @@ const MapPopup = ({ Popup, setCompleted, markerInfo }) => {
             mb="5px !important"
             mt="0 !important"
             display="flex"
-            alignItems='center'
+            alignItems="center"
           >
             {markerInfo.title}
             <LinkIcon
@@ -117,11 +145,11 @@ const MapPopup = ({ Popup, setCompleted, markerInfo }) => {
             )}
           </Text>
           <Text mr="10px !important" mt="0 !important" fontSize="11px">
-            {markerInfo.category.charAt(0).toUpperCase() +
-              markerInfo.category.substring(1)}
+            {details && details.type}
           </Text>
-          {markerInfo.descriptions &&
-            markerInfo.descriptions.map((desc, i) => (
+          {details &&
+            details.descriptions &&
+            details.descriptions.map((desc, i) => (
               <div key={i} dangerouslySetInnerHTML={{ __html: desc }} />
             ))}
         </Stack>

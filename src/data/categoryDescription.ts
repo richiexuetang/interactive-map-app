@@ -11,9 +11,7 @@ export const categoryDescriptions: CategoryDescriptionsType[] = [
     categoryDescriptions: [
       ["armor", ""],
       ["armorshop", ""],
-      ["arrows", ""],
       ["bargainer", ""],
-      ["blupee", ""],
       ["building", ""],
       ["cave", ""],
       ["caveentrance", ""],

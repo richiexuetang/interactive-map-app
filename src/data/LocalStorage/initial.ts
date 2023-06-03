@@ -7,9 +7,7 @@ export const initialUserSettings = {
     totk: {
       armor: false,
       armorshop: false,
-      arrows: false,
       bargainer: false,
-      blupee: false,
       bombflower: true,
       building: false,
       cave: false,
@@ -70,6 +68,7 @@ export const initialUserSettings = {
       yigaschematic: false,
       lynel: false,
       talus: false,
+      frox: false,
     },
     witcher3: {
       abandoned: false,

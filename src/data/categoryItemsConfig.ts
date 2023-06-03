@@ -61,8 +61,6 @@ export const categoryItemsConfig = [
         groupId: 4,
         members: [
           ["armor", "Armor"],
-          ["arrows", "Arrows"],
-          ["blupee", "Blupee"],
           ["poe", "Poe"],
           ["weapon", "Weapon"],
           ["zonaicharge", "Zonai Charge"],
@@ -86,6 +84,7 @@ export const categoryItemsConfig = [
         groupId: 6,
         members: [
           ["enemycamp", "Enemy Camp"],
+          ["frox", "Frox"],
           ["gleeok", "Gleeok"],
           ["lynel", "Lynel"],
           ["talus", "Talus"],
@@ -124,9 +123,7 @@ export const categoryItemsConfig = [
     categories: [
       "armor",
       "armorshop",
-      "arrows",
       "bargainer",
-      "blupee",
       "bombflower",
       "building",
       "cave",
@@ -141,6 +138,7 @@ export const categoryItemsConfig = [
       "healingfairy",
       "fairy",
       "fallingplatform",
+      "frox",
       "generalstore",
       "gleeok",
       "goddess",

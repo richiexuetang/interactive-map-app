@@ -1,6 +1,6 @@
 //@ts-nocheck
 import L from "leaflet";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as ReactLeaflet from "react-leaflet";
 
 import { useMapContext } from "@context/app-context";
@@ -13,6 +13,7 @@ const DynamicMarker = ({ children, marker, useMap, rank, ...rest }) => {
 
   const map = useMap();
   const { markerRefs, game: gameSlug } = useMapContext();
+  const [fetchInfo, setFetchInfo] = useState(false);
 
   useEffect(() => {
     (async function init() {
@@ -140,6 +141,8 @@ const DynamicMarker = ({ children, marker, useMap, rank, ...rest }) => {
       zIndexOffset={100 + rank}
       eventHandlers={{
         click: () => {
+          setFetchInfo(true);
+
           map.flyTo(coord, map.getZoom(), {
             animate: true,
             duration: 0.5,
@@ -148,7 +151,7 @@ const DynamicMarker = ({ children, marker, useMap, rank, ...rest }) => {
       }}
       {...rest}
     >
-      {children(ReactLeaflet, L)}
+      {children(ReactLeaflet, fetchInfo, setFetchInfo, L)}
     </Marker>
   );
 };
