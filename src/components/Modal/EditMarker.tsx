@@ -16,12 +16,11 @@ import {
   Select,
 } from "@chakra-ui/react";
 import draftToHtml from "draftjs-to-html";
-import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
 import { toast } from "react-toastify";
 
 import dynamic from "next/dynamic";
 import { MarkerInfo } from "src/types/markerInfo";
-import { marker } from "leaflet";
 import useMapObject from "@hooks/useMapObject";
 import { categoryItemsConfig } from "@data/index";
 import { useMapContext } from "@context/app-context";

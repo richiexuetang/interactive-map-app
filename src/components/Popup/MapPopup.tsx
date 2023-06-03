@@ -81,7 +81,7 @@ const MapPopup = ({
         isOpen={isOpen}
         markerInfo={{
           id: markerInfo.id,
-          descriptions: markerInfo.descriptions,
+          descriptions: details.descriptions,
           title: markerInfo.title,
           category: markerInfo.category,
         }}
