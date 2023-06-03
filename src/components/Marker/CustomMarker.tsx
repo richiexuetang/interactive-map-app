@@ -13,6 +13,7 @@ import {
   SETTING_HIDDEN_CATEGORY,
 } from "@data/LocalStorage";
 import useLocalStorage from "@hooks/useLocalStorage";
+import { useMapContext } from "@context/app-context";
 
 const Marker = dynamic(() => import("./DynamicMarker"), {
   ssr: false,

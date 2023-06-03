@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Input } from "@chakra-ui/react";
 
 import { useMapContext } from "@context/app-context";
+import { Loader } from "@components/Loader";
 
 const SearchInput = ({ results, setResults }) => {
   const { area } = useMapContext();
@@ -59,6 +60,10 @@ const SearchInput = ({ results, setResults }) => {
     }
   };
 
+  if (isLoading) {
+    return <Loader loading={isLoading} />
+  }
+  
   return (
     <Input
       variant="outlined"
