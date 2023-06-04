@@ -61,6 +61,7 @@ export const categoryItemsConfig = [
         groupId: 4,
         members: [
           ["armor", "Armor"],
+          ["bow", "Bow"],
           ["poe", "Poe"],
           ["weapon", "Weapon"],
           ["zonaicharge", "Zonai Charge"],
@@ -125,6 +126,7 @@ export const categoryItemsConfig = [
       "armorshop",
       "bargainer",
       "bombflower",
+      "bow",
       "building",
       "cave",
       "caveentrance",

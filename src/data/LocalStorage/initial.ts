@@ -9,6 +9,7 @@ export const initialUserSettings = {
       armorshop: false,
       bargainer: false,
       bombflower: true,
+      bow: false,
       building: false,
       cave: false,
       caveentrance: false,

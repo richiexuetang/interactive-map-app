@@ -591,14 +591,14 @@ const pointsData = [
     endLong: -0.5768616692,
     category: "seed",
   },
-  // {
-  //   startLat: ,
-  //   startLong: -,
-  //   id: "",
-  //   endLat: ,
-  //   endLong: -,
-  //   category: "seed",
-  // },
+  {
+    startLat: 0.7851963860,
+    startLong: -0.7527609832,
+    id: "646946546fda291c35936271",
+    endLat: 0.7927004887,
+    endLong: -0.7469165262,
+    category: "seed",
+  },
   // {
   //   startLat: ,
   //   startLong: -,
