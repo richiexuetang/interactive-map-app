@@ -19,6 +19,10 @@ const PolyLines = dynamic(() => import("@components/Line/PolyLines"), {
   ssr: false,
 });
 
+const TextLayer = dynamic(() => import("@components/Layer/TextLayer"), {
+  ssr: false,
+});
+
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
 
@@ -148,6 +152,7 @@ const MapPage = ({
             />
             <AddMarkerControl useMap={useMap} />
             <PolyLines />
+            <TextLayer />
           </>
         )}
       </Map>

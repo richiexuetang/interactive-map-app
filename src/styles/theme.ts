@@ -11,6 +11,11 @@ const styles = {
             bg: "app.background",
             color: "app.text",
             fontSize: "15px !important"
+        },
+        span: {
+            textWrap: 'nowrap',
+            fontSize: '1rem',
+            letterSpacing: '2px'
         }
     })
 };

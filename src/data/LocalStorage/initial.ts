@@ -1,6 +1,6 @@
 export const initialUserSettings = {
   hideCompletedMarkers: {
-    totk: false,
+    totk: true,
     witcher3: false,
   },
   hiddenCategories: {
@@ -23,6 +23,7 @@ export const initialUserSettings = {
       healingfairy: true,
       fairy: false,
       fallingplatform: false,
+      fleetlotus: true,
       generalstore: false,
       gleeok: false,
       goddess: false,
@@ -37,9 +38,11 @@ export const initialUserSettings = {
       lore: false,
       mainquest: false,
       mastersword: false,
+      material: true, 
       memory: false,
       merchant: false,
       minigame: false,
+      mightythistle: true,
       npc: false,
       paragliderfabric: false,
       poi: false,
@@ -51,6 +54,7 @@ export const initialUserSettings = {
       settlement: false,
       shrine: false,
       shrinequest: false,
+      silentshroom: true,
       sideadventure: false,
       sidequest: false,
       stable: false,
