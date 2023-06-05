@@ -116,6 +116,7 @@ const MapPage = ({
     setCategoryItems,
     setMarkers,
     setCategoryCounts,
+    markerRefs
   } = useMapContext();
 
   useEffect(() => {

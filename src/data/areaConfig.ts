@@ -250,43 +250,6 @@ export const areaConfig = [
     ],
   },
   {
-    name: "hyrule",
-    maxZoom: 16,
-    minZoom: 9,
-    zoom: 14.97,
-    center: [0.7025662387368882, -0.7162766852252856],
-    bounds: [
-      [0.5, -0.5],
-      [0.9, 0],
-    ],
-    gameSlug: "totk",
-    subSelections: [
-      {
-        name: "Sky",
-        to: "hyrule",
-        location: [1.0526990043409699, -0.7615146589836197],
-        bounds: [
-          [83.8, -169.65],
-          [84, -167],
-        ],
-        zoom: 11.52,
-      },
-      {
-        name: "Surface",
-        to: "hyrule",
-        location: [0.6984909381621621, -0.7724546477287465],
-        zoom: 11.53,
-      },
-      {
-        name: "Depths",
-        to: "hyrule",
-        location: [0.3703973477190078, -0.7705527723557173],
-        zoom: 11.53,
-        flex: "100%",
-      },
-    ],
-  },
-  {
     name: "hyrule-sky",
     maxZoom: 16,
     minZoom: 11,

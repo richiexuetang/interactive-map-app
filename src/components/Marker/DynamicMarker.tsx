@@ -12,7 +12,7 @@ const DynamicMarker = ({ children, marker, useMap, rank, ...rest }) => {
   const { category, _id: id, coord } = marker;
 
   const map = useMap();
-  const { markerRefs, game: gameSlug } = useMapContext();
+  const { markerRefs, game: gameSlug, config } = useMapContext();
   const [fetchInfo, setFetchInfo] = useState(false);
 
   useEffect(() => {
@@ -142,7 +142,7 @@ const DynamicMarker = ({ children, marker, useMap, rank, ...rest }) => {
       eventHandlers={{
         click: () => {
           setFetchInfo(true);
-
+          
           map.flyTo(coord, map.getZoom(), {
             animate: true,
             duration: 0.5,

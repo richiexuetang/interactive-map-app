@@ -29,7 +29,7 @@ export const icons = [
     title: "Temple of Time",
     maxZoom: 14,
     minZoom: 17,
-    position: [1.0203929826939, -0.6885244272461],
+    position: [1.0200723811, -0.6897892562],
   },
   {
     game: "totk",
@@ -1894,14 +1894,6 @@ export const icons = [
     maxZoom: 15,
     minZoom: 17,
     position: [0.62318442783695, -0.68547088254763],
-  },
-  {
-    game: "totk",
-    area: "hyrule-surface",
-    title: "Lake Hylia",
-    maxZoom: 15,
-    minZoom: 17,
-    position: [0.62371783331432, -0.69966422068305],
   },
   {
     game: "totk",

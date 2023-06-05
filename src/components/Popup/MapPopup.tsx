@@ -19,13 +19,7 @@ import { useMapContext } from "@context/app-context";
 import { COMPLETED } from "@data/LocalStorage";
 import { useCopyToClipboard, useLocalStorage } from "@hooks/index";
 
-const MapPopup = ({
-  Popup,
-  setCompleted,
-  markerInfo,
-  fetchInfo,
-  setFetchInfo,
-}) => {
+const MapPopup = ({ Popup, setCompleted, markerInfo, fetchInfo }) => {
   const pathname = usePathname();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { status } = useSession();
@@ -38,6 +32,7 @@ const MapPopup = ({
   const [value, copy] = useCopyToClipboard();
   const [completed] = useState(completedMarkers[markerInfo.id]);
   const [details, setDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (fetchInfo) {
@@ -56,7 +51,10 @@ const MapPopup = ({
         .then((res) => {
           return res.json();
         })
-        .then((json) => setDetails({ ...json }));
+        .then((json) => {
+          setDetails({ ...json });
+          setLoading(false);
+        });
     }
   }, [fetchInfo]);
 
@@ -74,7 +72,7 @@ const MapPopup = ({
     toast.success(`Link copied`);
   };
 
-  if (isOpen) {
+  if (isOpen && !loading) {
     return (
       <MarkerEdit
         onClose={onClose}
@@ -104,7 +102,7 @@ const MapPopup = ({
       );
 
       setMarkers(markers.filter((marker) => marker._id !== markerInfo.id));
-      toast.success("Delete Successful");
+      toast.success("Delete Successfully");
     } catch (errorMessage: any) {
       toast.error(errorMessage);
     }
@@ -113,9 +111,9 @@ const MapPopup = ({
   return (
     <Popup>
       <HStack justifyContent="space-between" mb={2}>
-        <Stack mt={3} spacing="3">
+        <Stack mt={2} spacing="3">
           <Text
-            fontSize="1rem"
+            fontSize="1.25rem"
             fontWeight="normal"
             lineHeight="1.2"
             mb="5px !important"
@@ -144,24 +142,25 @@ const MapPopup = ({
               </>
             )}
           </Text>
-          <Text mr="10px !important" mt="0 !important" fontSize="11px">
+          <Text mr="10px !important" mt="0 !important" fontSize="12px">
             {details && details.type}
           </Text>
+
           {details &&
             details.descriptions &&
             details.descriptions.map((desc, i) => (
-              <div key={i} dangerouslySetInnerHTML={{ __html: desc }} />
+              <div key={i} style={{margin: '0.25em'}} dangerouslySetInnerHTML={{ __html: desc }} />
             ))}
         </Stack>
       </HStack>
 
-      <Divider />
-      <Box my={4} textAlign="center" pl={3}>
+      <Divider pt={2}/>
+      <Box my={2} textAlign="center" pl={3}>
         <Checkbox
           isChecked={completed}
           onChange={(e) => handleCompleteCheck(e)}
         >
-          Completed
+          <Text letterSpacing={0}>Completed</Text>
         </Checkbox>
       </Box>
     </Popup>

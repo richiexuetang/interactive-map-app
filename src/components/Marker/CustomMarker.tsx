@@ -68,12 +68,11 @@ const CustomMarker = (props) => {
       {!hidden && (
         <Marker
           opacity={completed ? 0.5 : 1}
-          gameSlug={gameSlug}
           marker={marker}
           useMap={useMap}
           rank={rank}
         >
-          {({ Popup, Tooltip }, fetchInfo, setFetchInfo) => {
+          {({ Popup, Tooltip }, fetchInfo) => {
             const CustomTooltip = styled(Tooltip)`
               margin-left: 15px;
 
@@ -92,15 +91,17 @@ const CustomMarker = (props) => {
             const CustomPopup = styled(Popup)`
               border-radius: 0;
               white-space: nowrap;
-              min-width: 350px;
-              max-width: 450px;
+              min-width: 450px;
               white-space: initial;
               bottom: 35px !important;
+              
 
               .leaflet-popup-content {
+                max-height: 300px;
+                width: auto !important;
+                overflow-y: scroll;
                 p {
-                  margin-top: 0 !important;
-                  margin-bottom: 0.5em !important;
+                  margin: 0 !important;
                   line-height: 1.5em;
                 }
               }
@@ -129,6 +130,11 @@ const CustomMarker = (props) => {
               .leaflet-popup-tip-container {
                 background: transparent;
               }
+
+              .leaflet-popup-close-button {
+                right: 5px !important;
+                top: 3px !important;
+              }
             `;
 
             if(fetchInfo) {
@@ -143,7 +149,6 @@ const CustomMarker = (props) => {
                     }}
                     setCompleted={setCompleted}
                     fetchInfo={fetchInfo}
-                    setFetchInfo={setFetchInfo}
                   />
                   <CustomTooltip>{title}</CustomTooltip>
                 </>
