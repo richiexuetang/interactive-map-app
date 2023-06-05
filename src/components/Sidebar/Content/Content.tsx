@@ -69,9 +69,10 @@ const Content = ({ useMap }) => {
       return;
     }
 
-    // console.log("" + map.getCenter().lat + "," + map.getCenter().lng);
-    // console.log(map.getZoom());
-    // console.log(map.getBounds())
+    // alert("" + map.getCenter().lat + "," + map.getCenter().lng);
+    // alert(map.getZoom());
+    // alert("" + map.getBounds()._southWest.lat + "," + map.getBounds()._southWest.lng)
+    // alert("" + map.getBounds()._northEast.lat + "," + map.getBounds()._northEast.lng)
 
     if (to === area) {
       map.flyTo(selection.location, selection.zoom, {

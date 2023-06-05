@@ -32,8 +32,6 @@ export const initialUserSettings = {
       inn: false,
       jewelry: false,
       keyitem: false,
-      landmark: false,
-      lighthouse: false,
       lightroot: false,
       lore: false,
       mainquest: false,
@@ -74,6 +72,7 @@ export const initialUserSettings = {
       lynel: false,
       talus: false,
       frox: false,
+      oldmap: false
     },
     witcher3: {
       abandoned: false,
