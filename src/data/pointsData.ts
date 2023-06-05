@@ -106,7 +106,7 @@ const pointsData = [
   {
     startLat: 0.6020053721170381,
     startLong: -0.8261847496032716,
-    id: "646946546fda291c3593622b",
+    id: "647d5e9c45baf4fa82e7ecc9",
     endLat: 0.5910410959443791,
     endLong: -0.823502540588379,
     category: "seed",
@@ -599,14 +599,14 @@ const pointsData = [
     endLong: -0.7469165262,
     category: "seed",
   },
-  // {
-  //   startLat: ,
-  //   startLong: -,
-  //   id: "",
-  //   endLat: ,
-  //   endLong: -,
-  //   category: "seed",
-  // },
+  {
+    startLat: 0.7732144731,
+    startLong: -0.8402824402,
+    id: "646946576fda291c359363c7",
+    endLat: 0.7808527019,
+    endLong: -0.8356261253,
+    category: "seed",
+  },
   // {
   //   startLat: ,
   //   startLong: -,
