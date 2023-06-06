@@ -1,5 +1,7 @@
 const pointsData = [
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7295902494300266,
     startLong: -0.5696356192571383,
     id: "646c46476fda291c359376d3",
@@ -8,6 +10,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.8013871542183558,
     startLong: -0.6874231335368531,
     id: "646946576fda291c35936395",
@@ -16,6 +20,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7998354503416558,
     startLong: -0.6628629845017998,
     id: "646946576fda291c35936397",
@@ -24,6 +30,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7983278911846298,
     startLong: -0.7778745325304071,
     id: "646946526fda291c3593614f",
@@ -32,6 +40,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7945085387167313,
     startLong: -0.7940958314638903,
     id: "646c464a6fda291c3593785f",
@@ -40,6 +50,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.8121035113786735,
     startLong: -0.8213254609963162,
     id: "646946576fda291c359363b3",
@@ -48,6 +60,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.8156019766755437,
     startLong: -0.7962717427070355,
     id: "646946576fda291c359363ab",
@@ -56,6 +70,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7353135349466987,
     startLong: -0.8196084575600661,
     id: "646946546fda291c35936277",
@@ -64,6 +80,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7190485814618647,
     startLong: -0.7955653707892175,
     id: "646946556fda291c359362ad",
@@ -72,6 +90,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7058931506771507,
     startLong: -0.7984449891235014,
     id: "6469465a6fda291c35936533",
@@ -80,6 +100,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6653874555019941,
     startLong: -0.805950164794922,
     id: "646946596fda291c359364a5",
@@ -88,6 +110,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6303791312167949,
     startLong: -0.8362284660147279,
     id: "646946596fda291c359364f3",
@@ -96,6 +120,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6001751224107008,
     startLong: -0.8516244971330856,
     id: "6469465a6fda291c3593651b",
@@ -104,6 +130,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6020053721170381,
     startLong: -0.8261847496032716,
     id: "647d5e9c45baf4fa82e7ecc9",
@@ -112,6 +140,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6048044391237417,
     startLong: -0.8108489715806866,
     id: "6469465a6fda291c35936507",
@@ -120,6 +150,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6707944212751733,
     startLong: -0.7528209686279297,
     id: "646946546fda291c35936265",
@@ -128,6 +160,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6870367386872144,
     startLong: -0.7282090187072755,
     id: "646946526fda291c3593613d",
@@ -136,6 +170,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7175257999726969,
     startLong: -0.5815243721008302,
     id: "646946516fda291c359360ab",
@@ -144,6 +180,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6970567406004983,
     startLong: -0.5744004249572755,
     id: "646946536fda291c359361cd",
@@ -152,6 +190,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6836252128826836,
     startLong: -0.5853867530822755,
     id: "646c46486fda291c35937765",
@@ -160,6 +200,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6561398138243756,
     startLong: -0.590493679046631,
     id: "646946586fda291c35936417",
@@ -168,6 +210,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6335463162279087,
     startLong: -0.5831336975097657,
     id: "6469465b6fda291c359365b1",
@@ -176,6 +220,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6295339752934778,
     startLong: -0.5985617637634278,
     id: "646c46486fda291c35937771",
@@ -184,6 +230,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6093863988712149,
     startLong: -0.6247615814208984,
     id: "646946546fda291c35936241",
@@ -200,6 +248,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.5913629438918696,
     startLong: -0.6310272216796876,
     id: "646c46496fda291c359377df",
@@ -208,6 +258,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.5777916727038873,
     startLong: -0.6121337413787843,
     id: "646c46496fda291c359377dd",
@@ -216,6 +268,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.5959546392388285,
     startLong: -0.5846786499023439,
     id: "646946546fda291c35936233",
@@ -224,6 +278,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.5917920744594702,
     startLong: -0.5890989303588868,
     id: "646946546fda291c35936235",
@@ -232,6 +288,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7545479575399617,
     startLong: -0.5649161338806153,
     id: "6469465a6fda291c35936581",
@@ -240,6 +298,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7846825389300082,
     startLong: -0.5626201629638673,
     id: "646c46496fda291c359377a3",
@@ -248,6 +308,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7912050544220214,
     startLong: -0.5677485466003419,
     id: "646c46476fda291c359376e9",
@@ -256,6 +318,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.8083480641199646,
     startLong: -0.5647552013397218,
     id: "64770714e10921b7863da47d",
@@ -264,6 +328,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.8037994878113124,
     startLong: -0.5756878852844239,
     id: "646c46476fda291c359376ef",
@@ -272,6 +338,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.8211999101179438,
     startLong: -0.5953645706176759,
     id: "646946566fda291c3593636d",
@@ -280,6 +348,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7923636580774951,
     startLong: -0.6331300735473634,
     id: "646946566fda291c35936379",
@@ -288,6 +358,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7880403483452386,
     startLong: -0.6446421146392823,
     id: "646946566fda291c35936383",
@@ -296,6 +368,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.5857842435028313,
     startLong: -0.6582355499267578,
     id: "6469465a6fda291c35936523",
@@ -304,6 +378,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.5910518242095987,
     startLong: -0.6865382194519043,
     id: "646946586fda291c35936457",
@@ -312,6 +388,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.5818147802258885,
     startLong: -0.7010650634765626,
     id: "6469465a6fda291c35936529",
@@ -320,6 +398,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.5896249647540417,
     startLong: -0.6958508491516113,
     id: "6469465a6fda291c35936531",
@@ -328,6 +408,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6306666196604575,
     startLong: -0.7091601389635585,
     id: "646946546fda291c35936257",
@@ -336,6 +418,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6326666053791765,
     startLong: -0.6858515739440919,
     id: "6469465b6fda291c359365c9",
@@ -344,6 +428,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6419142899748818,
     startLong: -0.664104,
     id: "646946586fda291c35936437",
@@ -352,6 +438,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.643673708359862,
     startLong: -0.646347999572754,
     id: "646946586fda291c3593645d",
@@ -360,6 +448,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6468921551,
     startLong: -0.6236886978,
     id: "6469465b6fda291c359365b7",
@@ -368,6 +458,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.8203202358,
     startLong: -0.7476496696,
     id: "646946596fda291c359364e5",
@@ -376,6 +468,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7870855721,
     startLong: -0.6476140022,
     id: "646946566fda291c35936381",
@@ -384,6 +478,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7686551305,
     startLong: -0.6393527985,
     id: "6469465a6fda291c3593656b",
@@ -392,6 +488,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7615747301,
     startLong: -0.654040575,
     id: "646946586fda291c3593640d",
@@ -400,6 +498,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7549234342,
     startLong: -0.6538367271,
     id: "6469465a6fda291c3593653d",
@@ -408,6 +508,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7479073789,
     startLong: -0.6264781952,
     id: "6469465b6fda291c359365e3",
@@ -416,6 +518,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7384775253,
     startLong: -0.6180989742,
     id: "6469465a6fda291c35936567",
@@ -424,6 +528,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.692808434,
     startLong: -0.6550168991,
     id: "646c46476fda291c35937701",
@@ -432,6 +538,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6965417946,
     startLong: -0.6723117828,
     id: "646946556fda291c359362eb",
@@ -440,6 +548,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.684998406,
     startLong: -0.6767642498,
     id: "646946536fda291c359361c1",
@@ -448,6 +558,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6721247056,
     startLong: -0.6826543808,
     id: "646946566fda291c3593631d",
@@ -456,6 +568,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.664400469,
     startLong: -0.6937265396,
     id: "646946576fda291c359363cf",
@@ -464,6 +578,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6483511835,
     startLong: -0.7014513016,
     id: "646946586fda291c3593644f",
@@ -472,6 +588,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6672541467,
     startLong: -0.704240799,
     id: "646946526fda291c35936165",
@@ -480,6 +598,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6497994835,
     startLong: -0.7178986073,
     id: "6469465b6fda291c359365d7",
@@ -488,6 +608,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6523420535,
     startLong: -0.7254195213,
     id: "646946546fda291c3593627f",
@@ -496,6 +618,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.5953538569,
     startLong: -0.7834625244,
     id: "647732f109cdcbe3d154fa16",
@@ -504,6 +628,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6282251361,
     startLong: -0.7988262177,
     id: "646946546fda291c3593622d",
@@ -512,6 +638,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6348873386,
     startLong: -0.7813382149,
     id: "646946526fda291c35936135",
@@ -520,6 +648,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7187444535,
     startLong: -0.7703360161,
     id: "646946596fda291c359364ad",
@@ -528,6 +658,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7033877473,
     startLong: -0.8183157262,
     id: "646946596fda291c359364bb",
@@ -536,14 +668,18 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6600653275,
     startLong: -0.8490243254,
-    id: "",
+    id: "646c46486fda291c3593773f",
     endLat: 0.6841607122,
     endLong: -0.8482505672,
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6772950718,
     startLong: -0.6427952034,
     id: "6469465b6fda291c359365a9",
@@ -552,6 +688,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.6855041473,
     startLong: -0.6166832225,
     id: "646c46486fda291c35937753",
@@ -560,7 +698,9 @@ const pointsData = [
     category: "seed",
   },
   {
-    startLat: 0.6183231380,
+    game: "totk",
+    area: "hyrule-surface",
+    startLat: 0.618323138,
     startLong: -0.7358694016,
     id: "6469465a6fda291c35936517",
     endLat: 0.6244000434,
@@ -568,6 +708,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.8212139196,
     startLong: -0.6701541919,
     id: "646946566fda291c35936347",
@@ -576,7 +718,9 @@ const pointsData = [
     category: "seed",
   },
   {
-    startLat: 0.7556296160,
+    game: "totk",
+    area: "hyrule-surface",
+    startLat: 0.755629616,
     startLong: -0.6427461639,
     id: "647bc1c345baf4fa82e7ecb8",
     endLat: 0.7548248405,
@@ -584,6 +728,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7174629044,
     startLong: -0.5815829603,
     id: "647bc46845baf4fa82e7ecbc",
@@ -592,7 +738,9 @@ const pointsData = [
     category: "seed",
   },
   {
-    startLat: 0.7851963860,
+    game: "totk",
+    area: "hyrule-surface",
+    startLat: 0.785196386,
     startLong: -0.7527609832,
     id: "646946546fda291c35936271",
     endLat: 0.7927004887,
@@ -600,6 +748,8 @@ const pointsData = [
     category: "seed",
   },
   {
+    game: "totk",
+    area: "hyrule-surface",
     startLat: 0.7732144731,
     startLong: -0.8402824402,
     id: "646946576fda291c359363c7",
@@ -607,22 +757,146 @@ const pointsData = [
     endLong: -0.8356261253,
     category: "seed",
   },
-  // {
-  //   startLat: ,
-  //   startLong: -,
-  //   id: "",
-  //   endLat: ,
-  //   endLong: -,
-  //   category: "seed",
-  // },
-  // {
-  //   startLat: ,
-  //   startLong: -,
-  //   id: "",
-  //   endLat: ,
-  //   endLong: -,
-  //   category: "seed",
-  // },
+  {
+    game: "totk",
+    area: "hyrule-surface",
+    startLat: 0.6362187315,
+    startLong: -0.7669975784,
+    id: "646c464a6fda291c35937819",
+    endLat: 0.6389289844,
+    endLong: -0.7691627074,
+    category: "seed",
+  },
+  {
+    game: "totk",
+    area: "hyrule-surface",
+    startLat: 0.6278686229,
+    startLong: -0.7580891403,
+    id: "646c464a6fda291c3593781b",
+    endLat: 0.6271237771,
+    endLong: -0.7559311488,
+    category: "seed",
+  },
+  {
+    game: "totk",
+    area: "hyrule-surface",
+    startLat: 0.5972520949,
+    startLong: -0.7128240669,
+    id: "646946546fda291c35936227",
+    endLat: 0.5957636168,
+    endLong: -0.7222484942,
+    category: "seed",
+  },
+  {
+    game: "totk",
+    area: "hyrule-surface",
+    startLat: 0.6608608023,
+    startLong: -0.746707652,
+    id: "6469465a6fda291c35936573",
+    endLat: 0.6602145432,
+    endLong: -0.745174054,
+    category: "seed",
+  },
+  {
+    game: "totk",
+    area: "hyrule-surface",
+    startLat: 0.7776898377,
+    startLong: -0.793591935,
+    id: "646946596fda291c359364df",
+    endLat: 0.7776460246,
+    endLong: -0.7945011395,
+    category: "seed",
+  },
+  {
+    game: "totk",
+    area: "hyrule-surface",
+    startLat: 0.7745737592,
+    startLong: -0.7206786304,
+    id: "646946576fda291c359363a3",
+    endLat: 0.775186126,
+    endLong: -0.7347643546,
+    category: "seed",
+  },
+  {
+    game: "totk",
+    area: "hyrule-surface",
+    startLat: 0.7769333609,
+    startLong: -0.5830097282,
+    id: "6469465a6fda291c35936585",
+    endLat: 0.7783445742,
+    endLong: -0.5652717084,
+    category: "seed",
+  },
+  {
+    game: "totk",
+    area: "hyrule-surface",
+    startLat: 0.6416349766,
+    startLong: -0.6113936944,
+    id: "646c46476fda291c359376b9",
+    endLat: 0.6350807055,
+    endLong: -0.5984057216,
+    category: "seed",
+  },
+  {
+    game: "totk",
+    area: "hyrule-surface",
+    startLat: 0.6348625007,
+    startLong: -0.6172610232,
+    id: "646c46496fda291c359377d3",
+    endLat: 0.6371791865,
+    endLong: -0.623220147,
+    category: "seed",
+  },
+  {
+    game: "totk",
+    area: "hyrule-surface",
+    startLat: 0.7108495254,
+    startLong: -0.6309968137,
+    id: "646946586fda291c3593643f",
+    endLat: 0.7081482005,
+    endLong: -0.6320894829,
+    category: "seed",
+  },
+  {
+    game: "totk",
+    area: "hyrule-surface",
+    startLat: 0.72335036,
+    startLong: -0.6209854756,
+    id: "6469465b6fda291c35936593",
+    endLat: 0.7234489406,
+    endLong: -0.618181182,
+    category: "seed",
+  },
+  {
+  game: "totk",
+  area: "hyrule-surface",
+    startLat: 0.7334036045,
+    startLong: -0.7280774688,
+    id: "646946516fda291c35936115",
+    endLat: 0.7376086091,
+    endLong: -0.7274064021,
+    category: "seed",
+  },
+  {
+  game: "totk",
+  area: "hyrule-surface",
+    startLat: 0.7386822266,
+    startLong: -0.6859792206,
+    id: "646946526fda291c35936183",
+    endLat: 0.7411873332,
+    endLong: -0.6815949185,
+    category: "seed",
+  },
+  {
+  game: "totk",
+  area: "hyrule-surface",
+    startLat: 0.7596607241,
+    startLong: -0.6035902809,
+    id: "646c46476fda291c359376c1",
+    endLat: 0.7730039148,
+    endLong: -0.5993323487,
+    category: "seed",
+  },
 ];
 
 export default pointsData;

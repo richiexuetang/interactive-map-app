@@ -8,13 +8,18 @@ import { useMapContext } from "src/context/app-context";
 
 const SearchResult = ({ result, useMap }) => {
   const { game, markerRefs } = useMapContext();
-  const { _id: id, category, title, coord, descriptions } = result;
+  const { _id: id, category, title, descriptions } = result;
   const ref = useRef(null);
   const map = useMap();
   const [markerOverlays, setMarkerOverlays] = useState({});
 
-  const goToPosition = (pos) => {
-    map.flyTo(pos, map.getMaxZoom() - 1, { animate: true, duration: 0.5 });
+  const goToPosition = () => {
+    if (markerRefs[id]._latlng) {
+      map.flyTo(markerRefs[id]._latlng, map.getZoom(), {
+        animate: true,
+        duration: 0.5,
+      });
+    }
   };
 
   const handleMouseEnter = () => {
@@ -51,11 +56,10 @@ const SearchResult = ({ result, useMap }) => {
 
   return (
     <Box
-      key={id}
       borderTop="1px solid #584835"
       _hover={{ bg: "#141310" }}
       pb="5px"
-      onClick={() => goToPosition(coord)}
+      onClick={goToPosition}
       ref={ref}
     >
       <Box display="flex" my="1rem">
@@ -72,7 +76,7 @@ const SearchResult = ({ result, useMap }) => {
             height={32}
             src={`/images/icons/${game}/${category}.png`}
             alt={`${game}-${category}`}
-            style={{ objectFit: "contain", width: 'auto', height: 'auto' }}
+            style={{ objectFit: "contain", width: "auto", height: "auto" }}
           />
         </Box>
 
@@ -80,9 +84,9 @@ const SearchResult = ({ result, useMap }) => {
       </Box>
 
       <Box>
-        {descriptions.map((desc) => {
+        {descriptions.map((desc, i) => {
           return (
-            <Box mb="1rem" key={desc}>
+            <Box mb="1rem" key={id + i}>
               <div dangerouslySetInnerHTML={{ __html: desc }} />
             </Box>
           );

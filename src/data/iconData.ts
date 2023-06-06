@@ -2506,14 +2506,6 @@ export const icons = [
   {
     game: "totk",
     area: "hyrule-surface",
-    title: "Giant's Forest",
-    maxZoom: 15,
-    minZoom: 17,
-    position: [0.71208515093601, -0.75211199716352],
-  },
-  {
-    game: "totk",
-    area: "hyrule-surface",
     title: "Passeri Greenbelt",
     maxZoom: 15,
     minZoom: 17,

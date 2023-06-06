@@ -12,16 +12,13 @@ const SearchInput = ({ results, setResults }) => {
   let seen = new Set();
 
   useEffect(() => {
-    fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/markers?area=` + area,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/markers?area=` + area, {
+      method: "GET",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+    })
       .then((res) => {
         return res.json();
       })
@@ -41,29 +38,39 @@ const SearchInput = ({ results, setResults }) => {
         )
         .map((filtered) => {
           const newArr = results;
-          newArr.push(filtered);
+          newArr.push({
+            _id: filtered._id,
+            descriptions: filtered.descriptions,
+            title: filtered.title,
+            category: filtered.category
+          });
           setResults([...newArr]);
           seen = new Set([...seen, filtered._id]);
         });
 
-        markers.map((marker) =>
+      markers.map((marker) =>
         marker.descriptions
-              .filter((desc) => desc.toLowerCase().includes(value.toLowerCase()))
-              .map(() => {
-                  if (!seen.has(marker._id)) {
-                      const newArr = results;
-                      newArr.push(marker);
-                      setResults([...newArr]);
-                  }
-              })
+          .filter((desc) => desc.toLowerCase().includes(value.toLowerCase()))
+          .map(() => {
+            if (!seen.has(marker._id)) {
+              const newArr = results;
+              newArr.push({
+                _id: marker._id,
+                descriptions: marker.descriptions,
+                title: marker.title,
+                category: marker.category
+              });
+              setResults([...newArr]);
+            }
+          })
       );
     }
   };
 
   if (isLoading) {
-    return <Loader loading={isLoading} />
+    return <Loader loading={isLoading} />;
   }
-  
+
   return (
     <Input
       variant="outlined"

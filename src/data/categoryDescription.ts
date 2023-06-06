@@ -34,8 +34,6 @@ export const categoryDescriptions: CategoryDescriptionsType[] = [
       ["inn", ""],
       ["jewelry", ""],
       ["keyitem", ""],
-      ["landmark", ""],
-      ["lighthouse", ""],
       ["lightroot", ""],
       ["lore", ""],
       ["lynel", "Naturally resist all elements, only challenge one if you're very well prepared."],

@@ -18,10 +18,9 @@ const PolyLines = () => {
 
   return (
     <>
-      {game === "totk" &&
-        area === "hyrule-surface" &&
+      {
         pointsData.map(
-          ({ startLat, startLong, id, endLat, endLong, category }) => {
+          ({ startLat, startLong, id, endLat, endLong, category, game: gameId, area: areaId }) => {
             const hideCategory =
               userSettings[SETTING_HIDDEN_CATEGORY][game][category];
 
@@ -31,7 +30,7 @@ const PolyLines = () => {
               
             const shouldHide = hideCategory || hideComplete;
 
-            if (!shouldHide) {
+            if (!shouldHide && game === gameId && area === areaId) {
               return (
                 <Polyline
                   key={id}

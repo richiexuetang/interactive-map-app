@@ -6,8 +6,8 @@ import {SearchResult} from ".";
 const SearchResults = ({results, useMap}) => {
     return (
         <Box overflow="scroll" _hover={{cursor: "pointer"}}>
-            {results.map((result) => (
-                <SearchResult key={result._id} result={result} useMap={useMap}/>
+            {results.map((result, i) => (
+                <SearchResult key={i} result={result} useMap={useMap}/>
             ))}
         </Box>
     );
