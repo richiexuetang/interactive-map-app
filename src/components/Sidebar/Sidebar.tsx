@@ -17,7 +17,8 @@ import { Content } from ".";
 import { useMapContext } from "@context/.";
 
 const Sidebar = ({ useMap }) => {
-  const { game } = useMapContext();
+  const { config } = useMapContext();
+  
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
@@ -78,11 +79,11 @@ const Sidebar = ({ useMap }) => {
             />
           </Box>
           <DrawerHeader textAlign="center" _hover={{ cursor: "pointer" }}>
-            <Link href={`/game/${game}`}>
+            <Link href={`/game/${config.gameSlug}`}>
               <Image
                 width={360}
                 height={60}
-                src={`/images/logos/${game}/logo.png`}
+                src={`/images/logos/${config.gameSlug}/logo.png`}
                 alt="logo"
                 style={{ objectFit: "contain", height: 'auto' }}
                 priority={true}

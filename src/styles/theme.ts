@@ -13,9 +13,9 @@ const styles = {
             fontSize: "15px !important"
         },
         span: {
-            textWrap: 'nowrap',
-            fontSize: '1rem',
-            letterSpacing: '2px'
+            textWrap: 'nowrap !important',
+            textAlign: 'left',
+            overflowWrap: 'break-word'
         }
     })
 };

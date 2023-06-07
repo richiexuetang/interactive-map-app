@@ -1,20 +1,20 @@
 import React from "react";
 import TextContainer from "./TextContainer";
-import { icons } from "@data/iconData";
+import { useMapContext } from "@context/app-context";
 
 const TextLayer = () => {
+  const {textOverlay} = useMapContext();
+
   return (
     <>
-      {icons.map(({ title, position, maxZoom, minZoom, game, area }) => {
+      {textOverlay.map(({ id, coordinate, zoomRange, markerName }) => {
         return (
           <TextContainer
-            key={title}
-            position={position}
-            content={title}
-            maxZoom={maxZoom}
-            minZoom={minZoom}
-            game={game}
-            area={area}
+            key={id}
+            position={coordinate}
+            content={markerName}
+            maxZoom={zoomRange[0]}
+            minZoom={zoomRange[1]}
           />
         );
       })}

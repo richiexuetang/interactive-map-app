@@ -4,7 +4,7 @@ export default async (req, res) => {
   try {
     const { area } = req.query;
     const client = await clientPromise;
-    const db = client.db("test");
+    const db = client.db("ritcher-map");
 
     const projection = { area: 0, category: 0, title: 0, coord: 0, type: 0};
 

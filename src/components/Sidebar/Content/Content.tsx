@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import { Box, HStack, VStack, Button } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
-import { CategoryGroups, SearchInput, SearchResults } from "@components/Sidebar";
+import {
+  CategoryGroups,
+  SearchInput,
+  SearchResults,
+} from "@components/Sidebar";
 import { useMapContext } from "@context/index";
 import {
   SETTING_HIDDEN_CATEGORY,
   SETTING_HIDE_ALL,
   SETTING_HIDE_COMPLETED,
   USER_SETTING,
-  initialUserSettings
+  initialUserSettings,
 } from "@data/LocalStorage";
 import useLocalStorage from "@hooks/useLocalStorage";
 
@@ -17,15 +21,16 @@ const Content = ({ useMap }) => {
   const router = useRouter();
   const map = useMap();
 
-  const { area, game, config } = useMapContext();
-  const navSelections = config.subSelections;
+  const { config } = useMapContext();
+  const { game, area, subSelections: navSelections } = config;
 
   const [userSettings, setUserSettings] = useLocalStorage(
     USER_SETTING,
     initialUserSettings
   );
-  const [hideCompleted, setHideCompleted] =
-    useState(userSettings[SETTING_HIDE_COMPLETED][game]);
+  const [hideCompleted, setHideCompleted] = useState(
+    userSettings[SETTING_HIDE_COMPLETED][game]
+  );
 
   const [results, setResults] = useState([]);
 
@@ -36,12 +41,12 @@ const Content = ({ useMap }) => {
 
     if (settingKey === SETTING_HIDE_COMPLETED) {
       setHideCompleted(!current);
-      setUserSettings(prev => ({
-        ...prev, 
+      setUserSettings((prev) => ({
+        ...prev,
         hideCompletedMarkers: {
           ...prev.hideCompletedMarkers,
           [game]: !current,
-        }
+        },
       }));
     } else if (settingKey === SETTING_HIDE_ALL) {
       const newHidden = userSettings[SETTING_HIDDEN_CATEGORY][game];
@@ -85,26 +90,23 @@ const Content = ({ useMap }) => {
   };
 
   const handleHideShowAll = (hide: boolean) => {
-    const newHidden = userSettings[SETTING_HIDDEN_CATEGORY][game];
-      for (const key in newHidden) {
-        newHidden[key] = hide;
-      }
-      
-      setUserSettings((prev) => ({
-        ...prev,
-        hiddenCategories: {
-          ...prev.hiddenCategories,
-          [game]: {
-            ...prev.hiddenCategories[game],
-            ...newHidden,
-          },
-        },
-      }));
-  }
+    const newHidden = userSettings[SETTING_HIDDEN_CATEGORY];
+    for (const key in newHidden) {
+      newHidden[key] = hide;
+    }
+
+    setUserSettings((prev) => ({
+      ...prev,
+      hiddenCategories: {
+        ...prev.hiddenCategories,
+        ...newHidden,
+      },
+    }));
+  };
 
   return (
     <VStack>
-      <HStack>
+      {/* <HStack>
         <Button
           onClick={() => handleHideShowAll(false)}
           variant="underlined"
@@ -119,14 +121,14 @@ const Content = ({ useMap }) => {
         >
           Hide All
         </Button>
-      </HStack>
+      </HStack> */}
       <Button
-          onClick={() => toggle(SETTING_HIDE_COMPLETED)}
-          variant="underlined"
-          fontSize="12px"
-        >
-          {hideCompleted ? "Show Completed" : "Hide Completed"}
-        </Button>
+        onClick={() => toggle(SETTING_HIDE_COMPLETED)}
+        variant="underlined"
+        fontSize="12px"
+      >
+        {hideCompleted ? "Show Completed" : "Hide Completed"}
+      </Button>
 
       <Box mt={5}>
         <SearchInput results={results} setResults={setResults} />

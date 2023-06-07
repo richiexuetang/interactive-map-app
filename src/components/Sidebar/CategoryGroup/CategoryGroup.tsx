@@ -9,66 +9,34 @@ import {
   USER_SETTING,
   initialUserSettings,
 } from "@data/LocalStorage";
-import useMapObject, { MapOrEntries } from "@hooks/useMapObject";
 import useLocalStorage from "@hooks/useLocalStorage";
+import { categoryIdNameMap } from "@data/categoryItemsConfig";
 
 interface CategoryGroupPropsType {
   group: string;
-  categoryMap: MapOrEntries<string, string>;
-  game: string;
+  members: number[];
 }
 
-const CategoryGroup = ({
-  group,
-  categoryMap,
-  game,
-}: CategoryGroupPropsType) => {
-  const [members] = useMapObject<string, string>(categoryMap);
-  const [categories, setCategories] = useState([]);
-  const { markers } = useMapContext();
-  const [categoryCounts, setCategoryCounts] = useState({});
+const CategoryGroup = ({ group, members }: CategoryGroupPropsType) => {
+  const { categoryCounts } = useMapContext();
+
   const [userSettings, setUserSettings] = useLocalStorage(
     USER_SETTING,
     initialUserSettings
   );
 
-  useEffect(() => {
-    if (!Object.keys(categoryCounts).length) {
-      const counts = {...categoryCounts}
-      markers.map(({ category }) => {
-        counts[category] = (counts[category] + 1) || 1;
-      });
-      setCategoryCounts({...counts})
-    }
-  });
-
-  useEffect(() => {
-    if (!categories.length) {
-      Array.from(members.entries()).map(([key]) => {
-        categories.push(key);
-        setCategories([...categories]);
-      });
-    }
-  }, [categories, members]);
-
   const toggleGroupCategories = () => {
-    const newHidden = {};
+    members.map((categoryId) => {
+      const prev = userSettings[SETTING_HIDDEN_CATEGORY][categoryId];
 
-    Array.from(members.entries()).map(([key]) => {
-      const prev = userSettings[SETTING_HIDDEN_CATEGORY][game][key];
-      newHidden[key] = !prev;
-    });
-
-    setUserSettings((prev) => ({
-      ...prev,
-      hiddenCategories: {
-        ...prev.hiddenCategories,
-        [game]: {
-          ...prev.hiddenCategories[game],
-          ...newHidden,
+      setUserSettings((prevState) => ({
+        ...prevState,
+        hiddenCategories: {
+          ...prevState.hiddenCategories,
+          [categoryId]: !prev,
         },
-      },
-    }));
+      }));
+    });
   };
 
   return (
@@ -83,17 +51,13 @@ const CategoryGroup = ({
           {group.toUpperCase() + ":"}
         </Button>
       </HStack>
-      {Array.from(members.entries()).map(([key, value]) => {
+      {members.map((member) => {
         return (
-          categoryCounts &&
-          categoryCounts[key] && (
+          categoryCounts[member] > 0 && (
             <MarkerButton
-              key={key}
-              game={game}
-              type={value}
-              num={categoryCounts[key]}
-              category={key}
-              groupHide={userSettings[SETTING_HIDDEN_CATEGORY][game][key]}
+              key={member}
+              category={member}
+              groupHide={userSettings[SETTING_HIDDEN_CATEGORY][member]}
             />
           )
         );

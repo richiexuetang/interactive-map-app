@@ -1,16 +1,11 @@
-import { useMapContext } from "@context/app-context";
 import { divIcon } from "leaflet";
 import { useState } from "react";
-import { Marker, Popup, useMap, useMapEvents } from "react-leaflet";
+import { Marker, useMap, useMapEvents } from "react-leaflet";
 
-const TextContainer = ({ position, minZoom, maxZoom, content, game, area }) => {
-  const { game: gameMap, area: areaMap } = useMapContext();
+const TextContainer = ({ position, minZoom, maxZoom, content }) => {
   const map = useMap();
   const [show, setShow] = useState(
-    map.getZoom() <= minZoom &&
-      map.getZoom() >= maxZoom &&
-      game === gameMap &&
-      area === areaMap
+    map.getZoom() <= minZoom && map.getZoom() >= maxZoom
   );
 
   const icon = divIcon({
@@ -20,12 +15,7 @@ const TextContainer = ({ position, minZoom, maxZoom, content, game, area }) => {
 
   useMapEvents({
     zoom() {
-      setShow(
-        maxZoom <= map.getZoom() &&
-          map.getZoom() <= minZoom &&
-          game === gameMap &&
-          area === areaMap
-      );
+      setShow(maxZoom <= map.getZoom() && map.getZoom() <= minZoom);
     },
   });
 

@@ -1,6 +1,6 @@
-import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import React, { useState } from "react";
 
 import { DeleteIcon, EditIcon, LinkIcon } from "@chakra-ui/icons";
 import {
@@ -14,53 +14,34 @@ import {
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 
-import MarkerEdit from "@components/Modal/EditMarker";
-import { useMapContext } from "@context/app-context";
+// import MarkerEdit from "@components/Modal/EditMarker";
 import { COMPLETED } from "@data/LocalStorage";
 import { useCopyToClipboard, useLocalStorage } from "@hooks/index";
+import dynamic from "next/dynamic";
+import { useMapContext } from "@context/app-context";
 
-const MapPopup = ({ Popup, setCompleted, markerInfo, fetchInfo }) => {
-  const pathname = usePathname();
+const RMPopup = dynamic(() => import("@components/Popup/RMPopup"), {
+  ssr: false,
+});
+
+const RMTooltip = dynamic(() => import("@components/Popup/RMTooltip"), {
+  ssr: false,
+});
+
+const MapPopup = ({ markerInfo }) => {
+  const { setStandardMarker, standardMarker } = useMapContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { status } = useSession();
+  const pathname = usePathname();
   const [completedMarkers, setCompletedMarkers] = useLocalStorage(
     COMPLETED,
     {}
   );
 
-  const { setMarkers, markers, markerRefs } = useMapContext();
   const [value, copy] = useCopyToClipboard();
   const [completed] = useState(completedMarkers[markerInfo.id]);
-  const [details, setDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (fetchInfo) {
-      markerRefs[markerInfo.id].openPopup();
-      fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/marker-detail?id=` +
-          markerInfo.id,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-          },
-        }
-      )
-        .then((res) => {
-          return res.json();
-        })
-        .then((json) => {
-          setDetails({ ...json });
-          setLoading(false);
-        });
-    }
-  }, [fetchInfo]);
 
   const handleCompleteCheck = (e) => {
-    setCompleted(e.target.checked);
-
     setCompletedMarkers((prev) => ({
       ...prev,
       [markerInfo.id]: e.target.checked,
@@ -72,20 +53,20 @@ const MapPopup = ({ Popup, setCompleted, markerInfo, fetchInfo }) => {
     toast.success(`Link copied`);
   };
 
-  if (isOpen && !loading) {
-    return (
-      <MarkerEdit
-        onClose={onClose}
-        isOpen={isOpen}
-        markerInfo={{
-          id: markerInfo.id,
-          descriptions: details.descriptions,
-          title: markerInfo.title,
-          category: markerInfo.category,
-        }}
-      />
-    );
-  }
+  // if (isOpen) {
+  //   return (
+  //     <MarkerEdit
+  //       onClose={onClose}
+  //       isOpen={isOpen}
+  //       markerInfo={{
+  //         id: markerInfo.id,
+  //         descriptions: markerInfo.descriptions,
+  //         title: markerInfo.title,
+  //         category: markerInfo.category,
+  //       }}
+  //     />
+  //   );
+  // }
 
   const handleDelete = async () => {
     try {
@@ -101,7 +82,9 @@ const MapPopup = ({ Popup, setCompleted, markerInfo, fetchInfo }) => {
         }
       );
 
-      setMarkers(markers.filter((marker) => marker._id !== markerInfo.id));
+      setStandardMarker(
+        standardMarker.filter((marker) => marker.id !== markerInfo.id)
+      );
       toast.success("Delete Successfully");
     } catch (errorMessage: any) {
       toast.error(errorMessage);
@@ -109,61 +92,51 @@ const MapPopup = ({ Popup, setCompleted, markerInfo, fetchInfo }) => {
   };
 
   return (
-    <Popup>
-      <HStack justifyContent="space-between" mb={2}>
-        <Stack mt={2} spacing="3">
-          <Text
-            fontSize="1.25rem"
-            fontWeight="normal"
-            lineHeight="1.2"
-            mb="5px !important"
-            mt="0 !important"
-            display="flex"
-            alignItems="center"
+    <>
+      <RMPopup>
+        <HStack justifyContent="space-between" mb={2}>
+          <Stack mt={2} spacing="3">
+            <Text
+              fontSize="1.25rem"
+              fontWeight="normal"
+              lineHeight="1.2"
+              mb="5px !important"
+              mt="0 !important"
+              display="flex"
+              alignItems="center"
+            >
+              {markerInfo.title}
+              <LinkIcon
+                mx="5px"
+                _hover={{ cursor: "pointer" }}
+                onClick={handleCopyLink}
+              />
+            </Text>
+
+            {markerInfo &&
+              markerInfo.descriptions &&
+              markerInfo.descriptions.map((desc, i) => (
+                <div
+                  key={i}
+                  style={{ margin: "0.25em" }}
+                  dangerouslySetInnerHTML={{ __html: desc }}
+                />
+              ))}
+          </Stack>
+        </HStack>
+
+        <Divider pt={2} />
+        <Box my={2} textAlign="center" pl={3}>
+          <Checkbox
+            isChecked={completed}
+            onChange={(e) => handleCompleteCheck(e)}
           >
-            {markerInfo.title}
-            <LinkIcon
-              mx="5px"
-              _hover={{ cursor: "pointer" }}
-              onClick={handleCopyLink}
-            />
-            {status === "authenticated" && (
-              <>
-                <EditIcon
-                  mx="5px"
-                  _hover={{ cursor: "pointer" }}
-                  onClick={onOpen}
-                />
-                <DeleteIcon
-                  mx="5px"
-                  _hover={{ cursor: "pointer" }}
-                  onClick={handleDelete}
-                />
-              </>
-            )}
-          </Text>
-          <Text mr="10px !important" mt="0 !important" fontSize="12px">
-            {details && details.type}
-          </Text>
-
-          {details &&
-            details.descriptions &&
-            details.descriptions.map((desc, i) => (
-              <div key={i} style={{margin: '0.25em'}} dangerouslySetInnerHTML={{ __html: desc }} />
-            ))}
-        </Stack>
-      </HStack>
-
-      <Divider pt={2}/>
-      <Box my={2} textAlign="center" pl={3}>
-        <Checkbox
-          isChecked={completed}
-          onChange={(e) => handleCompleteCheck(e)}
-        >
-          <Text letterSpacing={0}>Completed</Text>
-        </Checkbox>
-      </Box>
-    </Popup>
+            <Text letterSpacing={0}>Completed</Text>
+          </Checkbox>
+        </Box>
+      </RMPopup>
+      <RMTooltip>{markerInfo.title}</RMTooltip>
+    </>
   );
 };
 

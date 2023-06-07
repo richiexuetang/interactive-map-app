@@ -3,41 +3,38 @@ import { createContext, useContext, useState } from "react";
 const MapContext = createContext(undefined);
 
 export function MapProvider({ children }) {
-  const [area, setArea] = useState(null);
-  const [markers, setMarkers] = useState({});
   const [config, setConfig] = useState({});
   const [categoryItems, setCategoryItems] = useState({});
-  const [game, setGame] = useState(null);
   const [markerRefs, setMarkerRefs] = useState({});
-  const [noteMarkers, setNoteMarkers] = useState([]);
-  const [limitCategories, setLimitCategories] = useState([]);
   const [categoryCounts, setCategoryCounts] = useState({});
+  const [standardMarker, setStandardMarker] = useState([]);
 
-  const [canvasCategories, setCanvasCategories] = useState([]);
+  const [noteMarkers, setNoteMarkers] = useState([]);
+  const [textOverlay, setTextOverlay] = useState([]);
+  const [clusterGroups, setClusterGroups] = useState([]);
+  const [pathMarkers, setPathMarkers] = useState([]);
 
   return (
     <MapContext.Provider
       value={{
-        area,
-        setArea,
-        markers,
-        setMarkers,
         config,
         setConfig,
         categoryItems,
         setCategoryItems,
-        game, 
-        setGame,
-        markerRefs, 
+        markerRefs,
         setMarkerRefs,
         noteMarkers,
         setNoteMarkers,
-        canvasCategories,
-        setCanvasCategories,
-        limitCategories,
-        setLimitCategories,
         categoryCounts,
-        setCategoryCounts
+        setCategoryCounts,
+        standardMarker,
+        setStandardMarker,
+        textOverlay,
+        setTextOverlay,
+        setClusterGroups,
+        clusterGroups,
+        pathMarkers,
+        setPathMarkers,
       }}
     >
       {children}
@@ -46,11 +43,11 @@ export function MapProvider({ children }) {
 }
 
 export function useMapContext() {
-    const context = useContext(MapContext);
+  const context = useContext(MapContext);
 
-    if (!context) {
-        throw new Error('useMapContext must be used inside a `MapProvider`')
-    }
+  if (!context) {
+    throw new Error("useMapContext must be used inside a `MapProvider`");
+  }
 
-    return context;
+  return context;
 }

@@ -1,19 +1,18 @@
 import clientPromise from "@lib/mongodb";
-import { ObjectId } from "mongodb";
 
 export default async (req, res) => {
     try {
-        const {id} = req.query;
+        const {area} = req.query;
         const client = await clientPromise;
         const db = client.db("ritcher-map");
 
-        const details = await db
+        const markers = await db
             .collection("markers")
-            .findOne({_id: new ObjectId(id)});
+            .find({mapSlug: area})
+            .sort({ coordinate: -1 })
+            .toArray();
 
-        const {descriptions} = details;
-        
-        res.json({descriptions});
+        res.json(markers);
     } catch (e) {
         console.error(e);
     }

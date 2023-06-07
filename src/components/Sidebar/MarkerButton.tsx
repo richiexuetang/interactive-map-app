@@ -7,27 +7,28 @@ import {
   initialUserSettings,
 } from "@data/LocalStorage";
 import useLocalStorage from "@hooks/useLocalStorage";
+import { useMapContext } from "@context/app-context";
+import { categoryIdNameMap } from "@data/categoryItemsConfig";
 
-const MarkerButton = ({ type, num, category, game, groupHide }) => {
+const MarkerButton = ({ category, groupHide }) => {
+  const {categoryCounts} = useMapContext();
+
   const [userSettings, setUserSettings] = useLocalStorage(
     USER_SETTING,
     initialUserSettings
   );
   const [hidden, setHidden] = useState(
-    userSettings["hiddenCategories"][game][category] || groupHide
+    userSettings[SETTING_HIDDEN_CATEGORY][category] || groupHide
   );
 
   const toggleCategoryHide = () => {
-    const current = userSettings[SETTING_HIDDEN_CATEGORY][game][category];
+    const current = userSettings[SETTING_HIDDEN_CATEGORY][category];
 
     setUserSettings((prev) => ({
       ...prev,
       hiddenCategories: {
         ...prev.hiddenCategories,
-        [game]: {
-          ...prev.hiddenCategories[game],
-          [category]: !current,
-        },
+        [category]: !current,
       },
     }));
 
@@ -35,7 +36,7 @@ const MarkerButton = ({ type, num, category, game, groupHide }) => {
   };
 
   useEffect(() => {
-    if (userSettings[SETTING_HIDDEN_CATEGORY][game][category]) {
+    if (userSettings[SETTING_HIDDEN_CATEGORY][category]) {
       setHidden(true);
     } else {
       setHidden(false);
@@ -46,7 +47,6 @@ const MarkerButton = ({ type, num, category, game, groupHide }) => {
     <Button
       display="flex"
       flexDir="row"
-      key={type}
       justifyContent="space-between"
       w="100%"
       bg="#221c0f"
@@ -62,7 +62,7 @@ const MarkerButton = ({ type, num, category, game, groupHide }) => {
       >
         <Box>
           <Image
-            src={`/images/icons/${game}/${category}.png`}
+            src={`/images/icons/${category}.png`}
             opacity={hidden ? "0.5" : "1"}
           />
         </Box>
@@ -72,10 +72,10 @@ const MarkerButton = ({ type, num, category, game, groupHide }) => {
         fontWeight="normal"
         textDecor={hidden ? "line-through" : "none"}
       >
-        {type}
+        {categoryIdNameMap[category]}
       </Box>
       <Box fontSize="0.6875rem" textDecor={hidden ? "line-through" : "none"}>
-        {num}
+        {categoryCounts[category]}
       </Box>
     </Button>
   );

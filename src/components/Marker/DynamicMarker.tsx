@@ -9,11 +9,10 @@ import "leaflet/dist/leaflet.css";
 const { Marker } = ReactLeaflet;
 
 const DynamicMarker = ({ children, marker, useMap, rank, ...rest }) => {
-  const { category, _id: id, coord } = marker;
+  const { categoryId, id, coordinate } = marker;
 
   const map = useMap();
-  const { markerRefs, game: gameSlug, config } = useMapContext();
-  const [fetchInfo, setFetchInfo] = useState(false);
+  const { markerRefs } = useMapContext();
 
   useEffect(() => {
     (async function init() {
@@ -132,18 +131,16 @@ const DynamicMarker = ({ children, marker, useMap, rank, ...rest }) => {
   return (
     <Marker
       ref={(ref) => (markerRefs[id] = ref)}
-      position={marker.coord}
+      position={coordinate}
       icon={L.icon({
-        iconUrl: `/images/icons/${gameSlug}/${category}.png`,
+        iconUrl: `/images/icons/${categoryId}.png`,
         iconSize: [35, 45],
         iconAnchor: [17, 45],
       })}
       zIndexOffset={100 + rank}
       eventHandlers={{
         click: () => {
-          setFetchInfo(true);
-          
-          map.flyTo(coord, map.getZoom(), {
+          map.flyTo(coordinate, map.getZoom(), {
             animate: true,
             duration: 0.5,
           });
@@ -151,7 +148,7 @@ const DynamicMarker = ({ children, marker, useMap, rank, ...rest }) => {
       }}
       {...rest}
     >
-      {children(ReactLeaflet, fetchInfo, setFetchInfo, L)}
+      {children(ReactLeaflet, L)}
     </Marker>
   );
 };

@@ -21,20 +21,19 @@ import { EditorState, convertToRaw } from "draft-js";
 
 import useMapObject from "@hooks/useMapObject";
 import { RichEditor } from "@components/Editor";
-import { categoryItemsConfig } from "@data/categoryItemsConfig";
+import { categoryIdNameMap, categoryItemsConfig } from "@data/categoryItemsConfig";
 import { useMapContext } from "@context/app-context";
 
 interface Marker {
-  area: string;
-  category: string;
-  type: string;
-  coord: number[];
-  title: string;
+  mapSlug: string;
+  categoryId: number;
+  coordinate: number[];
+  markerName: string;
   descriptions: string[];
 }
 
 const CreateMarker = ({ coordX, coordY, setRefresh, isOpen, onClose }) => {
-  const { game, area: areaId, markers, setMarkers } = useMapContext();
+  const { config, markers, setMarkers } = useMapContext();
   const [markerCategory, markerCategoryActions] = useMapObject<string, string>(
     []
   );
@@ -49,16 +48,15 @@ const CreateMarker = ({ coordX, coordY, setRefresh, isOpen, onClose }) => {
   useEffect(() => {
     if (!markerCategory.size) {
       categoryItemsConfig.map((entry) => {
-        if (entry.gameSlug === game) {
+        if (entry.gameSlug === config.gameSlug) {
           entry.categoryGroups.map(({ members }) => {
-            Array.from(members.entries()).map(([key, value]) => {
-              const [category, type] = [...value];
-              markerCategoryActions.set(category, type);
-
+            members.map((categoryId) => {
+              const type = categoryIdNameMap[categoryId];
               setCategoryTypeMap((prevState) => {
-                return Object.assign({}, prevState, { [category]: type });
+                return Object.assign({}, prevState, { [categoryId]: type });
               });
-            });
+
+            })
           });
         }
       });
@@ -70,11 +68,10 @@ const CreateMarker = ({ coordX, coordY, setRefresh, isOpen, onClose }) => {
       const value = categoryTypeMap["seed"];
       setMarker({
         ...marker,
-        area: areaId,
-        category: "seed",
-        type: value,
-        title: value,
-        coord: [coordX, coordY],
+        mapSlug: config.name,
+        categoryId: 69,
+        markerName: value,
+        coordinate: [coordX, coordY],
         descriptions: [],
       });
     }
@@ -107,69 +104,69 @@ const CreateMarker = ({ coordX, coordY, setRefresh, isOpen, onClose }) => {
     });
   };
 
-  const handleCreateMarker = async () => {
-    setEditorState(
-      EditorState.createWithContent(editorState.getCurrentContent())
-    );
+  // const handleCreateMarker = async () => {
+  //   setEditorState(
+  //     EditorState.createWithContent(editorState.getCurrentContent())
+  //   );
 
-    if (editorState.getCurrentContent().hasText()) {
-      const rawRichText = draftToHtml(
-        convertToRaw(editorState.getCurrentContent())
-      );
+  //   if (editorState.getCurrentContent().hasText()) {
+  //     const rawRichText = draftToHtml(
+  //       convertToRaw(editorState.getCurrentContent())
+  //     );
 
-      setMarker((prevState) => {
-        return Object.assign({}, prevState, {
-          descriptions: [...prevState.descriptions, rawRichText],
-        });
-      });
-    } else {
-      setMarker((prevState) => {
-        return Object.assign({}, prevState, {
-          descriptions: [...prevState.descriptions],
-        });
-      });
-    }
+  //     setMarker((prevState) => {
+  //       return Object.assign({}, prevState, {
+  //         descriptions: [...prevState.descriptions, rawRichText],
+  //       });
+  //     });
+  //   } else {
+  //     setMarker((prevState) => {
+  //       return Object.assign({}, prevState, {
+  //         descriptions: [...prevState.descriptions],
+  //       });
+  //     });
+  //   }
 
-    const { title, category, descriptions, area, coord, type } = marker;
+  //   const { markerName, categoryId, descriptions, mapSlug, coordinate} = marker;
 
-    try {
-      let response = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/addMarker`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            title,
-            category,
-            descriptions,
-            area,
-            coord,
-            type,
-          }),
-          headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const { insertedId } = await response.json();
+  //   try {
+  //     let response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_APP_URL}/api/addMarker`,
+  //       {
+  //         method: "POST",
+  //         body: JSON.stringify({
+  //           title,
+  //           category,
+  //           descriptions,
+  //           area,
+  //           coord,
+  //           type,
+  //         }),
+  //         headers: {
+  //           Accept: "application/json, text/plain, */*",
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     const { insertedId } = await response.json();
 
-      setMarkers((prevState) => [
-        ...prevState,
-        {
-          _id: insertedId,
-          title: title,
-          category: category,
-          descriptions: descriptions,
-          area: area,
-          coord: coord,
-          type: type,
-        },
-      ]);
-      toast.success("Marker Created Successfully");
-    } catch (errorMessage: any) {
-      toast.error(errorMessage);
-    }
-  };
+  //     setMarkers((prevState) => [
+  //       ...prevState,
+  //       {
+  //         _id: insertedId,
+  //         title: title,
+  //         category: category,
+  //         descriptions: descriptions,
+  //         area: area,
+  //         coord: coord,
+  //         type: type,
+  //       },
+  //     ]);
+  //     toast.success("Marker Created Successfully");
+  //   } catch (errorMessage: any) {
+  //     toast.error(errorMessage);
+  //   }
+  // };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -188,9 +185,9 @@ const CreateMarker = ({ coordX, coordY, setRefresh, isOpen, onClose }) => {
           <ModalBody>
             <FormControl>
               <FormLabel>Area:</FormLabel>
-              <Input id="area" value={areaId} disabled />
+              <Input id="area" value={config.name} disabled />
 
-              <FormLabel mt={5}>Category:</FormLabel>
+              {/* <FormLabel mt={5}>Category:</FormLabel>
               <Select
                 id="category"
                 value={marker.category}
@@ -202,24 +199,24 @@ const CreateMarker = ({ coordX, coordY, setRefresh, isOpen, onClose }) => {
                     {value}
                   </option>
                 ))}
-              </Select>
+              </Select> */}
 
               <FormLabel mt={5}>Title:</FormLabel>
               <Input
                 id="title"
                 type="text"
-                value={marker.title}
+                value={marker.markerName}
                 onChange={(e) => handleInputChange(e)}
               />
 
               <Box display="flex" justifyContent="space-between" mt={5}>
                 <Box display="flex">
                   <FormLabel mt={5}>Lat:</FormLabel>
-                  <Input id="lat" value={marker.coord[0]} disabled />
+                  <Input id="lat" value={marker.coordinate[0]} disabled />
                 </Box>
                 <Box display="flex" ml="2px">
                   <FormLabel mt={5}>Long:</FormLabel>
-                  <Input id="long" value={marker.coord[1]} disabled />
+                  <Input id="long" value={marker.coordinate[1]} disabled />
                 </Box>
               </Box>
 
@@ -243,9 +240,9 @@ const CreateMarker = ({ coordX, coordY, setRefresh, isOpen, onClose }) => {
 
           <ModalFooter>
             <Box display="flex">
-              <Button onClick={handleCreateMarker} type="submit">
+              {/* <Button onClick={handleCreateMarker} type="submit">
                 Submit
-              </Button>
+              </Button> */}
               <Button onClick={onClose}>Cancel</Button>
             </Box>
           </ModalFooter>

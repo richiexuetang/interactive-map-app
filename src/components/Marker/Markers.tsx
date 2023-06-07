@@ -14,7 +14,7 @@ const Markers = (props) => {
   const { useMap, useMapEvents } = props;
   const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
-  const { markers, game: gameSlug } = useMapContext();
+  const { standardMarker: markers, config } = useMapContext();
 
   return (
     <>
@@ -22,7 +22,7 @@ const Markers = (props) => {
         markers.map((marker, i) => {
           const hide =
             completedMarkers[marker._id] &&
-            userSettings[SETTING_HIDE_COMPLETED][gameSlug];
+            userSettings[SETTING_HIDE_COMPLETED][config.gameSlug];
           return (
             !hide && (
               <CustomMarker
@@ -30,7 +30,7 @@ const Markers = (props) => {
                 useMap={useMap}
                 marker={marker}
                 rank={i}
-                gameSlug={gameSlug}
+                gameSlug={config.gameSlug}
                 useMapEvents={useMapEvents}
               />
             )

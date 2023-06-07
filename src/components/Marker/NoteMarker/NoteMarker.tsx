@@ -5,7 +5,6 @@ import {Box, useDisclosure, Text, Button} from "@chakra-ui/react";
 import {EditIcon} from "@chakra-ui/icons";
 
 import CreateMarker from "@components/Modal/CreateMarker";
-import {CustomPopup} from "src/styles/Popup.styles";
 
 const NoteMarker = ({position, setRefresh}) => {
     const {isOpen, onOpen, onClose} = useDisclosure();
@@ -46,7 +45,7 @@ const NoteMarker = ({position, setRefresh}) => {
                 />
             )}
             {!isOpen && (
-                <CustomPopup>
+                <Popup>
                     <Box>
                         <Box
                             fontSize="1.25rem"
@@ -76,7 +75,7 @@ const NoteMarker = ({position, setRefresh}) => {
                             </Box>
                         </Box>
                     </Box>
-                </CustomPopup>
+                </Popup>
             )}
         </Marker>
     );

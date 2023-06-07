@@ -1,7 +1,7 @@
 import styled from "styled-components";
+import { Popup } from "react-leaflet";
 
-const RMPopup = ({ Popup, children }) => {
-  const CustomPopup = styled(Popup)`
+const CustomPopup = styled(Popup)`
     border-radius: 0;
     white-space: nowrap;
     min-width: 350px;
@@ -42,6 +42,7 @@ const RMPopup = ({ Popup, children }) => {
     }
   `;
 
+const RMPopup = ({children }) => {
   return <CustomPopup>{children}</CustomPopup>
 };
 
