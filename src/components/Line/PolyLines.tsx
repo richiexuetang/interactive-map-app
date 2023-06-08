@@ -1,20 +1,10 @@
-import { Polyline } from "react-leaflet";
+import Polyline from "./PolyLine";
 
-import {
-  SETTING_HIDDEN_CATEGORY,
-  SETTING_HIDE_COMPLETED,
-  USER_SETTING,
-  initialUserSettings,
-} from "@data/index";
 import { useMapContext } from "@context/app-context";
-import { COMPLETED } from "@data/index";
-import useLocalStorage from "@hooks/useLocalStorage";
 
 const PolyLines = () => {
   const { pathMarkers } = useMapContext();
-  const [completedMarkers] = useLocalStorage(COMPLETED, {});
-  const [userSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
-
+  
   return (
     <>
       {pathMarkers &&
@@ -22,12 +12,8 @@ const PolyLines = () => {
           return (
             <Polyline
               key={parentId}
-              positions={[
-                [path[0][0], path[0][1]],
-                [path[1][0], path[1][1]],
-              ]}
-              color={"white"}
-              weight={1}
+              parentId={parentId}
+              path={path}
             />
           );
         })}

@@ -1,68 +1,76 @@
 import React, { useEffect, useState } from "react";
 
-import { VStack, HStack, Button } from "@chakra-ui/react";
+import { Button, Box, Image, Flex } from "@chakra-ui/react";
 
-import { MarkerButton } from "@components/Sidebar/.";
 import { useMapContext } from "@context/.";
 import {
   SETTING_HIDDEN_CATEGORY,
+  SETTING_HIDDE_ALL,
   USER_SETTING,
   initialUserSettings,
 } from "@data/LocalStorage";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
 
-interface CategoryGroupPropsType {
-  group: string;
-  members: number[];
-}
+const CategoryGroup = ({ onLayerClick, layerObj }) => {
+  const { categoryCounts, userSettings, setUserSettings } = useMapContext();
 
-const CategoryGroup = ({ group, members }: CategoryGroupPropsType) => {
-  const { categoryCounts } = useMapContext();
+  const [show, setShow] = useState(layerObj.checked);
 
-  const [userSettings, setUserSettings] = useLocalStorage(
-    USER_SETTING,
-    initialUserSettings
-  );
+  const handleLayerClick = () => {
+    const prev = userSettings[SETTING_HIDDEN_CATEGORY][layerObj.name];
 
-  const toggleGroupCategories = () => {
-    members.map((categoryId) => {
-      const prev = userSettings[SETTING_HIDDEN_CATEGORY][categoryId];
+    setUserSettings((prevState) => ({
+      ...prevState,
+      hiddenCategories: {
+        ...prevState.hiddenCategories,
+        [layerObj.name]: !prev,
+      },
+    }));
 
-      setUserSettings((prevState) => ({
-        ...prevState,
-        hiddenCategories: {
-          ...prevState.hiddenCategories,
-          [categoryId]: !prev,
-        },
-      }));
-    });
+    setShow(!show);
+    onLayerClick(layerObj);
   };
 
+  useEffect(() => {
+    if (userSettings[SETTING_HIDDEN_CATEGORY][layerObj.name] || userSettings[SETTING_HIDDE_ALL]) {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
+  }, [userSettings]);
+
   return (
-    <VStack w="100%" key={group}>
-      <HStack px="8px" pt={3} justifyContent="space-between" w="100%">
-        <Button
-          fontSize="1rem"
-          pl={0}
-          variant="underlined"
-          onClick={toggleGroupCategories}
-        >
-          {group.toUpperCase() + ":"}
-        </Button>
-      </HStack>
-      {members.map((member) => {
-        return (
-          categoryCounts[member] > 0 && (
-            <MarkerButton
-              key={member}
-              category={member}
-              groupHide={userSettings[SETTING_HIDDEN_CATEGORY][member]}
-            />
-          )
-        );
-      })}
-    </VStack>
+    <Button
+      display="flex"
+      flexDir="row"
+      justifyContent="space-between"
+      w="full"
+      bg="sidebar.content"
+      onClick={handleLayerClick}
+    >
+      <Flex
+        w={5}
+        h={6}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Image
+          src={`/images/icons/${layerObj.name}.png`}
+          opacity={show ? 1 : 0.5}
+        />
+      </Flex>
+      <Box
+        fontSize="md"
+        fontWeight="normal"
+        textDecor={show ? "none" : "line-through"}
+      >
+        {categoryIdNameMap[layerObj.name]}
+      </Box>
+      <Box fontSize="sm" textDecor={show ? "none" : "line-through"}>
+        {categoryCounts[layerObj.name]}
+      </Box>
+    </Button>
   );
 };
 

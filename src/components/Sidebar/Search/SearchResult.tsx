@@ -2,33 +2,50 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import L from "leaflet";
 
-import { Box } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 
 import { useMapContext } from "src/context/app-context";
+import { useMap } from "react-leaflet";
+import { useRouter } from "next/router";
 
-const SearchResult = ({ result, useMap }) => {
-  const { game, markerRefs } = useMapContext();
-  const { _id: id, category, title, descriptions } = result;
+const SearchResult = ({ result }) => {
+  const router = useRouter();
+  const { markerRefs, config } = useMapContext();
+  const {
+    _id: id,
+    categoryId,
+    markerName,
+    descriptions,
+    coordinate,
+    mapSlug,
+  } = result;
+
   const ref = useRef(null);
   const map = useMap();
   const [markerOverlays, setMarkerOverlays] = useState({});
 
   const goToPosition = () => {
-    if (markerRefs[id]._latlng) {
-      map.flyTo(markerRefs[id]._latlng, map.getZoom(), {
+    if (mapSlug === config.name) {
+      map.flyTo(coordinate, map.getMaxZoom(), {
         animate: true,
         duration: 0.5,
+      });
+    } else {
+      router.replace(`/map/${mapSlug}?markerId=${id}`, undefined, {
+        shallow: true,
       });
     }
   };
 
   const handleMouseEnter = () => {
-    const overlay = L.circle(markerRefs[id]._latlng, {
-      radius: (1000 + map.getZoom() * 100) / map.getZoom(),
-    });
+    if (markerRefs[id]) {
+      const overlay = L.circle(markerRefs[id]._latlng, {
+        radius: (1000 + map.getZoom() * 100) / map.getZoom(),
+      });
 
-    setMarkerOverlays({ ...markerOverlays, [id]: overlay });
-    map.addLayer(overlay);
+      setMarkerOverlays({ ...markerOverlays, [id]: overlay });
+      map.addLayer(overlay);
+    }
   };
 
   const handleMouseLeave = () => {
@@ -62,11 +79,10 @@ const SearchResult = ({ result, useMap }) => {
       onClick={goToPosition}
       ref={ref}
     >
-      <Box display="flex" my="1rem">
-        <Box
+      <Flex my="1rem">
+        <Flex
           w="20px"
           h="22px"
-          display="flex"
           mr={2}
           alignItems="center"
           justifyContent="center"
@@ -74,24 +90,22 @@ const SearchResult = ({ result, useMap }) => {
           <Image
             width={32}
             height={32}
-            src={`/images/icons/${game}/${category}.png`}
-            alt={`${game}-${category}`}
+            src={`/images/icons/${categoryId}.png`}
+            alt={`${id}`}
             style={{ objectFit: "contain", width: "auto", height: "auto" }}
           />
-        </Box>
+        </Flex>
 
-        <Box key={id}>{title} </Box>
-      </Box>
+        <Box>{markerName} </Box>
+      </Flex>
 
-      <Box>
-        {descriptions.map((desc, i) => {
-          return (
-            <Box mb="1rem" key={id + i}>
-              <div dangerouslySetInnerHTML={{ __html: desc }} />
-            </Box>
-          );
-        })}
-      </Box>
+      {descriptions.map((desc, i) => {
+        return (
+          <Box mb="1rem" key={id + i}>
+            <div dangerouslySetInnerHTML={{ __html: desc }} />
+          </Box>
+        );
+      })}
     </Box>
   );
 };

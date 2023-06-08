@@ -1,75 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Input } from "@chakra-ui/react";
-
 import { useMapContext } from "@context/app-context";
-import { Loader } from "@components/Loader";
 
-const SearchInput = ({ results, setResults }) => {
-  const { area } = useMapContext();
+const SearchInput = ({ setResults }) => {
   const [value, setValue] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [markers, setMarkers] = useState([]);
   let seen = new Set();
+  const {config} = useMapContext();
 
-  useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/markers?area=` + area, {
-      method: "GET",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        setMarkers([...json]), setIsLoading(false);
-      });
-  }, []);
-
-  const handleKeyPress = (e) => {
+  const handleKeyPress = async (e) => {
     if (e.key === "Enter") {
       setResults([]);
       seen = new Set();
 
-      markers
-        .filter((marker) =>
-          marker.title.toLowerCase().includes(value.toLowerCase())
-        )
-        .map((filtered) => {
-          const newArr = results;
-          newArr.push({
-            _id: filtered._id,
-            descriptions: filtered.descriptions,
-            title: filtered.title,
-            category: filtered.category
-          });
-          setResults([...newArr]);
-          seen = new Set([...seen, filtered._id]);
-        });
-
-      markers.map((marker) =>
-        marker.descriptions
-          .filter((desc) => desc.toLowerCase().includes(value.toLowerCase()))
-          .map(() => {
-            if (!seen.has(marker._id)) {
-              const newArr = results;
-              newArr.push({
-                _id: marker._id,
-                descriptions: marker.descriptions,
-                title: marker.title,
-                category: marker.category
-              });
-              setResults([...newArr]);
-            }
-          })
-      );
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_APP_URL}/api/findMarker?searchParam=` +
+            e.target.value + `&mapSlug=${config.name}`
+        );
+        const json = await res.json();
+        setResults([...json]);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
-
-  if (isLoading) {
-    return <Loader loading={isLoading} />;
-  }
 
   return (
     <Input

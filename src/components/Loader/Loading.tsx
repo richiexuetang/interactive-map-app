@@ -1,6 +1,3 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-
 import { Box } from "@chakra-ui/react";
 import ClipLoader from "react-spinners/ClipLoader";
 

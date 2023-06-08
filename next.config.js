@@ -1,5 +1,6 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+const fs = require('fs');
 
 /** @type {import('next').NextConfig} */
 
@@ -7,6 +8,7 @@ const nextConfig = {
   reactStrictMode: true,
   env: {
     BASE_URL: process.env.NEXT_PUBLIC_APP_URL,
+    rawJsFromFile: fs.readFileSync('./rawJsFromFile.js').toString()
   },
   images: {
     remotePatterns: [

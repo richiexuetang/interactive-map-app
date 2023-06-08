@@ -11,10 +11,11 @@ const CustomPopup = styled(Popup)`
 
     .leaflet-popup-content {
       p {
-        margin-top: 0 !important;
+        margin: 0 !important;
         line-height: 1.5em;
       }
     }
+
     .leaflet-popup-content-wrapper {
       border-radius: 0;
       background: #221c0f;

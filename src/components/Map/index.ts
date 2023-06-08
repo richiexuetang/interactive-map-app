@@ -1,1 +1,1 @@
-export { default } from './Map';
+export { default as AppMap } from './AppMap';

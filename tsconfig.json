@@ -1,50 +1,45 @@
 {
-    "extends": "@tsconfig/next/tsconfig.json",
-    "compilerOptions": {
-      "lib": [
-        "dom",
-        "dom.iterable",
-        "esnext"
-      ],
-      "target": "es2015",
-      "baseUrl": "./",
-      "paths": {
-        "@components/*": [ "src/components/*" ],
-        "@context/*": [ "src/context/*" ],
-        "@data/*": ["src/data/*"],
-        "@hooks/*": ["src/hooks/*"],
-        "@layout/*": ["src/layout/*"],
-        "@lib/*": ["src/lib/*"],
-        "@styles/*": [ "src/styles/*" ],
-        "@utils/*": [ "src/utils/*" ],
-        "@types/*": [ "src/types/*" ],
-      },
-      "allowJs": true,
-      "skipLibCheck": true,
-      "strict": false,
-      "forceConsistentCasingInFileNames": true,
-      "noEmit": true,
-      "incremental": true,
-      "esModuleInterop": true,
-      "module": "esnext",
-      "moduleResolution": "node",
-      "resolveJsonModule": true,
-      "isolatedModules": true,
-      "jsx": "preserve",
-      "plugins": [
-        {
-          "name": "next"
-        }
-      ]
+  "extends": "@tsconfig/next/tsconfig.json",
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "es2015",
+    "baseUrl": "./",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@context/*": ["src/context/*"],
+      "@data/*": ["src/data/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@layout/*": ["src/layout/*"],
+      "@lib/*": ["src/lib/*"],
+      "@styles/*": ["src/styles/*"],
+      "@utils/*": ["src/utils/*"],
+      "@types/*": ["src/types/*"]
     },
-    "include": [
-      "next-env.d.ts",
-      ".next/types/**/*.ts",
-      "**/*.ts",
-      "**/*.tsx"
-    ],
-    "exclude": [
-      "node_modules"
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
     ]
-  }
-  
+  },
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/components/Layer/MarkerOverlay",
+    "src/lib/leaflet.ellipse.js"
+  ],
+  "exclude": ["node_modules"]
+}

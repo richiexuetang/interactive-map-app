@@ -15,18 +15,22 @@ import { useRouter } from "next/router";
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
 
+  const config = areaConfig.find((o) => o.name === areaId);
+
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}`
   );
 
   const { data: markers } = await res.json();
-  const standardMarkers = [];
+  const markersList = [];
   const textOverlay = [];
   const clusterGroups = [];
   const pathMarkers = [];
 
+  const markerGroups = [];
   const categoryCounts = {};
   const seen = new Set();
+  const seenCategory = new Set();
 
   markers.map((marker) => {
     const {
@@ -51,7 +55,8 @@ export async function getStaticProps(context) {
         markerName: markerName,
         descriptions: descriptions,
       };
-      standardMarkers.push(standard);
+
+      markersList.push(standard);
     } else if (markerTypeId === 2) {
       const textOverlayMarker = {
         id: _id,
@@ -82,24 +87,55 @@ export async function getStaticProps(context) {
     }
   });
 
-  const sortedMarkers = [...standardMarkers];
+  const sortedMarkers = [...markersList];
   sortedMarkers.sort((a, b) => b.coordinate[0] - a.coordinate[0]);
 
-  const config = areaConfig.find((o) => o.name === areaId);
+  sortedMarkers.map(({ categoryId, coordinate, id }, rank) => {
+    if (seenCategory.has(categoryId)) {
+      markerGroups.map((group, i) => {
+        const {
+          coordinates: groupCoordinates,
+          ids: currIds,
+          categoryId: currCategoryId,
+          ranks,
+        } = group;
+        if (currCategoryId === categoryId) {
+          markerGroups[i].coordinates = [...groupCoordinates, coordinate];
+          markerGroups[i].ids = [...currIds, id];
+          markerGroups[i].ranks = [...ranks, rank];
+        }
+      });
+    } else {
+      let groupName = "locations";
+      categoryItemsConfig.map((item) => {
+        if (item.gameSlug === config.gameSlug) {
+          item.categoryGroups.map(({ members, name }) => {
+            if (members.includes(categoryId)) {
+              groupName = name;
+            }
+          });
+        }
+      });
 
-  const categoryItems = categoryItemsConfig.find(
-    (o) => o.gameSlug === config.gameSlug
-  );
+      markerGroups.push({
+        categoryId: categoryId,
+        coordinates: [coordinate],
+        ids: [id],
+        ranks: [rank],
+        group: groupName,
+      });
+      seenCategory.add(categoryId);
+    }
+  });
 
   return {
     props: {
       config,
-      categoryItems,
       categoryCounts,
-      standardMarkers: sortedMarkers,
       textOverlay,
       clusterGroups,
       pathMarkers,
+      markerGroups
     },
     revalidate: 10,
   };
@@ -121,20 +157,13 @@ export async function getStaticPaths() {
 }
 
 const MapPage = ({
-  areaId,
   config,
-  categoryItems,
   categoryCounts,
-  standardMarkers,
   textOverlay,
   clusterGroups,
   pathMarkers,
+  markerGroups
 }) => {
-  if (typeof window !== "undefined") {
-    useLocalStorage(USER_SETTING, initialUserSettings);
-    useLocalStorage(COMPLETED, {});
-  }
-
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -156,23 +185,22 @@ const MapPage = ({
 
   const {
     setConfig,
-    setCategoryItems,
     setCategoryCounts,
-    setStandardMarker,
     setTextOverlay,
     setPathMarkers,
     setClusterGroups,
+    setMarkerGroups,
+    setUserSettings
   } = useMapContext();
 
   useEffect(() => {
     setConfig(config);
-    setCategoryItems(categoryItems);
     setCategoryCounts(categoryCounts);
-    setStandardMarker(standardMarkers);
     setTextOverlay(textOverlay);
     setPathMarkers(pathMarkers);
     setClusterGroups(clusterGroups);
-  }, [areaId, config, categoryItems]);
+    setMarkerGroups(markerGroups);
+  }, []);
 
   if (loading) {
     return <Loader loading={loading} />;

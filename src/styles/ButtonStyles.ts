@@ -5,7 +5,6 @@ export const Button = defineStyleConfig({
         color: "#af894d !important",
         borderRadius: "0",
         bg: "transparent",
-        __hover: {bg: "#37373766"},
         border: "0px solid"
     },
     sizes: {

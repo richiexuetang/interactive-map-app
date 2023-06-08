@@ -1,87 +1,86 @@
-import {extendTheme} from "@chakra-ui/react";
+import { extendTheme } from "@chakra-ui/react";
 
-import {Button} from "./ButtonStyles";
-import {inputTheme} from "./InputTheme";
+import { Button } from "./ButtonStyles";
+import { inputTheme } from "./InputTheme";
 
 const styles = {
-    global: () => ({
-        body: {
-            margin: 0,
-            padding: 0,
-            bg: "app.background",
-            color: "app.text",
-            fontSize: "15px !important"
-        },
-        span: {
-            textWrap: 'nowrap !important',
-            textAlign: 'left',
-            overflowWrap: 'break-word'
-        }
-    })
+  global: () => ({
+    body: {
+      margin: 0,
+      padding: 0,
+      bg: "app.background",
+      color: "app.text",
+      fontSize: "15px !important",
+    },
+    span: {
+      textWrap: "nowrap !important",
+      textAlign: "left",
+      overflowWrap: "break-word",
+    },
+    img: {
+      maxWidth: "100%",
+      height: "auto",
+    },
+    ol: {
+        pl: '20px' 
+    },
+    ul: {
+        pl: '20px'
+    },
+    button: {
+      pointEvents: "pointer"
+    },
+    p: {
+      pt: '4px'
+    }
+  }),
 };
 
 const components = {
-    Button,
-    Modal: {
-        baseStyle: () => ({
-            dialog: {
-                minWidth: "75%",
-                bg: "app.modal"
-            }
-        })
+  Button,
+  Modal: {
+    baseStyle: () => ({
+      dialog: {
+        minWidth: "75%",
+        bg: "app.modal",
+      },
+    }),
+  },
+  Drawer: {
+    variants: {
+      aside: {
+        dialog: {
+          pointerEvents: "auto",
+          background: "app.modal",
+        },
+        dialogContainer: {
+          pointerEvents: "none",
+        },
+      },
     },
-    Card: {
-        baseStyle: () => ({
-            body: {
-                bg: "app.modal",
-                color: "app.text",
-                borderColor: "app.background",
-                border: "1px solid",
-                borderBottom: "none"
-            },
-            footer: {
-                bg: "app.modal",
-                color: "app.text",
-                borderColor: "app.background",
-                border: "1px solid"
-            }
-        })
-    },
-    Drawer: {
-        variants: {
-            aside: {
-                dialog: {
-                    pointerEvents: "auto",
-                    background: "app.modal"
-                },
-                dialogContainer: {
-                    pointerEvents: "none"
-                }
-            }
-        }
-    },
-    Input: inputTheme
+  },
+  Input: inputTheme,
 };
 
 const config = {
-    initialColorMode: "dark"
+  initialColorMode: "dark",
 };
 
 const theme = extendTheme({
-    components,
-    styles,
-    config,
-    colors: {
-        app: {
-            modal: "#221c0f",
-            background: "#967959",
-            text: "#fbe4bd"
-        },
-        sidebar: {
-            arrow: "#af894d",
-            content: "#221c0f"
-        }
-    }
+  components,
+  styles,
+  config,
+  colors: {
+    app: {
+      modal: "#221c0f",
+      background: "#967959",
+      text: "#fbe4bd",
+    },
+    sidebar: {
+      arrow: "#af894d",
+      content: "#221c0f",
+    },
+  },
 });
 
 export default theme;

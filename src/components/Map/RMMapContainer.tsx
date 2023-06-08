@@ -1,19 +1,21 @@
 //@ts-nocheck
-import React from "react";
+import React, { useState } from "react";
 import * as ReactLeaflet from "react-leaflet";
 import L from "leaflet";
 
 import "leaflet/dist/leaflet.css";
-import { Sidebar } from "@components/.";
+import "./leaflet.smooth-wheel-zoom.js";
 import { useMapContext } from "@context/.";
 
-const { MapContainer, useMap } = ReactLeaflet;
+const { MapContainer } = ReactLeaflet;
 
 const RMMapContainer = ({ children }) => {
+  const [map, setMap] = useState(null);
   const { config } = useMapContext();
 
   return (
     <MapContainer
+      whenReady={(map) => setMap(map)}
       style={{ background: "black", height: "100vh", width: "100vw" }}
       smoothWheelZoom={true}
       smoothSensitivity={15}
@@ -26,7 +28,6 @@ const RMMapContainer = ({ children }) => {
       maxZoom={config.maxZoom}
     >
       {children(ReactLeaflet, L)}
-      <Sidebar useMap={useMap} />
     </MapContainer>
   );
 };

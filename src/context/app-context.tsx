@@ -1,3 +1,4 @@
+import { initialUserSettings } from "@data/LocalStorage";
 import { createContext, useContext, useState } from "react";
 
 const MapContext = createContext(undefined);
@@ -7,12 +8,12 @@ export function MapProvider({ children }) {
   const [categoryItems, setCategoryItems] = useState({});
   const [markerRefs, setMarkerRefs] = useState({});
   const [categoryCounts, setCategoryCounts] = useState({});
-  const [standardMarker, setStandardMarker] = useState([]);
 
-  const [noteMarkers, setNoteMarkers] = useState([]);
   const [textOverlay, setTextOverlay] = useState([]);
   const [clusterGroups, setClusterGroups] = useState([]);
   const [pathMarkers, setPathMarkers] = useState([]);
+  const [markerGroups, setMarkerGroups] = useState([]);
+  const [userSettings, setUserSettings] = useState(initialUserSettings);
 
   return (
     <MapContext.Provider
@@ -23,18 +24,17 @@ export function MapProvider({ children }) {
         setCategoryItems,
         markerRefs,
         setMarkerRefs,
-        noteMarkers,
-        setNoteMarkers,
         categoryCounts,
         setCategoryCounts,
-        standardMarker,
-        setStandardMarker,
         textOverlay,
         setTextOverlay,
         setClusterGroups,
         clusterGroups,
         pathMarkers,
         setPathMarkers,
+        markerGroups,
+        setMarkerGroups,
+        userSettings, setUserSettings
       }}
     >
       {children}
