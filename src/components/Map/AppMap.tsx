@@ -13,7 +13,15 @@ import { categoryIdNameMap } from "@data/categoryItemsConfig";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { categoryHiddenState } from "@lib/getHiddenState";
 
+const NoteMarker = dynamic(() => import("@components/Marker/NoteMarker"), {
+  ssr: false,
+});
+
 const RMTooltip = dynamic(() => import("@components/Popup/RMTooltip"), {
+  ssr: false,
+});
+
+const RMPopup = dynamic(() => import("@components/Popup/RMPopup"), {
   ssr: false,
 });
 
@@ -53,7 +61,7 @@ const GroupedLayer = dynamic(
 
 const AppMap = () => {
   const [storageSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
-  const { config, markerGroups, clusterGroups } = useMapContext();
+  const { config, markerGroups, clusterGroups, noteMarkers } = useMapContext();
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
 
   const [userHideComplete, setUserHideComplete] = useState(
@@ -164,6 +172,15 @@ const AppMap = () => {
                 );
               }
             })}
+
+          {noteMarkers &&
+            noteMarkers.map((note) => (
+              <NoteMarker
+                key={note[0]}
+                position={note}
+                setRefresh={setRefresh}
+              />
+            ))}
           <PolyLines />
           <TextLayer />
         </LayerControl>

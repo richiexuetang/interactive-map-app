@@ -7,8 +7,7 @@ const fs = require('fs');
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    BASE_URL: process.env.NEXT_PUBLIC_APP_URL,
-    rawJsFromFile: fs.readFileSync('./rawJsFromFile.js').toString()
+    BASE_URL: process.env.NEXT_PUBLIC_APP_URL
   },
   images: {
     remotePatterns: [

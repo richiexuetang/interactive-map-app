@@ -18,9 +18,10 @@ const RMMapContainer = ({ children }) => {
 
   const addMarker = (e) => {
     const currentPosition = e.latlng;
+    console.log(currentPosition, currentPosition[1])
     setNoteMarkers((prev) => [
       ...prev,
-      [currentPosition[0], currentPosition[1]],
+      [currentPosition.lat, currentPosition.lng],
     ]);
   };
 

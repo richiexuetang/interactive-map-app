@@ -1,8 +1,8 @@
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-import { LinkIcon } from "@chakra-ui/icons";
-import { Box, Checkbox, Divider, HStack, Stack, Text } from "@chakra-ui/react";
+import { EditIcon, LinkIcon } from "@chakra-ui/icons";
+import { Box, Checkbox, Divider, HStack, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 
 import { COMPLETED } from "@data/LocalStorage";
@@ -10,6 +10,7 @@ import { useCopyToClipboard, useLocalStorage } from "@hooks/index";
 import dynamic from "next/dynamic";
 import { Loader } from "@components/Loader";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
+import RMForm from "@components/Form/RMForm";
 
 const RMPopup = dynamic(() => import("@components/Popup/RMPopup"), {
   ssr: false,
@@ -20,6 +21,7 @@ const RMTooltip = dynamic(() => import("@components/Popup/RMTooltip"), {
 });
 
 const MapPopup = (props) => {
+  const {onOpen, isOpen, onClose} = useDisclosure()
   const { markerInfo, markerId } = props;
   const pathname = usePathname();
   const [completedMarkers, setCompletedMarkers] = useLocalStorage(
@@ -50,6 +52,24 @@ const MapPopup = (props) => {
     }
   }, [markerInfo]);
 
+  if (isOpen) {
+    return (
+      <RMForm
+        onClose={onClose}
+        isOpen={isOpen}
+        markerInfo={{
+          id: markerInfo.id,
+          lat: markerInfo.lat,
+          lng: markerInfo.lng,
+          markerName: markerInfo.markerName,
+          descriptions: markerInfo.descriptions,
+          markerTypeId: markerInfo.markerTypeId,
+          categoryId: markerInfo.categoryId
+        }}
+      />
+    );
+  }
+
   return (
     <RMPopup>
       {!loaded ? (
@@ -71,8 +91,15 @@ const MapPopup = (props) => {
                   _hover={{ cursor: "pointer" }}
                   onClick={handleCopyLink}
                 />
+                <EditIcon
+                  ml={3}
+                  _hover={{ cursor: "pointer" }}
+                  onClick={onOpen}
+                />
               </Text>
-              <Text>{markerInfo && categoryIdNameMap[markerInfo.categoryId]}</Text>
+              <Text>
+                {markerInfo && categoryIdNameMap[markerInfo.categoryId]}
+              </Text>
 
               {markerInfo?.descriptions &&
                 markerInfo.descriptions.map((desc, i) => (

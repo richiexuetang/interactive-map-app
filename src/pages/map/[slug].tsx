@@ -3,12 +3,11 @@ import { NextSeo } from "next-seo";
 
 import { areaConfig } from "@data/areaConfig";
 import { categoryItemsConfig } from "@data/categoryItemsConfig";
-import { USER_SETTING, initialUserSettings, mapConfig } from "@data/index";
+import { mapConfig } from "@data/index";
 import { useMapContext } from "src/context/app-context";
 import AppMap from "@components/Map/AppMap";
 import { Loader } from "@components/Loader";
 import { useRouter } from "next/router";
-import useLocalStorage from "@hooks/useLocalStorage";
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
