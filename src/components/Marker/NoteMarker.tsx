@@ -23,6 +23,8 @@ import { EditIcon } from "@chakra-ui/icons";
 
 import dynamic from "next/dynamic";
 import RMForm from "@components/Form/RMForm";
+import { useMapContext } from "@context/app-context";
+import { toast } from "react-toastify";
 
 const RMPopup = dynamic(() => import("@components/Popup/RMPopup"), {
   ssr: false,
@@ -31,6 +33,7 @@ const RMPopup = dynamic(() => import("@components/Popup/RMPopup"), {
 const NoteMarker = ({ position, setRefresh }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dragRef = useRef(null);
+  const { config } = useMapContext();
 
   const [lat, setLat] = useState<number>(position[0]);
   const [lng, setLng] = useState<number>(position[1]);
@@ -41,6 +44,37 @@ const NoteMarker = ({ position, setRefresh }) => {
       const newPos = { ...marker.getLatLng() };
       setLat(newPos.lat);
       setLng(newPos.lng);
+    }
+  };
+
+  const onCreateSubmit = async (values) => {
+    const { markerName, categoryId, descriptions, markerType } = values;
+    try {
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/addMarker`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            markerName,
+            categoryId,
+            descriptions,
+            mapSlug: config.name,
+            gameSlug: config.gameSlug,
+            markerTypeId: markerType,
+            lat: position[0],
+            lng: position[1],
+            coordinate: [lat, lng],
+          }),
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const { insertedId } = await response.json();
+      toast.success("Marker Created Successfully");
+    } catch (errorMessage: any) {
+      toast.error(errorMessage);
     }
   };
   return (
@@ -58,38 +92,12 @@ const NoteMarker = ({ position, setRefresh }) => {
       }
     >
       {isOpen && (
-        <Modal isOpen={isOpen} onClose={onClose} size="lg">
-          <ModalOverlay />
-          {!marker && (
-            <ModalContent>
-              <ModalBody>
-                <div>loading...</div>
-              </ModalBody>
-            </ModalContent>
-          )}
-          {marker && (
-            <ModalContent>
-              <ModalHeader>Create marker</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                <RMForm />
-                <Box paddingInline="1rem" border="1px solid" h="400px">
-                  {/* <RichEditor
-                           editorState={editorState}
-                           setEditorState={setEditorState}
-                         /> */}
-                </Box>
-              </ModalBody>
-
-              <ModalFooter>
-                <Box display="flex">
-                  <Button type="submit">Submit</Button>
-                  <Button onClick={onClose}>Cancel</Button>
-                </Box>
-              </ModalFooter>
-            </ModalContent>
-          )}
-        </Modal>
+        <RMForm
+          onSubmit={onCreateSubmit}
+          onClose={onClose}
+          isOpen={isOpen}
+          markerInfo={{ lat: position[0], lng: position[1] }}
+        />
       )}
       {!isOpen && (
         <RMPopup>

@@ -162,7 +162,7 @@ export const categoryItemsConfig = [
       },
       {
         name: "fruits",
-        members: [111],
+        members: [111, 112],
       },
       {
         name: "materials",

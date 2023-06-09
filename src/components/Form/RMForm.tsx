@@ -1,15 +1,12 @@
 import {
   Box,
   Button,
-  ButtonGroup,
-  FormControl,
   FormLabel,
   Input,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
@@ -17,7 +14,6 @@ import RichEditor from "@components/Editor/RichEditor";
 import { useFormik } from "formik";
 import * as React from "react";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({
   markerType: Yup.number().required(),
@@ -27,18 +23,20 @@ const validationSchema = Yup.object({
 });
 
 const RMForm = (props) => {
-  const { markerInfo, isOpen, onClose } = props;
+  const { markerInfo = {}, isOpen, onClose, onSubmit } = props;
   const {
-    descriptions = [],
     lat = null,
     lng = null,
     markerName = "",
-    id,
+    markerTypeId = 1,
+    categoryId = 69,
   } = markerInfo;
 
   const formik = useFormik({
     initialValues: {
       markerName: markerName,
+      markerType: markerTypeId,
+      categoryId: categoryId,
       lat: lat,
       lng: lng,
       description: "",
@@ -46,42 +44,6 @@ const RMForm = (props) => {
     onSubmit: () => {},
     validationSchema: validationSchema,
   });
-
-  const handleSubmit = async () => {
-    const { markerName: newName, lat: newLat, lng: newLng, description } = formik.values;
-    
-    try {
-      let newDesc = [...descriptions];
-      if (descriptions.length > 0) {
-        newDesc = [...descriptions];
-      }
-      if (description) {
-        newDesc = [...newDesc, description];
-      }
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + id,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            markerName: newName,
-            lat: newLat,
-            lng: newLng,
-            descriptions: newDesc,
-          }),
-          headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const result = await response.json();
-
-      toast.success("Marker update success");
-    } catch (errorMessage: any) {
-      toast.error(errorMessage);
-    }
-  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -98,6 +60,20 @@ const RMForm = (props) => {
               name="markerName"
               onChange={formik.handleChange}
               value={formik.values.markerName}
+            />
+
+            <FormLabel>Marker Type:</FormLabel>
+            <Input
+              name="markerType"
+              onChange={formik.handleChange}
+              value={formik.values.markerType}
+            />
+
+            <FormLabel>Category:</FormLabel>
+            <Input
+              name="categoryId"
+              onChange={formik.handleChange}
+              value={formik.values.categoryId}
             />
 
             <FormLabel>Latitude:</FormLabel>
@@ -125,7 +101,7 @@ const RMForm = (props) => {
             </Box>
 
             <Box display="flex" py={3}>
-              <Button onClick={handleSubmit} type="submit">
+              <Button onClick={() => onSubmit(formik.values)} type="submit">
                 Submit
               </Button>
               <Button onClick={onClose}>Cancel</Button>

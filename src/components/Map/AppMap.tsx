@@ -156,6 +156,7 @@ const AppMap = () => {
                         {coordinates.map((coord) => {
                           return (
                             <CircleMarker
+                              key={`${coord[0]} ${coord[1]}`}
                               center={coord}
                               color={groupColor}
                               radius={2}

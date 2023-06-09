@@ -2,7 +2,15 @@ import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 import { EditIcon, LinkIcon } from "@chakra-ui/icons";
-import { Box, Checkbox, Divider, HStack, Stack, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Checkbox,
+  Divider,
+  HStack,
+  Stack,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { toast } from "react-toastify";
 
 import { COMPLETED } from "@data/LocalStorage";
@@ -21,7 +29,7 @@ const RMTooltip = dynamic(() => import("@components/Popup/RMTooltip"), {
 });
 
 const MapPopup = (props) => {
-  const {onOpen, isOpen, onClose} = useDisclosure()
+  const { onOpen, isOpen, onClose } = useDisclosure();
   const { markerInfo, markerId } = props;
   const pathname = usePathname();
   const [completedMarkers, setCompletedMarkers] = useLocalStorage(
@@ -46,9 +54,47 @@ const MapPopup = (props) => {
     toast.success(`Link copied`);
   };
 
-  const onEditSubmit = () => {
+  const onEditSubmit = async (values) => {
+    const {
+      markerName: newName,
+      lat: newLat,
+      lng: newLng,
+      description,
+    } = values;
+    const { id, descriptions } = markerInfo;
 
-  }
+    try {
+      let newDesc = [...descriptions];
+      if (descriptions.length > 0) {
+        newDesc = [...descriptions];
+      }
+      if (description) {
+        newDesc = [...newDesc, description];
+      }
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + id,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            markerName: newName,
+            lat: newLat,
+            lng: newLng,
+            descriptions: newDesc,
+          }),
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      await response.json();
+
+      toast.success("Marker update success");
+    } catch (errorMessage: any) {
+      toast.error(errorMessage);
+    }
+  };
 
   useEffect(() => {
     if (markerInfo) {
@@ -70,6 +116,7 @@ const MapPopup = (props) => {
           markerTypeId: markerInfo.markerTypeId,
           categoryId: markerInfo.categoryId
         }}
+        onSubmit={onEditSubmit}
       />
     );
   }
