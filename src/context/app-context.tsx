@@ -12,6 +12,7 @@ export function MapProvider({ children }) {
   const [clusterGroups, setClusterGroups] = useState([]);
   const [pathMarkers, setPathMarkers] = useState([]);
   const [markerGroups, setMarkerGroups] = useState([]);
+  const [noteMarkers, setNoteMarkers] = useState([]);
 
   return (
     <MapContext.Provider
@@ -31,7 +32,9 @@ export function MapProvider({ children }) {
         pathMarkers,
         setPathMarkers,
         markerGroups,
-        setMarkerGroups
+        setMarkerGroups,
+        noteMarkers,
+        setNoteMarkers,
       }}
     >
       {children}

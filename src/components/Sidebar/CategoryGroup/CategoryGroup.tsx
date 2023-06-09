@@ -5,12 +5,13 @@ import { Button, Box, Image, Flex } from "@chakra-ui/react";
 import { useMapContext } from "@context/.";
 import {
   SETTING_HIDDEN_CATEGORY,
-  SETTING_HIDDE_ALL,
+  SETTING_HIDE_ALL,
   USER_SETTING,
   initialUserSettings,
 } from "@data/LocalStorage";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
+import { categoryHiddenState } from "@lib/getHiddenState";
 
 const CategoryGroup = ({ onLayerClick, layerObj }) => {
   const [storageSettings, setStorageSettings] = useLocalStorage(
@@ -22,7 +23,7 @@ const CategoryGroup = ({ onLayerClick, layerObj }) => {
   const [show, setShow] = useState(layerObj.checked);
 
   const handleLayerClick = () => {
-    const prev = storageSettings[SETTING_HIDDEN_CATEGORY][layerObj.name];
+    const prev = categoryHiddenState(layerObj.name);
 
     setStorageSettings((prevState) => ({
       ...prevState,
@@ -37,14 +38,9 @@ const CategoryGroup = ({ onLayerClick, layerObj }) => {
   };
 
   useEffect(() => {
-    if (
-      storageSettings[SETTING_HIDDEN_CATEGORY][layerObj.name] ||
-      storageSettings[SETTING_HIDDE_ALL]
-    ) {
-      setShow(false);
-    } else {
-      setShow(true);
-    }
+    setShow(
+      !categoryHiddenState(layerObj.name) && !storageSettings[SETTING_HIDE_ALL]
+    );
   }, [storageSettings]);
 
   return (

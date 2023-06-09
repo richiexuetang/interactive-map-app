@@ -2,15 +2,13 @@ import React, { useEffect, useState } from "react";
 import { NextSeo } from "next-seo";
 
 import { areaConfig } from "@data/areaConfig";
-import { initialUserSettings } from "@data/LocalStorage/initial";
 import { categoryItemsConfig } from "@data/categoryItemsConfig";
-import { COMPLETED, USER_SETTING } from "@data/LocalStorage";
-import { mapConfig } from "@data/index";
+import { USER_SETTING, initialUserSettings, mapConfig } from "@data/index";
 import { useMapContext } from "src/context/app-context";
 import AppMap from "@components/Map/AppMap";
 import { Loader } from "@components/Loader";
-import useLocalStorage from "@hooks/useLocalStorage";
 import { useRouter } from "next/router";
+import useLocalStorage from "@hooks/useLocalStorage";
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
@@ -76,9 +74,21 @@ export async function getStaticProps(context) {
           }
         });
       } else {
+        let groupName = "";
+        categoryItemsConfig.map((item) => {
+          if (item.gameSlug === config.gameSlug) {
+            item.categoryGroups.map(({ members, name }) => {
+              if (members.includes(categoryId)) {
+                groupName = name;
+              }
+            });
+          }
+        });
+
         clusterGroups.push({
           categoryId: categoryId,
           coordinates: [coordinate],
+          group: groupName
         });
         seen.add(categoryId);
       }
@@ -135,7 +145,7 @@ export async function getStaticProps(context) {
       textOverlay,
       clusterGroups,
       pathMarkers,
-      markerGroups
+      markerGroups,
     },
     revalidate: 10,
   };
@@ -162,7 +172,7 @@ const MapPage = ({
   textOverlay,
   clusterGroups,
   pathMarkers,
-  markerGroups
+  markerGroups,
 }) => {
   const router = useRouter();
 
@@ -189,7 +199,7 @@ const MapPage = ({
     setTextOverlay,
     setPathMarkers,
     setClusterGroups,
-    setMarkerGroups
+    setMarkerGroups,
   } = useMapContext();
 
   useEffect(() => {

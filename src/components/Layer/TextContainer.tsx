@@ -1,8 +1,10 @@
+import { useMapContext } from "@context/app-context";
 import { divIcon } from "leaflet";
 import { useState } from "react";
 import { Marker, useMap, useMapEvents } from "react-leaflet";
 
-const TextContainer = ({ position, minZoom, maxZoom, content }) => {
+const TextContainer = ({ id, position, minZoom, maxZoom, content }) => {
+  const { markerRefs } = useMapContext();
   const map = useMap();
   const [show, setShow] = useState(
     map.getZoom() <= minZoom && map.getZoom() >= maxZoom
@@ -22,7 +24,11 @@ const TextContainer = ({ position, minZoom, maxZoom, content }) => {
   return (
     <>
       {show ? (
-        <Marker position={[position[0], position[1]]} icon={icon} />
+        <Marker
+          ref={(ref) => (markerRefs[id] = ref)}
+          position={[position[0], position[1]]}
+          icon={icon}
+        />
       ) : null}
     </>
   );

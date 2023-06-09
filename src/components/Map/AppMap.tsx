@@ -4,17 +4,18 @@ import React, { useEffect, useState } from "react";
 import { useMapContext } from "@context/app-context";
 import {
   COMPLETED,
-  SETTING_HIDDEN_CATEGORY,
-  SETTING_HIDDE_ALL,
+  SETTING_HIDE_ALL,
   SETTING_HIDE_COMPLETED,
   USER_SETTING,
   initialUserSettings,
 } from "@data/LocalStorage";
-import {
-  categoryIdNameMap,
-  categoryItemsConfig,
-} from "@data/categoryItemsConfig";
+import { categoryIdNameMap } from "@data/categoryItemsConfig";
 import useLocalStorage from "@hooks/useLocalStorage";
+import { categoryHiddenState } from "@lib/getHiddenState";
+
+const RMTooltip = dynamic(() => import("@components/Popup/RMTooltip"), {
+  ssr: false,
+});
 
 const MarkerClusterGroup = dynamic(
   () => import("@components/Marker/MarkerClusterGroup"),
@@ -53,23 +54,20 @@ const GroupedLayer = dynamic(
 const AppMap = () => {
   const [storageSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
   const { config, markerGroups, clusterGroups } = useMapContext();
-  const [completedMarkers, setCompletedMarkers] = useLocalStorage(
-    COMPLETED,
-    {}
-  );
-  
+  const [completedMarkers] = useLocalStorage(COMPLETED, {});
+
   const [userHideComplete, setUserHideComplete] = useState(
-    storageSettings[SETTING_HIDE_COMPLETED][config.game]
+    storageSettings[SETTING_HIDE_COMPLETED]
   );
   const [refresh, setRefresh] = useState(false);
-  const [hideAll, setHideAll] = useState(storageSettings[SETTING_HIDDE_ALL]);
+  const [hideAll, setHideAll] = useState(storageSettings[SETTING_HIDE_ALL]);
 
   useEffect(() => {
     if (refresh) {
-      const curr = storageSettings.hideCompletedMarkers[config.game];
+      const curr = storageSettings[SETTING_HIDE_COMPLETED];
       setUserHideComplete(curr);
 
-      setHideAll(storageSettings[SETTING_HIDDE_ALL]);
+      setHideAll(storageSettings[SETTING_HIDE_ALL]);
       setRefresh(false);
     }
   }, [storageSettings, refresh]);
@@ -88,12 +86,12 @@ const AppMap = () => {
           />
           {markerGroups.map(
             ({ categoryId, coordinates, ids, ranks, group }, i) => {
-              const categoryHiddenState = storageSettings[SETTING_HIDDEN_CATEGORY][categoryId];
+              const hidden = categoryHiddenState(categoryId);
               if (!hideAll) {
                 return (
                   <GroupedLayer
                     key={`${categoryId} + ${ids[i]}`}
-                    checked={!categoryHiddenState}
+                    checked={!hidden}
                     id={group}
                     name={categoryId}
                     group={group}
@@ -127,47 +125,36 @@ const AppMap = () => {
 
           {clusterGroups.length &&
             clusterGroups.map((group) => {
-              let groupName = "locations";
-              categoryItemsConfig.map((item) => {
-                if (item.gameSlug === config.gameSlug) {
-                  item.categoryGroups.map(({ members, name }) => {
-                    if (members.includes(group.categoryId)) {
-                      groupName = name;
-                    }
-                  });
-                }
-              });
-
+              const { categoryId, group: groupName, coordinates } = group;
               const groupColor =
                 "#" +
                 (0x1000000 + Math.random() * 0xffffff)
                   .toString(16)
                   .substr(1, 6);
 
-              const hidden =
-              storageSettings[SETTING_HIDDEN_CATEGORY][group.categoryId];
+              const hidden = categoryHiddenState(categoryId);
 
               if (!hideAll && !hidden) {
                 return (
                   <GroupedLayer
-                    key={`${group.categoryId}`}
+                    key={`${categoryId}`}
                     checked
                     id={groupName}
-                    name={group.categoryId}
+                    name={categoryId}
                     group={groupName}
                   >
                     <LayerGroup>
-                      <MarkerClusterGroup key={group.categoryId}>
-                        {group.coordinates.map((coord) => {
+                      <MarkerClusterGroup key={categoryId}>
+                        {coordinates.map((coord) => {
                           return (
                             <CircleMarker
                               center={coord}
                               color={groupColor}
                               radius={2}
                             >
-                              <Tooltip>
-                                {categoryIdNameMap[group.categoryId]}
-                              </Tooltip>
+                              <RMTooltip>
+                                {categoryIdNameMap[categoryId]}
+                              </RMTooltip>
                             </CircleMarker>
                           );
                         })}

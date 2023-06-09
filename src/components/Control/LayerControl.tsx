@@ -22,7 +22,7 @@ import {
 import { useMapContext } from "@context/app-context";
 import { CategoryGroup, SearchInput, SearchResults } from "@components/Sidebar";
 import {
-  SETTING_HIDDE_ALL,
+  SETTING_HIDE_ALL,
   SETTING_HIDE_COMPLETED,
   USER_SETTING,
   initialUserSettings,
@@ -39,9 +39,12 @@ const POSITION_CLASSES = {
 
 function LayerControl({ position, children, setRefresh }) {
   const router = useRouter();
-  const [storageSettings, setStorageSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
+  const [storageSettings, setStorageSettings] = useLocalStorage(
+    USER_SETTING,
+    initialUserSettings
+  );
   const { config } = useMapContext();
-  const {subSelections: navSelections, name: area} = config;
+  const { subSelections: navSelections, name: area } = config;
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [layers, setLayers] = useState([]);
@@ -51,16 +54,13 @@ function LayerControl({ position, children, setRefresh }) {
   const [results, setResults] = useState([]);
 
   const [hideCompleted, setHideCompleted] = useState(
-    storageSettings[SETTING_HIDE_COMPLETED][config.game]
+    storageSettings[SETTING_HIDE_COMPLETED]
   );
 
   const toggle = (key) => {
     setStorageSettings((prev) => ({
       ...prev,
-      hideCompletedMarkers: {
-        ...prev.hideCompletedMarkers,
-        [config.game]: !hideCompleted,
-      },
+      hideCompletedMarkers: !hideCompleted,
     }));
     setHideCompleted(!hideCompleted);
     setRefresh(true);
@@ -124,7 +124,7 @@ function LayerControl({ position, children, setRefresh }) {
   const handleHideShowAll = (val) => {
     setStorageSettings((prev) => ({
       ...prev,
-      [SETTING_HIDDE_ALL]: val,
+      [SETTING_HIDE_ALL]: val,
     }));
     setRefresh(true);
   };
@@ -172,7 +172,7 @@ function LayerControl({ position, children, setRefresh }) {
       router.push(`/map/${to}`);
     }
   };
-  
+
   return (
     <LayersControlProvider
       value={{

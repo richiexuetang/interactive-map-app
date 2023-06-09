@@ -11,6 +11,7 @@ const TextLayer = () => {
         return (
           <TextContainer
             key={id}
+            id={id}
             position={coordinate}
             content={markerName}
             maxZoom={zoomRange[0]}

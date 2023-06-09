@@ -8,6 +8,7 @@ import {
 import { COMPLETED } from "@data/index";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { useEffect, useState } from "react";
+import { categoryHiddenState } from "@lib/getHiddenState";
 
 const PolyLine = ({ parentId, path }) => {
   const [storageSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
@@ -36,11 +37,8 @@ const PolyLine = ({ parentId, path }) => {
   useEffect(() => {
     if (parent) {
       setHide(
-        storageSettings[SETTING_HIDDEN_CATEGORY][parent.categoryId] &&
-          completedMarkers[parentId]
+        categoryHiddenState(parent.categoryId) && completedMarkers[parentId]
       );
-    } else {
-      setHide(false);
     }
   }, [storageSettings, completedMarkers, parent]);
 

@@ -42,9 +42,12 @@ const SearchResult = ({ result }) => {
       const overlay = L.circle(markerRefs[id]._latlng, {
         radius: (1000 + map.getZoom() * 100) / map.getZoom(),
       });
-
       setMarkerOverlays({ ...markerOverlays, [id]: overlay });
       map.addLayer(overlay);
+      map.flyTo(coordinate, map.getMaxZoom(), {
+        animate: true,
+        duration: 0.5,
+      });
     }
   };
 
