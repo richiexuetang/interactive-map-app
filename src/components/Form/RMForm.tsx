@@ -2,32 +2,22 @@ import {
   Box,
   Button,
   ButtonGroup,
+  FormControl,
+  FormLabel,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
+  ModalHeader,
   ModalOverlay,
-  Radio,
-  Textarea,
 } from "@chakra-ui/react";
 import RichEditor from "@components/Editor/RichEditor";
-import { Formik } from "formik";
-import {
-  CheckboxContainer,
-  CheckboxControl,
-  CheckboxSingleControl,
-  InputControl,
-  NumberInputControl,
-  PercentComplete,
-  RadioGroupControl,
-  ResetButton,
-  SelectControl,
-  SubmitButton,
-} from "formik-chakra-ui";
+import { useFormik } from "formik";
 import * as React from "react";
 import * as Yup from "yup";
-import { EditorState, convertToRaw } from "draft-js";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({
   markerType: Yup.number().required(),
@@ -37,92 +27,110 @@ const validationSchema = Yup.object({
 });
 
 const RMForm = (props) => {
-  const [editorState, setEditorState] = React.useState(() =>
-    EditorState.createEmpty()
-  );
-
   const { markerInfo, isOpen, onClose } = props;
   const {
     descriptions = [],
     lat = null,
     lng = null,
     markerName = "",
-    categoryId = null,
     id,
-    markerTypeId,
   } = markerInfo;
 
-  const initialValues = {
-    markerType: 1,
-    markerName: markerName,
-    lat: lat,
-    lng: lng,
-    descriptions: descriptions,
+  const formik = useFormik({
+    initialValues: {
+      markerName: markerName,
+      lat: lat,
+      lng: lng,
+      description: "",
+    },
+    onSubmit: () => {},
+    validationSchema: validationSchema,
+  });
+
+  const handleSubmit = async () => {
+    const { markerName: newName, lat: newLat, lng: newLng, description } = formik.values;
+    
+    try {
+      let newDesc = [...descriptions];
+      if (descriptions.length > 0) {
+        newDesc = [...descriptions];
+      }
+      if (description) {
+        newDesc = [...newDesc, description];
+      }
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + id,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            markerName: newName,
+            lat: newLat,
+            lng: newLng,
+            descriptions: newDesc,
+          }),
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const result = await response.json();
+
+      toast.success("Marker update success");
+    } catch (errorMessage: any) {
+      toast.error(errorMessage);
+    }
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
+        <ModalHeader textAlign="center" mt={3}>
+          Edit Marker
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Formik
-            initialValues={initialValues}
-            onSubmit={() => console.log('submitting')}
-            validationSchema={validationSchema}
-          >
-            {({ handleSubmit, values, errors }) => (
-              <Box
-                borderWidth="1px"
-                rounded="lg"
-                shadow="1px 1px 3px rgba(0,0,0,0.3)"
-                maxWidth={800}
-                p={6}
-                m="10px auto"
-                as="form"
-                onSubmit={handleSubmit as any}
-              >
-                <SelectControl
-                  name="markerType"
-                  selectProps={{ placeholder: "Select Marker Type" }}
-                >
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                </SelectControl>
-                <InputControl name="markerName" label="Title" />
-                <InputControl name="lat" label="Latitude" />
-                <InputControl name="lng" label="Longitude" />
+          <form onSubmit={formik.handleSubmit}>
+            <FormLabel>Marker Name:</FormLabel>
+            <Input
+              name="markerName"
+              onChange={formik.handleChange}
+              value={formik.values.markerName}
+            />
 
-                {descriptions.map((value, i) => (
-                  <Textarea
-                    id={i.toString()}
-                    key={i}
-                    value={value}
-                    onChange={(e) => console.log(e, i)}
-                  />
-                ))}
-                <Box paddingInline="1rem" border="1px solid" h="400px">
-                  <RichEditor
-                    editorState={editorState}
-                    setEditorState={setEditorState}
-                  />
-                </Box>
-                {/* <PercentComplete /> */}
-                <ButtonGroup>
-                  <SubmitButton>Submit</SubmitButton>
-                  <Button onClick={onClose}>Cancel</Button>
-                </ButtonGroup>
+            <FormLabel>Latitude:</FormLabel>
+            <Input
+              name="lat"
+              onChange={formik.handleChange}
+              value={formik.values.lat}
+            />
 
-                {/* <Box as="pre" marginY={10}>
-                  {JSON.stringify(values, null, 2)}
-                  <br />
-                  {JSON.stringify(errors, null, 2)}
-                </Box> */}
-              </Box>
-            )}
-          </Formik>
+            <FormLabel>Longitude:</FormLabel>
+            <Input
+              name="lng"
+              onChange={formik.handleChange}
+              value={formik.values.lng}
+            />
+
+            <FormLabel>New Description:</FormLabel>
+            <Box paddingInline="1rem" border="1px solid" h="400px">
+              <RichEditor
+                setFieldValue={(val) =>
+                  formik.setFieldValue("description", val)
+                }
+                value={formik.values.description}
+              />
+            </Box>
+
+            <Box display="flex" py={3}>
+              <Button onClick={handleSubmit} type="submit">
+                Submit
+              </Button>
+              <Button onClick={onClose}>Cancel</Button>
+            </Box>
+          </form>
         </ModalBody>
       </ModalContent>
     </Modal>

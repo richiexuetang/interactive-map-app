@@ -102,7 +102,7 @@ const SearchResult = ({ result }) => {
         <Box>{markerName} </Box>
       </Flex>
 
-      {descriptions.map((desc, i) => {
+      {descriptions && descriptions.map((desc, i) => {
         return (
           <Box mb="1rem" key={id + i}>
             <div dangerouslySetInnerHTML={{ __html: desc }} />

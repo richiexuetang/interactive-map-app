@@ -46,6 +46,10 @@ const MapPopup = (props) => {
     toast.success(`Link copied`);
   };
 
+  const onEditSubmit = () => {
+
+  }
+
   useEffect(() => {
     if (markerInfo) {
       setLoaded(true);
@@ -58,7 +62,7 @@ const MapPopup = (props) => {
         onClose={onClose}
         isOpen={isOpen}
         markerInfo={{
-          id: markerInfo.id,
+          id: markerId,
           lat: markerInfo.lat,
           lng: markerInfo.lng,
           markerName: markerInfo.markerName,
