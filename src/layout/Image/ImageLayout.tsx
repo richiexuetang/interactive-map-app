@@ -13,15 +13,10 @@ const ImageLayout: React.FC<ImageLayoutPropsType> = ({
   imageData,
   imageType,
 }) => {
-  const layoutTitle = imageType + "s:";
   const routeType = imageType.toLowerCase();
 
   return (
-    <Box w="100%" px="15px" mx="auto">
-      <Text fontSize="2rem" pos="relative" lineHeight="1.2" mb="0.5rem">
-        {layoutTitle}
-      </Text>
-
+    <Box w="100%" px="15px" mx="auto" textAlign='center' mt={10}>
       <Box display="flex" flexWrap="wrap" mx="-15px" mb="30px" flexDir="row">
         {imageData.map(({ name, path, imagePath, blurDataUrl }) => (
           <Box

@@ -1,40 +1,22 @@
-import { Polyline } from "react-leaflet";
+import Polyline from "./PolyLine";
 
-import { pointsData } from "@data/index";
 import { useMapContext } from "@context/app-context";
-import { useMarkerContext } from "@context/marker-context";
-import { COMPLETED } from "@data/index";
 
 const PolyLines = () => {
-  const { game, areaId } = useMapContext();
-  const { hideCompleted, hiddenCategories } =
-    useMarkerContext();
-  const completedMarkers =
-    JSON.parse(window.localStorage.getItem(COMPLETED)) || {};
-
+  const { pathMarkers } = useMapContext();
+  
   return (
     <>
-      {game === "totk" && areaId === "hyrule-surface" &&
-        pointsData.map(
-          ({ startLat, startLong, id, endLat, endLong, category }) => {
-            const shouldHide =
-              (hideCompleted && completedMarkers[id]) ||
-              hiddenCategories[category];
-
-            if (!shouldHide) {
-              return (
-                <Polyline
-                  key={id}
-                  positions={[
-                    [startLat, startLong],
-                    [endLat, endLong],
-                  ]}
-                  color={"white"}
-                />
-              );
-            }
-          }
-        )}
+      {pathMarkers &&
+        pathMarkers.map(({parentId, path}) => {
+          return (
+            <Polyline
+              key={parentId}
+              parentId={parentId}
+              path={path}
+            />
+          );
+        })}
     </>
   );
 };

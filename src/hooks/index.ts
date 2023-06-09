@@ -1,5 +1,5 @@
-export * from './useCopyToClipboard';
-export * from './useLocalStorage'
+export {default as useCopyToClipboard} from './useCopyToClipboard';
+export {default as useLocalStorage} from './useLocalStorage'
 export * from './useMapObject';
 export * from './useLoading';
 export * from './useIsomorphicLayoutEffect';

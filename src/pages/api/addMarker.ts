@@ -3,16 +3,25 @@ import clientPromise from "../../lib/mongodb";
 export default async (req, res) => {
   try {
     const client = await clientPromise;
-    const db = client.db("test");
-    const { title, category, area, descriptions, coord, type } = req.body;
+    const db = client.db("ritcher-map");
+    const {
+      markerName,
+      categoryId,
+      mapSlug,
+      gameSlug,
+      descriptions,
+      coordinate,
+      markerTypeId,
+    } = req.body;
 
     const marker = await db.collection("markers").insertOne({
-      area: area,
-      category: category,
-      coord: coord,
+      markerName: markerName,
+      categoryId: categoryId,
+      coordinate: coordinate,
       descriptions: descriptions,
-      title: title,
-      type: type,
+      markerTypeId: markerTypeId,
+      mapSlug: mapSlug, 
+      gameSlug: gameSlug
     });
 
     res.json(marker);

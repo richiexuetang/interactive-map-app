@@ -1,1 +1,1 @@
-export {default as AddMarkerControl} from './AddMarkerControl';
+export {default as LayerControl} from './LayerControl';

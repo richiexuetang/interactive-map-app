@@ -1,8 +1,8 @@
-import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
-import { DeleteIcon, EditIcon, LinkIcon } from "@chakra-ui/icons";
+import { EditIcon, LinkIcon } from "@chakra-ui/icons";
 import {
   Box,
   Checkbox,
@@ -14,129 +14,174 @@ import {
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 
-import MarkerEdit from "@components/Modal/EditMarker";
-import { useMapContext } from "@context/app-context";
 import { COMPLETED } from "@data/LocalStorage";
-import useCopyToClipboard from "@hooks/useCopyToClipboard";
-import useLocalStorage from "@hooks/useLocalStorage";
+import { useCopyToClipboard, useLocalStorage } from "@hooks/index";
+import dynamic from "next/dynamic";
+import { Loader } from "@components/Loader";
+import { categoryIdNameMap } from "@data/categoryItemsConfig";
+import RMForm from "@components/Form/RMForm";
 
-const MapPopup = ({ Popup, setCompleted, markerInfo }) => {
+const RMPopup = dynamic(() => import("@components/Popup/RMPopup"), {
+  ssr: false,
+});
+
+const RMTooltip = dynamic(() => import("@components/Popup/RMTooltip"), {
+  ssr: false,
+});
+
+const MapPopup = (props) => {
+  const { status } = useSession();
+  const { onOpen, isOpen, onClose } = useDisclosure();
+  const { markerInfo, markerId } = props;
   const pathname = usePathname();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { data: session, status } = useSession();
   const [completedMarkers, setCompletedMarkers] = useLocalStorage(
     COMPLETED,
     {}
   );
+  const [loaded, setLoaded] = useState(false);
 
-  const { setMarkers, markers } = useMapContext();
   const [value, copy] = useCopyToClipboard();
-  const [completed] = useState(completedMarkers[markerInfo.id]);
+  const [completed, setCompleted] = useState(completedMarkers[markerId]);
 
   const handleCompleteCheck = (e) => {
-    setCompleted(e.target.checked);
-
     setCompletedMarkers((prev) => ({
       ...prev,
-      [markerInfo.id]: e.target.checked,
+      [markerId]: e.target.checked,
     }));
+    setCompleted(e.target.checked);
   };
 
   const handleCopyLink = () => {
-    copy(`${process.env.BASE_URL}${pathname}?markerId=${markerInfo.id}`);
+    copy(`${process.env.BASE_URL}${pathname}?markerId=${markerId}`);
     toast.success(`Link copied`);
   };
 
-  if (isOpen) {
-    return (
-      <MarkerEdit
-        onClose={onClose}
-        isOpen={isOpen}
-        markerInfo={{
-          id: markerInfo.id,
-          descriptions: markerInfo.descriptions,
-          title: markerInfo.title,
-          category: markerInfo.category,
-        }}
-      />
-    );
-  }
+  const onEditSubmit = async (values) => {
+    const {
+      markerName: newName,
+      lat: newLat,
+      lng: newLng,
+      description,
+    } = values;
+    const { id, descriptions } = markerInfo;
 
-  const handleDelete = async () => {
     try {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/deleteMarker?id=` +
-          markerInfo.id,
+      let newDesc = [...descriptions];
+      if (descriptions.length > 0) {
+        newDesc = [...descriptions];
+      }
+      if (description) {
+        newDesc = [...newDesc, description];
+      }
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + id,
         {
           method: "POST",
+          body: JSON.stringify({
+            markerName: newName,
+            lat: newLat,
+            lng: newLng,
+            descriptions: newDesc,
+          }),
           headers: {
             Accept: "application/json, text/plain, */*",
             "Content-Type": "application/json",
           },
         }
       );
+      await response.json();
 
-      setMarkers(markers.filter((marker) => marker._id !== markerInfo.id));
-      toast.success("Delete Successful");
+      toast.success("Marker update success");
     } catch (errorMessage: any) {
       toast.error(errorMessage);
     }
   };
 
-  return (
-    <Popup>
-      <HStack justifyContent="space-between" mb={2}>
-        <Stack mt={3} spacing="3">
-          <Text
-            fontSize="1.25rem"
-            fontWeight="normal"
-            lineHeight="1.2"
-            mb="5px !important"
-            mt="0 !important"
-            display="flex"
-          >
-            {markerInfo.title}
-            <LinkIcon
-              mx="5px"
-              _hover={{ cursor: "pointer" }}
-              onClick={handleCopyLink}
-            />
-            {status === "authenticated" && (
-              <>
-                <EditIcon
-                  mx="5px"
-                  _hover={{ cursor: "pointer" }}
-                  onClick={onOpen}
-                />
-                <DeleteIcon
-                  mx="5px"
-                  _hover={{ cursor: "pointer" }}
-                  onClick={handleDelete}
-                />
-              </>
-            )}
-          </Text>
-          <Text mr="10px !important" mt="0 !important" fontSize="11px">
-            {markerInfo.category.charAt(0).toUpperCase() +
-              markerInfo.category.substring(1)}
-          </Text>
-          {markerInfo.descriptions &&
-            markerInfo.descriptions.map((desc, i) => (
-              <div key={i} dangerouslySetInnerHTML={{ __html: desc }} />
-            ))}
-        </Stack>
-      </HStack>
+  useEffect(() => {
+    if (markerInfo) {
+      setLoaded(true);
+    }
+  }, [markerInfo]);
 
-      <Divider />
-      <Box my={4} textAlign="center" pl={3}>
-        <Checkbox
-          isChecked={completed}
-          onChange={(e) => handleCompleteCheck(e)}
-        >
-          Completed
-        </Checkbox>
-      </Box>
-    </Popup>
+  if (isOpen) {
+    return (
+      <RMForm
+        onClose={onClose}
+        isOpen={isOpen}
+        markerInfo={{
+          id: markerId,
+          lat: markerInfo.lat,
+          lng: markerInfo.lng,
+          markerName: markerInfo.markerName,
+          descriptions: markerInfo.descriptions,
+          markerTypeId: markerInfo.markerTypeId,
+          categoryId: markerInfo.categoryId,
+        }}
+        onSubmit={onEditSubmit}
+      />
+    );
+  }
+
+  return (
+    <RMPopup>
+      {!loaded ? (
+        <Loader loading={!loaded} />
+      ) : (
+        <>
+          <HStack justifyContent="space-between" mb={2}>
+            <Stack mt={2} spacing="3">
+              <Text
+                fontSize="1.25rem"
+                mb="5px !important"
+                mt="0 !important"
+                display="flex"
+                alignItems="center"
+              >
+                {markerInfo && markerInfo.markerName}
+                <LinkIcon
+                  ml={3}
+                  _hover={{ cursor: "pointer" }}
+                  onClick={handleCopyLink}
+                />
+                {status === "authenticated" && (
+                  <EditIcon
+                    ml={3}
+                    _hover={{ cursor: "pointer" }}
+                    onClick={onOpen}
+                  />
+                )}
+              </Text>
+              <Text>
+                {markerInfo && categoryIdNameMap[markerInfo.categoryId]}
+              </Text>
+
+              {markerInfo?.descriptions &&
+                markerInfo.descriptions.map((desc, i) => (
+                  <div
+                    key={i}
+                    style={{ margin: "0.25em" }}
+                    dangerouslySetInnerHTML={{ __html: desc }}
+                  />
+                ))}
+            </Stack>
+          </HStack>
+
+          <Divider pt={2} />
+          <Box my={2} textAlign="center" pl={3}>
+            <Checkbox
+              isChecked={completed}
+              onChange={(e) => handleCompleteCheck(e)}
+            >
+              <Text letterSpacing={0} mb="0 !important">
+                Completed
+              </Text>
+            </Checkbox>
+          </Box>
+        </>
+      )}
+      {loaded && markerInfo && <RMTooltip>{markerInfo.markerName}</RMTooltip>}
+    </RMPopup>
   );
 };
 

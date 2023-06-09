@@ -1,49 +1,152 @@
 import React, { useEffect, useState } from "react";
 import { NextSeo } from "next-seo";
-import dynamic from "next/dynamic";
 
-import Map from "@components/Map";
 import { areaConfig } from "@data/areaConfig";
-import { initialUserSettings } from "@data/LocalStorage/initial";
 import { categoryItemsConfig } from "@data/categoryItemsConfig";
-import { COMPLETED, USER_SETTING } from "@data/LocalStorage";
 import { mapConfig } from "@data/index";
 import { useMapContext } from "src/context/app-context";
-import Markers from "@components/Marker/Markers";
+import AppMap from "@components/Map/AppMap";
 import { Loader } from "@components/Loader";
-import useLocalStorage from "@hooks/useLocalStorage";
 import { useRouter } from "next/router";
-import { AddMarkerControl } from "@components/Control";
-
-const PolyLines = dynamic(() => import("@components/Line/PolyLines"), {
-  ssr: false,
-});
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
+
+  const config = areaConfig.find((o) => o.name === areaId);
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}`
   );
 
-  const {data: markers} = await res.json();
-  
-  const sortedMarkers = [...markers];
-  sortedMarkers.sort((a, b) => b.coord[0] - a.coord[0]);
+  const { data: markers } = await res.json();
+  const markersList = [];
+  const textOverlay = [];
+  const clusterGroups = [];
+  const pathMarkers = [];
 
-  const config = areaConfig.find((o) => o.name === areaId);
+  const markerGroups = [];
+  const categoryCounts = {};
+  const seen = new Set();
+  const seenCategory = new Set();
 
-  const categoryItems = categoryItemsConfig.find(
-    (o) => o.gameSlug === config.gameSlug
-  );
+  markers.map((marker) => {
+    const {
+      markerTypeId,
+      categoryId,
+      _id,
+      coordinate,
+      markerName,
+      zoomRange,
+      path,
+      parentId,
+      descriptions,
+    } = marker;
+
+    categoryCounts[categoryId] = categoryCounts[categoryId] + 1 || 1;
+
+    if (markerTypeId === 1) {
+      const standard = {
+        id: _id,
+        coordinate: coordinate,
+        categoryId: categoryId,
+        markerName: markerName,
+        descriptions: descriptions,
+      };
+
+      markersList.push(standard);
+    } else if (markerTypeId === 2) {
+      const textOverlayMarker = {
+        id: _id,
+        coordinate: coordinate,
+        markerName: markerName,
+        zoomRange: zoomRange,
+      };
+
+      textOverlay.push(textOverlayMarker);
+    } else if (markerTypeId === 3) {
+      if (seen.has(categoryId)) {
+        clusterGroups.map((group, i) => {
+          if (group.categoryId === categoryId) {
+            const current = clusterGroups[i].coordinates;
+            const newCoords = [...current, coordinate];
+            clusterGroups[i].coordinates = [...newCoords];
+          }
+        });
+      } else {
+        let groupName = "";
+        categoryItemsConfig.map((item) => {
+          if (item.gameSlug === config.gameSlug) {
+            item.categoryGroups.map(({ members, name }) => {
+              if (members.includes(categoryId)) {
+                groupName = name;
+              }
+            });
+          }
+        });
+
+        clusterGroups.push({
+          categoryId: categoryId,
+          coordinates: [coordinate],
+          group: groupName
+        });
+        seen.add(categoryId);
+      }
+    } else if (markerTypeId === 4) {
+      pathMarkers.push({ path: path, parentId: parentId });
+    }
+  });
+
+  const sortedMarkers = [...markersList];
+  sortedMarkers.sort((a, b) => b.coordinate[0] - a.coordinate[0]);
+
+  sortedMarkers.map(({ categoryId, coordinate, id }, rank) => {
+    if (seenCategory.has(categoryId)) {
+      markerGroups.map((group, i) => {
+        const {
+          coordinates: groupCoordinates,
+          ids: currIds,
+          categoryId: currCategoryId,
+          ranks,
+        } = group;
+        if (currCategoryId === categoryId) {
+          markerGroups[i].coordinates = [...groupCoordinates, coordinate];
+          markerGroups[i].ids = [...currIds, id];
+          markerGroups[i].ranks = [...ranks, rank];
+        }
+      });
+    } else {
+      let groupName = "locations";
+      categoryItemsConfig.map((item) => {
+        if (item.gameSlug === config.gameSlug) {
+          item.categoryGroups.map(({ members, name }) => {
+            if (members.includes(categoryId)) {
+              groupName = name;
+            }
+          });
+        }
+      });
+
+      markerGroups.push({
+        categoryId: categoryId,
+        coordinates: [coordinate],
+        ids: [id],
+        ranks: [rank],
+        group: groupName,
+      });
+      seenCategory.add(categoryId);
+    }
+  });
 
   return {
     props: {
-      markers: sortedMarkers,
-      areaId,
       config,
-      categoryItems,
-    }
+      categoryCounts,
+      textOverlay,
+      clusterGroups,
+      pathMarkers,
+      markerGroups,
+    },
+    revalidate: 10,
   };
 }
 
@@ -63,16 +166,13 @@ export async function getStaticPaths() {
 }
 
 const MapPage = ({
-  markers,
-  areaId,
   config,
-  categoryItems
+  categoryCounts,
+  textOverlay,
+  clusterGroups,
+  pathMarkers,
+  markerGroups,
 }) => {
-  if (typeof window !== "undefined") {
-    useLocalStorage(USER_SETTING, initialUserSettings);
-    useLocalStorage(COMPLETED, {});
-  }
-
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -93,44 +193,34 @@ const MapPage = ({
   });
 
   const {
-    setArea,
     setConfig,
-    setGame,
-    setCategoryItems,
-    setMarkers,
+    setCategoryCounts,
+    setTextOverlay,
+    setPathMarkers,
+    setClusterGroups,
+    setMarkerGroups,
   } = useMapContext();
 
   useEffect(() => {
-    setArea(areaId);
     setConfig(config);
-    setGame(config.gameSlug);
-    setCategoryItems(categoryItems);
-    setMarkers(markers);
-  }, [areaId, config, categoryItems]);
+    setCategoryCounts(categoryCounts);
+    setTextOverlay(textOverlay);
+    setPathMarkers(pathMarkers);
+    setClusterGroups(clusterGroups);
+    setMarkerGroups(markerGroups);
+  }, []);
 
   if (loading) {
     return <Loader loading={loading} />;
   }
+
   return (
     <>
       <NextSeo
         title="Interactive Map for Zelda: Tears of the Kingdom totk | Witcher 3"
         description="Interactive Map for Zelda: Tears of the Kingdom totk | Witcher 3"
       />
-      <Map markers={markers}>
-        {({ TileLayer, useMap }) => (
-          <>
-            <TileLayer
-              url={`/tiles/${areaId}/{z}/{x}/{y}.png`}
-              noWrap
-              bounds={config.bounds}
-            />
-            <Markers useMap={useMap} gameSlug={config.gameSlug} />
-            <AddMarkerControl useMap={useMap} />
-            <PolyLines />
-          </>
-        )}
-      </Map>
+      <AppMap />
     </>
   );
 };

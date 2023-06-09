@@ -1,59 +1,48 @@
-import React, {useState} from "react";
-import {Input} from "@chakra-ui/react";
-
+import React, { useState } from "react";
+import { Input } from "@chakra-ui/react";
 import { useMapContext } from "@context/app-context";
 
-const SearchInput = ({results, setResults}) => {
-    const {markers} = useMapContext();
-    const [value, setValue] = useState("");
-    let seen = new Set();
+const SearchInput = ({ setResults }) => {
+  const [value, setValue] = useState("");
+  let seen = new Set();
+  const {config} = useMapContext();
 
-    const handleKeyPress = (e) => {
-        if (e.key === "Enter") {
-            setResults([]);
-            seen = new Set();
+  const handleKeyPress = async (e) => {
+    if (e.key === "Enter") {
+      setResults([]);
+      seen = new Set();
 
-            markers
-                .filter((marker) => marker.title.toLowerCase().includes(value.toLowerCase()))
-                .map((filtered) => {
-                    const newArr = results;
-                    newArr.push(filtered);
-                    setResults([...newArr]);
-                    seen = new Set([...seen, filtered._id]);      
-                });
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_APP_URL}/api/findMarker?searchParam=` +
+            e.target.value + `&mapSlug=${config.name}`
+        );
+        const json = await res.json();
+        setResults([...json]);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
-            markers.map((marker) =>
-                marker.descriptions
-                    .filter((desc) => desc.toLowerCase().includes(value.toLowerCase()))
-                    .map(() => {
-                        if (!seen.has(marker._id)) {
-                            const newArr = results;
-                            newArr.push(marker);
-                            setResults([...newArr]);
-                        }
-                    })
-            );
-        }
-    };
-
-    return (
-        <Input
-            variant='outlined'
-            borderColor='#584835'
-            focusBorderColor='#af894d'
-            placeholder="Search..."
-            value={value}
-            onChange={(e) => {
-                setValue(e.target.value);
-                setResults([]);
-            }}
-            onReset={() => {
-                setValue("");
-                setResults([]);
-            }}
-            onKeyUp={(e) => handleKeyPress(e)}
-        />
-    );
+  return (
+    <Input
+      variant="outlined"
+      borderColor="#584835"
+      focusBorderColor="#af894d"
+      placeholder="Search..."
+      value={value}
+      onChange={(e) => {
+        setValue(e.target.value);
+        setResults([]);
+      }}
+      onReset={() => {
+        setValue("");
+        setResults([]);
+      }}
+      onKeyUp={(e) => handleKeyPress(e)}
+    />
+  );
 };
 
 export default SearchInput;

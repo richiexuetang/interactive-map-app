@@ -1,109 +1,74 @@
 import React, { useEffect, useState } from "react";
 
-import { VStack, HStack, Button } from "@chakra-ui/react";
+import { Button, Box, Image, Flex } from "@chakra-ui/react";
 
-import { MarkerButton } from "@components/Sidebar/.";
 import { useMapContext } from "@context/.";
 import {
   SETTING_HIDDEN_CATEGORY,
+  SETTING_HIDE_ALL,
   USER_SETTING,
   initialUserSettings,
 } from "@data/LocalStorage";
-import useMapObject, { MapOrEntries } from "@hooks/useMapObject";
 import useLocalStorage from "@hooks/useLocalStorage";
+import { categoryIdNameMap } from "@data/categoryItemsConfig";
+import { categoryHiddenState } from "@lib/getHiddenState";
 
-interface CategoryGroupPropsType {
-  group: string;
-  categoryMap: MapOrEntries<string, string>;
-  game: string;
-}
-
-const CategoryGroup = ({
-  group,
-  categoryMap,
-  game,
-}: CategoryGroupPropsType) => {
-  const [members] = useMapObject<string, string>(categoryMap);
-  const [categories, setCategories] = useState([]);
-  const { markers } = useMapContext();
-  const [categoryCounts, setCategoryCounts] = useState(null);
-  const [userSettings, setUserSettings] = useLocalStorage(
+const CategoryGroup = ({ onLayerClick, layerObj }) => {
+  const [storageSettings, setStorageSettings] = useLocalStorage(
     USER_SETTING,
     initialUserSettings
   );
+  const { categoryCounts } = useMapContext();
 
-  useEffect(() => {
-    if (!categoryCounts) {
-      const counts = {};
-      markers.map(({ category }) => {
-        if (!counts[category]) {
-          counts[category] = 1;
-        } else {
-          counts[category]++;
-        }
-      });
+  const [show, setShow] = useState(layerObj.checked);
 
-      setCategoryCounts({ ...counts });
-    }
-  });
+  const handleLayerClick = () => {
+    const prev = categoryHiddenState(layerObj.name);
 
-  useEffect(() => {
-    if (!categories.length) {
-      Array.from(members.entries()).map(([key]) => {
-        categories.push(key);
-        setCategories([...categories]);
-      });
-    }
-  }, [categories, members]);
-
-  const toggleGroupCategories = () => {
-    const newHidden = {};
-
-    Array.from(members.entries()).map(([key]) => {
-      const prev = userSettings["hiddenCategories"][game][key];
-      newHidden[key] = !prev;
-    });
-
-    setUserSettings((prev) => ({
-      ...prev,
+    setStorageSettings((prevState) => ({
+      ...prevState,
       hiddenCategories: {
-        ...prev.hiddenCategories,
-        [game]: {
-          ...prev.hiddenCategories[game],
-          ...newHidden,
-        },
+        ...prevState.hiddenCategories,
+        [layerObj.name]: !prev,
       },
     }));
+
+    setShow(!show);
+    onLayerClick(layerObj);
   };
 
+  useEffect(() => {
+    setShow(
+      !categoryHiddenState(layerObj.name) && !storageSettings[SETTING_HIDE_ALL]
+    );
+  }, [storageSettings]);
+
   return (
-    <VStack w="100%" key={group}>
-      <HStack px="8px" pt={3} justifyContent="space-between" w="100%">
-        <Button
-          fontSize="1rem"
-          pl={0}
-          variant="underlined"
-          onClick={toggleGroupCategories}
-        >
-          {group.toUpperCase() + ":"}
-        </Button>
-      </HStack>
-      {Array.from(members.entries()).map(([key, value]) => {
-        return (
-          categoryCounts &&
-          categoryCounts[key] && (
-            <MarkerButton
-              key={key}
-              game={game}
-              type={value}
-              num={categoryCounts[key]}
-              category={key}
-              groupHide={userSettings["hiddenCategories"][game][key]}
-            />
-          )
-        );
-      })}
-    </VStack>
+    <Button
+      display="flex"
+      flexDir="row"
+      justifyContent="space-between"
+      w="full"
+      bg="sidebar.content"
+      onClick={handleLayerClick}
+    >
+      <Flex w={5} h={6} alignItems="center" justifyContent="center">
+        <Image
+          src={`/images/icons/${layerObj.name}.png`}
+          opacity={show ? 1 : 0.5}
+        />
+      </Flex>
+      <Box
+        fontSize="md"
+        fontWeight="normal"
+        textDecor={show ? "none" : "line-through"}
+      >
+        {categoryIdNameMap[layerObj.name]}
+      </Box>
+      <Box fontSize="sm" textDecor={show ? "none" : "line-through"}>
+        {categoryCounts[layerObj.name]}
+      </Box>
+    </Button>
   );
 };
 

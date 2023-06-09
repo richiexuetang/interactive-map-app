@@ -1,16 +1,16 @@
 import React from "react";
-import {Box} from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
-import {SearchResult} from ".";
+import { SearchResult } from ".";
 
-const SearchResults = ({results, useMap}) => {
-    return (
-        <Box overflow="scroll" _hover={{cursor: "pointer"}}>
-            {results.map((result) => (
-                <SearchResult key={result._id} result={result} useMap={useMap}/>
-            ))}
-        </Box>
-    );
+const SearchResults = ({ results }) => {
+  return (
+    <Box overflow="scroll" _hover={{ cursor: "pointer" }}>
+      {results.map((result, i) => (
+        <SearchResult key={i} result={result} />
+      ))}
+    </Box>
+  );
 };
 
 export default SearchResults;
