@@ -51,27 +51,28 @@ const GroupedLayer = dynamic(
 );
 
 const AppMap = () => {
-  const { config, markerGroups, clusterGroups, userSettings } = useMapContext();
+  const [storageSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
+  const { config, markerGroups, clusterGroups } = useMapContext();
   const [completedMarkers, setCompletedMarkers] = useLocalStorage(
     COMPLETED,
     {}
   );
   
   const [userHideComplete, setUserHideComplete] = useState(
-    userSettings[SETTING_HIDE_COMPLETED][config.game]
+    storageSettings[SETTING_HIDE_COMPLETED][config.game]
   );
   const [refresh, setRefresh] = useState(false);
-  const [hideAll, setHideAll] = useState(userSettings[SETTING_HIDDE_ALL]);
+  const [hideAll, setHideAll] = useState(storageSettings[SETTING_HIDDE_ALL]);
 
   useEffect(() => {
     if (refresh) {
-      const curr = userSettings.hideCompletedMarkers[config.game];
+      const curr = storageSettings.hideCompletedMarkers[config.game];
       setUserHideComplete(curr);
 
-      setHideAll(userSettings[SETTING_HIDDE_ALL]);
+      setHideAll(storageSettings[SETTING_HIDDE_ALL]);
       setRefresh(false);
     }
-  }, [userSettings, refresh]);
+  }, [storageSettings, refresh]);
 
   return (
     <RMMapContainer>
@@ -87,11 +88,12 @@ const AppMap = () => {
           />
           {markerGroups.map(
             ({ categoryId, coordinates, ids, ranks, group }, i) => {
+              const categoryHiddenState = storageSettings[SETTING_HIDDEN_CATEGORY][categoryId];
               if (!hideAll) {
                 return (
                   <GroupedLayer
                     key={`${categoryId} + ${ids[i]}`}
-                    checked
+                    checked={!categoryHiddenState}
                     id={group}
                     name={categoryId}
                     group={group}
@@ -143,7 +145,7 @@ const AppMap = () => {
                   .substr(1, 6);
 
               const hidden =
-                userSettings[SETTING_HIDDEN_CATEGORY][group.categoryId];
+              storageSettings[SETTING_HIDDEN_CATEGORY][group.categoryId];
 
               if (!hideAll && !hidden) {
                 return (

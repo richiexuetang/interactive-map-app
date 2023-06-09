@@ -1,4 +1,3 @@
-import { initialUserSettings } from "@data/LocalStorage";
 import { createContext, useContext, useState } from "react";
 
 const MapContext = createContext(undefined);
@@ -13,7 +12,6 @@ export function MapProvider({ children }) {
   const [clusterGroups, setClusterGroups] = useState([]);
   const [pathMarkers, setPathMarkers] = useState([]);
   const [markerGroups, setMarkerGroups] = useState([]);
-  const [userSettings, setUserSettings] = useState(initialUserSettings);
 
   return (
     <MapContext.Provider
@@ -33,8 +31,7 @@ export function MapProvider({ children }) {
         pathMarkers,
         setPathMarkers,
         markerGroups,
-        setMarkerGroups,
-        userSettings, setUserSettings
+        setMarkerGroups
       }}
     >
       {children}

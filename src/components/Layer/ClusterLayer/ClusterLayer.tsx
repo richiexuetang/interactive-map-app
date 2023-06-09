@@ -7,15 +7,16 @@ import { categoryIdNameMap } from "@data/categoryItemsConfig";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import { SETTING_HIDDEN_CATEGORY, USER_SETTING, initialUserSettings } from "@data/LocalStorage";
+import useLocalStorage from "@hooks/useLocalStorage";
 
 const ClusterLayer = () => {
-  const {userSettings} = useMapContext();
+  const [storageSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
   const {clusterGroups} = useMapContext();
 
   return (
     <>
       {clusterGroups.length && clusterGroups.map((group) => {
-        const hidden = userSettings[SETTING_HIDDEN_CATEGORY][group.categoryId];
+        const hidden = storageSettings[SETTING_HIDDEN_CATEGORY][group.categoryId];
         if (!hidden) {
           return (
             <MarkerClusterGroup key={group.categoryId}>

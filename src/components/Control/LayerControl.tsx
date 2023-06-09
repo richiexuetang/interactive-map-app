@@ -28,6 +28,7 @@ import {
   initialUserSettings,
 } from "@data/LocalStorage";
 import { useRouter } from "next/router";
+import useLocalStorage from "@hooks/useLocalStorage";
 
 const POSITION_CLASSES = {
   bottomleft: "leaflet-bottom leaflet-left",
@@ -38,7 +39,8 @@ const POSITION_CLASSES = {
 
 function LayerControl({ position, children, setRefresh }) {
   const router = useRouter();
-  const { config, userSettings, setUserSettings } = useMapContext();
+  const [storageSettings, setStorageSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
+  const { config } = useMapContext();
   const {subSelections: navSelections, name: area} = config;
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -49,11 +51,11 @@ function LayerControl({ position, children, setRefresh }) {
   const [results, setResults] = useState([]);
 
   const [hideCompleted, setHideCompleted] = useState(
-    userSettings[SETTING_HIDE_COMPLETED][config.game]
+    storageSettings[SETTING_HIDE_COMPLETED][config.game]
   );
 
   const toggle = (key) => {
-    setUserSettings((prev) => ({
+    setStorageSettings((prev) => ({
       ...prev,
       hideCompletedMarkers: {
         ...prev.hideCompletedMarkers,
@@ -120,7 +122,7 @@ function LayerControl({ position, children, setRefresh }) {
   };
 
   const handleHideShowAll = (val) => {
-    setUserSettings((prev) => ({
+    setStorageSettings((prev) => ({
       ...prev,
       [SETTING_HIDDE_ALL]: val,
     }));

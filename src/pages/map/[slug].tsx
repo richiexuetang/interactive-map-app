@@ -189,8 +189,7 @@ const MapPage = ({
     setTextOverlay,
     setPathMarkers,
     setClusterGroups,
-    setMarkerGroups,
-    setUserSettings
+    setMarkerGroups
   } = useMapContext();
 
   useEffect(() => {

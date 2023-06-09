@@ -13,14 +13,18 @@ import useLocalStorage from "@hooks/useLocalStorage";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
 
 const CategoryGroup = ({ onLayerClick, layerObj }) => {
-  const { categoryCounts, userSettings, setUserSettings } = useMapContext();
+  const [storageSettings, setStorageSettings] = useLocalStorage(
+    USER_SETTING,
+    initialUserSettings
+  );
+  const { categoryCounts } = useMapContext();
 
   const [show, setShow] = useState(layerObj.checked);
 
   const handleLayerClick = () => {
-    const prev = userSettings[SETTING_HIDDEN_CATEGORY][layerObj.name];
+    const prev = storageSettings[SETTING_HIDDEN_CATEGORY][layerObj.name];
 
-    setUserSettings((prevState) => ({
+    setStorageSettings((prevState) => ({
       ...prevState,
       hiddenCategories: {
         ...prevState.hiddenCategories,
@@ -33,12 +37,15 @@ const CategoryGroup = ({ onLayerClick, layerObj }) => {
   };
 
   useEffect(() => {
-    if (userSettings[SETTING_HIDDEN_CATEGORY][layerObj.name] || userSettings[SETTING_HIDDE_ALL]) {
+    if (
+      storageSettings[SETTING_HIDDEN_CATEGORY][layerObj.name] ||
+      storageSettings[SETTING_HIDDE_ALL]
+    ) {
       setShow(false);
     } else {
       setShow(true);
     }
-  }, [userSettings]);
+  }, [storageSettings]);
 
   return (
     <Button
@@ -49,12 +56,7 @@ const CategoryGroup = ({ onLayerClick, layerObj }) => {
       bg="sidebar.content"
       onClick={handleLayerClick}
     >
-      <Flex
-        w={5}
-        h={6}
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Flex w={5} h={6} alignItems="center" justifyContent="center">
         <Image
           src={`/images/icons/${layerObj.name}.png`}
           opacity={show ? 1 : 0.5}

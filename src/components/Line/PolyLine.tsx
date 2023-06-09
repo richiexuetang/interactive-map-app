@@ -2,17 +2,15 @@ import { Polyline } from "react-leaflet";
 
 import {
   SETTING_HIDDEN_CATEGORY,
-  SETTING_HIDE_COMPLETED,
   USER_SETTING,
   initialUserSettings,
 } from "@data/index";
-import { useMapContext } from "@context/app-context";
 import { COMPLETED } from "@data/index";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { useEffect, useState } from "react";
 
 const PolyLine = ({ parentId, path }) => {
-  const { config, userSettings } = useMapContext();
+  const [storageSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
 
   const [loading, setLoading] = useState(false);
@@ -38,13 +36,13 @@ const PolyLine = ({ parentId, path }) => {
   useEffect(() => {
     if (parent) {
       setHide(
-        userSettings[SETTING_HIDDEN_CATEGORY][parent.categoryId] &&
+        storageSettings[SETTING_HIDDEN_CATEGORY][parent.categoryId] &&
           completedMarkers[parentId]
       );
     } else {
       setHide(false);
     }
-  }, [userSettings, completedMarkers, parent]);
+  }, [storageSettings, completedMarkers, parent]);
 
   if (loading || !parent || hide) return null;
 
