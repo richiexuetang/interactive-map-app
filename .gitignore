@@ -34,3 +34,6 @@ yarn-error.log*
 package-lock.json
 yarn.lock
 .nvmrc
+
+/public/leaflet
+/.vscode
