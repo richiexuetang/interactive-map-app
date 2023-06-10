@@ -13,7 +13,7 @@ export default async (req, res) => {
           {
             $or: [
               { markerName: { $regex: searchParam } },
-              { descriptions: { $regex: searchParam } },
+              { description: { $regex: searchParam } },
             ],
           },
           {

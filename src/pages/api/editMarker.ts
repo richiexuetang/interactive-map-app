@@ -6,7 +6,7 @@ export default async (req, res) => {
     const client = await clientPromise;
     const db = client.db("ritcher-map");
     const { id } = req.query;
-    const { markerName, descriptions, lat, lng } = req.body;
+    const { markerName, description, lat, lng } = req.body;
 
     const marker = await db.collection("markers").updateOne(
       {
@@ -14,7 +14,7 @@ export default async (req, res) => {
       },
       {
         $set: {
-          descriptions: descriptions,
+          description: description,
           markerName: markerName,
           lat: lat,
           lng: lng,

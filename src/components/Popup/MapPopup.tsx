@@ -63,17 +63,9 @@ const MapPopup = (props) => {
       lng: newLng,
       description,
     } = values;
-    const { id, descriptions } = markerInfo;
+    const { id } = markerInfo;
 
     try {
-      let newDesc = [...descriptions];
-      if (descriptions.length > 0) {
-        newDesc = [...descriptions];
-      }
-      if (description) {
-        newDesc = [...newDesc, description];
-      }
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + id,
         {
@@ -82,7 +74,7 @@ const MapPopup = (props) => {
             markerName: newName,
             lat: newLat,
             lng: newLng,
-            descriptions: newDesc,
+            description: description,
           }),
           headers: {
             Accept: "application/json, text/plain, */*",
@@ -114,7 +106,7 @@ const MapPopup = (props) => {
           lat: markerInfo.lat,
           lng: markerInfo.lng,
           markerName: markerInfo.markerName,
-          descriptions: markerInfo.descriptions,
+          description: markerInfo.description,
           markerTypeId: markerInfo.markerTypeId,
           categoryId: markerInfo.categoryId,
         }}
@@ -156,14 +148,13 @@ const MapPopup = (props) => {
                 {markerInfo && categoryIdNameMap[markerInfo.categoryId]}
               </Text>
 
-              {markerInfo?.descriptions &&
-                markerInfo.descriptions.map((desc, i) => (
-                  <div
-                    key={i}
-                    style={{ margin: "0.25em" }}
-                    dangerouslySetInnerHTML={{ __html: desc }}
-                  />
-                ))}
+              {markerInfo.description && (
+                <div
+                  key={markerInfo.description}
+                  style={{ margin: "0.25em" }}
+                  dangerouslySetInnerHTML={{ __html: markerInfo.description }}
+                />
+              )}
             </Stack>
           </HStack>
 

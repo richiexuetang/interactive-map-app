@@ -9,7 +9,7 @@ export default async (req, res) => {
       categoryId,
       mapSlug,
       gameSlug,
-      descriptions,
+      description,
       coordinate,
       markerTypeId,
     } = req.body;
@@ -18,7 +18,7 @@ export default async (req, res) => {
       markerName: markerName,
       categoryId: categoryId,
       coordinate: coordinate,
-      descriptions: descriptions,
+      description: description,
       markerTypeId: markerTypeId,
       mapSlug: mapSlug, 
       gameSlug: gameSlug

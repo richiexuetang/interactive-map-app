@@ -39,7 +39,7 @@ export async function getStaticProps(context) {
       zoomRange,
       path,
       parentId,
-      descriptions,
+      description,
     } = marker;
 
     categoryCounts[categoryId] = categoryCounts[categoryId] + 1 || 1;
@@ -50,7 +50,7 @@ export async function getStaticProps(context) {
         coordinate: coordinate,
         categoryId: categoryId,
         markerName: markerName,
-        descriptions: descriptions,
+        description: description,
       };
 
       markersList.push(standard);

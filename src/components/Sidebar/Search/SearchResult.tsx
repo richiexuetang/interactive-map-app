@@ -15,7 +15,7 @@ const SearchResult = ({ result }) => {
     _id: id,
     categoryId,
     markerName,
-    descriptions,
+    description,
     coordinate,
     mapSlug,
   } = result;
@@ -102,13 +102,9 @@ const SearchResult = ({ result }) => {
         <Box>{markerName} </Box>
       </Flex>
 
-      {descriptions && descriptions.map((desc, i) => {
-        return (
-          <Box mb="1rem" key={id + i}>
-            <div dangerouslySetInnerHTML={{ __html: desc }} />
-          </Box>
-        );
-      })}
+      <Box mb="1rem">
+        <div dangerouslySetInnerHTML={{ __html: description }} />
+      </Box>
     </Box>
   );
 };
