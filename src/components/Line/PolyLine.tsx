@@ -1,7 +1,6 @@
 import { Polyline } from "react-leaflet";
 
 import {
-  SETTING_HIDDEN_CATEGORY,
   USER_SETTING,
   initialUserSettings,
 } from "@data/index";
