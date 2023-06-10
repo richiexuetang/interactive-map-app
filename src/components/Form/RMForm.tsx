@@ -9,8 +9,12 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Select,
 } from "@chakra-ui/react";
 import RichEditor from "@components/Editor/RichEditor";
+import { useMapContext } from "@context/app-context";
+import { categoryIdNameMap } from "@data/categoryItemsConfig";
+import useMapObject from "@hooks/useMapObject";
 import { useFormik } from "formik";
 import * as React from "react";
 import * as Yup from "yup";
@@ -23,6 +27,7 @@ const validationSchema = Yup.object({
 });
 
 const RMForm = (props) => {
+  const { categoryMap } = useMapContext();
   const { markerInfo = {}, isOpen, onClose, onSubmit } = props;
   const {
     lat = null,
@@ -31,6 +36,7 @@ const RMForm = (props) => {
     markerTypeId = 1,
     categoryId = 69,
   } = markerInfo;
+  console.log(markerInfo);
 
   const formik = useFormik({
     initialValues: {
@@ -75,6 +81,19 @@ const RMForm = (props) => {
               onChange={formik.handleChange}
               value={formik.values.categoryId}
             />
+            <Select
+              name="categoryId"
+              onChange={formik.handleChange}
+              value={formik.values.categoryId}
+            >
+              {categoryMap.map((category) => {
+                return (
+                  <option value={category}>
+                    {categoryIdNameMap[category]}
+                  </option>
+                );
+              })}
+            </Select>
 
             <FormLabel>Latitude:</FormLabel>
             <Input

@@ -1,3 +1,4 @@
+import { MapOrEntries } from "@hooks/useMapObject";
 import { createContext, useContext, useState } from "react";
 
 const MapContext = createContext(undefined);
@@ -13,6 +14,7 @@ export function MapProvider({ children }) {
   const [pathMarkers, setPathMarkers] = useState([]);
   const [markerGroups, setMarkerGroups] = useState([]);
   const [noteMarkers, setNoteMarkers] = useState([]);
+  const [categoryMap, setCategoryMap] = useState<MapOrEntries<string, string>>([]);
 
   return (
     <MapContext.Provider
@@ -35,6 +37,8 @@ export function MapProvider({ children }) {
         setMarkerGroups,
         noteMarkers,
         setNoteMarkers,
+        categoryMap,
+        setCategoryMap,
       }}
     >
       {children}

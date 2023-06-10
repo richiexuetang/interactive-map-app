@@ -28,6 +28,7 @@ export async function getStaticProps(context) {
   const categoryCounts = {};
   const seen = new Set();
   const seenCategory = new Set();
+  const categoryMap = [];
 
   markers.map((marker) => {
     const {
@@ -84,6 +85,7 @@ export async function getStaticProps(context) {
           }
         });
 
+        categoryMap.push(categoryId);
         clusterGroups.push({
           categoryId: categoryId,
           coordinates: [coordinate],
@@ -126,6 +128,7 @@ export async function getStaticProps(context) {
         }
       });
 
+      categoryMap.push(categoryId);
       markerGroups.push({
         categoryId: categoryId,
         coordinates: [coordinate],
@@ -146,6 +149,7 @@ export async function getStaticProps(context) {
       clusterGroups,
       pathMarkers,
       markerGroups,
+      categoryMap
     },
     revalidate: 10,
   };
@@ -174,6 +178,7 @@ const MapPage = ({
   clusterGroups,
   pathMarkers,
   markerGroups,
+  categoryMap
 }) => {
   const [loading] = useLoading();
 
@@ -184,6 +189,7 @@ const MapPage = ({
     setPathMarkers,
     setClusterGroups,
     setMarkerGroups,
+    setCategoryMap
   } = useMapContext();
 
   useEffect(() => {
@@ -193,6 +199,7 @@ const MapPage = ({
     setPathMarkers(pathMarkers);
     setClusterGroups(clusterGroups);
     setMarkerGroups(markerGroups);
+    setCategoryMap(categoryMap)
   }, [areaId]);
 
   return (

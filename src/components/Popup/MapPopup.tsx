@@ -62,8 +62,9 @@ const MapPopup = (props) => {
       lat: newLat,
       lng: newLng,
       description,
+      categoryId,
+      markerType,
     } = values;
-    const { id } = markerInfo;
 
     try {
       const response = await fetch(
@@ -72,9 +73,11 @@ const MapPopup = (props) => {
           method: "POST",
           body: JSON.stringify({
             markerName: newName,
-            lat: newLat,
-            lng: newLng,
+            lat: parseFloat(newLat),
+            lng: parseFloat(newLng),
             description: description,
+            categoryId: parseInt(categoryId),
+            markerTypeId: markerType
           }),
           headers: {
             Accept: "application/json, text/plain, */*",
@@ -105,6 +108,7 @@ const MapPopup = (props) => {
           id: markerId,
           lat: markerInfo.lat,
           lng: markerInfo.lng,
+          coordinate: markerInfo.coordinate,
           markerName: markerInfo.markerName,
           description: markerInfo.description,
           markerTypeId: markerInfo.markerTypeId,
