@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { NextSeo } from "next-seo";
 
 import { areaConfig } from "@data/areaConfig";
 import { categoryItemsConfig } from "@data/categoryItemsConfig";
 import { mapConfig } from "@data/index";
-import { useMapContext } from "src/context/app-context";
+import { useMapContext } from "@context/app-context";
 import AppMap from "@components/Map/AppMap";
 import { Loader } from "@components/Loader";
-import { useRouter } from "next/router";
+import { useLoading } from "@hooks/useLoading";
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
@@ -139,6 +139,7 @@ export async function getStaticProps(context) {
 
   return {
     props: {
+      areaId,
       config,
       categoryCounts,
       textOverlay,
@@ -166,6 +167,7 @@ export async function getStaticPaths() {
 }
 
 const MapPage = ({
+  areaId,
   config,
   categoryCounts,
   textOverlay,
@@ -173,24 +175,7 @@ const MapPage = ({
   pathMarkers,
   markerGroups,
 }) => {
-  const router = useRouter();
-
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const handleStart = (url) => url !== router.asPath && setLoading(true);
-    const handleComplete = (url) => url === router.asPath && setLoading(false);
-
-    router.events.on("routeChangeStart", handleStart);
-    router.events.on("routeChangeComplete", handleComplete);
-    router.events.on("routeChangeError", handleComplete);
-
-    return () => {
-      router.events.off("routeChangeStart", handleStart);
-      router.events.off("routeChangeComplete", handleComplete);
-      router.events.off("routeChangeError", handleComplete);
-    };
-  });
+  const [loading] = useLoading();
 
   const {
     setConfig,
@@ -208,11 +193,7 @@ const MapPage = ({
     setPathMarkers(pathMarkers);
     setClusterGroups(clusterGroups);
     setMarkerGroups(markerGroups);
-  }, []);
-
-  if (loading) {
-    return <Loader loading={loading} />;
-  }
+  }, [areaId]);
 
   return (
     <>
@@ -220,7 +201,7 @@ const MapPage = ({
         title="Interactive Map for Zelda: Tears of the Kingdom totk | Witcher 3"
         description="Interactive Map for Zelda: Tears of the Kingdom totk | Witcher 3"
       />
-      <AppMap />
+      {loading ? <Loader loading={loading}/> : <AppMap />}
     </>
   );
 };

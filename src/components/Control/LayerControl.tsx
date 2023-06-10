@@ -155,13 +155,7 @@ function LayerControl({ position, children, setRefresh }) {
   const navigateToArea = (selection) => {
     const { to } = selection;
 
-    if (!map) {
-      return;
-    }
-
-    // console.log("" + map.getCenter().lat + "," + map.getCenter().lng);
-    // console.log(map.getZoom());
-    // console.log(map.getBounds())
+    if (!map) return
 
     if (to === area) {
       map.flyTo(selection.location, selection.zoom, {

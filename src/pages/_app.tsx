@@ -4,10 +4,12 @@ import theme from "@styles/theme";
 import { ChakraProvider } from "@chakra-ui/react";
 import { ToastContainer } from "react-toastify";
 import { SessionProvider } from "next-auth/react";
+import { Session } from 'next-auth'
 
 import { MapProvider } from "@context/app-context";
+import { AppProps } from "next/app";
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps<{ session: Session; }>) {
   return (
     <SessionProvider session={session}>
       <ToastContainer

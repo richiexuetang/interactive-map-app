@@ -179,7 +179,6 @@ const AppMap = () => {
               <NoteMarker
                 key={note[0]}
                 position={note}
-                setRefresh={setRefresh}
               />
             ))}
           <PolyLines />

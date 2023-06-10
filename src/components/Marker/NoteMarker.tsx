@@ -1,36 +1,19 @@
 import React, { useRef, useState } from "react";
-import { Icon, marker } from "leaflet";
+import { Icon } from "leaflet";
 import { Marker } from "react-leaflet";
-import {
-  Box,
-  useDisclosure,
-  Text,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Select,
-  Textarea,
-} from "@chakra-ui/react";
+import { Box, useDisclosure, Text, Button } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
-
-import dynamic from "next/dynamic";
-import RMForm from "@components/Form/RMForm";
-import { useMapContext } from "@context/app-context";
 import { toast } from "react-toastify";
+import dynamic from "next/dynamic";
+
+import { useMapContext } from "@context/app-context";
+import RMForm from "@components/Form/RMForm";
 
 const RMPopup = dynamic(() => import("@components/Popup/RMPopup"), {
   ssr: false,
 });
 
-const NoteMarker = ({ position, setRefresh }) => {
+const NoteMarker = ({ position }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dragRef = useRef(null);
   const { config } = useMapContext();
