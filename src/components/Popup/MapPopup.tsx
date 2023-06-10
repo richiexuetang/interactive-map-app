@@ -67,7 +67,7 @@ const MapPopup = (props) => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + id,
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + markerId,
         {
           method: "POST",
           body: JSON.stringify({
