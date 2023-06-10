@@ -118,7 +118,8 @@ export const categoryIdNameMap = {
   122: "Spicy Pepper",
   123: "Hylian Tomato",
   124: "Hylian Shroom",
-  125: "Skyshroom"
+  125: "Skyshroom",
+  126: "Satori Tree"
 };
 
 export const categoryItemsConfig = [
@@ -158,7 +159,7 @@ export const categoryItemsConfig = [
       {
         name: "other",
         groupId: 7,
-        members: [59, 73, 83, 100, 61],
+        members: [59, 73, 83, 100, 61, 126],
       },
       {
         name: "fruits",

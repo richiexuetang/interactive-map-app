@@ -58,7 +58,8 @@ export const initialUserSettings = {
     107: false,
     108: false,
     109: false,
-    112: false
+    112: false,
+    126: false,
   },
   hideAll: false,
 };
