@@ -73,10 +73,10 @@ const MapPopup = (props) => {
           method: "POST",
           body: JSON.stringify({
             markerName: newName,
-            lat: parseFloat(newLat),
-            lng: parseFloat(newLng),
+            lat: newLat,
+            lng: newLng,
             description: description,
-            categoryId: parseInt(categoryId),
+            categoryId: categoryId,
             markerTypeId: markerType
           }),
           headers: {

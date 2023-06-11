@@ -106,7 +106,7 @@ const AppMap = () => {
                   <LayerGroup>
                     {coordinates.map((coordinate, i) => {
                       const completed = completedMarkers[ids[i]];
-                      const hide = completed && userHideComplete;
+                      const hide = (completed && userHideComplete) || hideAll;
 
                       if (!hide) {
                         return (
@@ -152,16 +152,19 @@ const AppMap = () => {
                     <MarkerClusterGroup key={categoryId}>
                       {coordinates.map((coord) => {
                         return (
-                          <CircleMarker
-                            key={`${coord[0]} ${coord[1]}`}
-                            center={coord}
-                            color={groupColor}
-                            radius={2}
-                          >
-                            <RMTooltip>
-                              {categoryIdNameMap[categoryId]}
-                            </RMTooltip>
-                          </CircleMarker>
+                          !hidden &&
+                          !hideAll && (
+                            <CircleMarker
+                              key={`${coord[0]} ${coord[1]}`}
+                              center={coord}
+                              color={groupColor}
+                              radius={2}
+                            >
+                              <RMTooltip>
+                                {categoryIdNameMap[categoryId]}
+                              </RMTooltip>
+                            </CircleMarker>
+                          )
                         );
                       })}
                     </MarkerClusterGroup>

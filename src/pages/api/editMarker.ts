@@ -17,11 +17,11 @@ export default async (req, res) => {
         $set: {
           description: description,
           markerName: markerName,
-          lat: lat,
-          lng: lng,
-          coordinate: [lat, lng],
-          markerTypeId: markerTypeId,
-          categoryId: categoryId,
+          lat: parseFloat(lat),
+          lng: parseFloat(lng),
+          coordinate: [parseFloat(lat), parseFloat(lng)],
+          markerTypeId: parseInt(markerTypeId),
+          categoryId: parseInt(categoryId),
         },
       }
     );

@@ -39,11 +39,11 @@ const NoteMarker = ({ position }) => {
           method: "POST",
           body: JSON.stringify({
             markerName,
-            categoryId,
+            categoryId: parseInt(categoryId),
             description,
             mapSlug: config.name,
             gameSlug: config.gameSlug,
-            markerTypeId: markerType,
+            markerTypeId: parseInt(markerType),
             lat: parseFloat(lat),
             lng: parseFloat(lng),
             coordinate: [parseFloat(lat), parseFloat(lng)],

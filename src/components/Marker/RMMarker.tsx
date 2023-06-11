@@ -12,9 +12,8 @@ const RMMarker = (props) => {
 
   const { Marker, coordinate, categoryId, rank, markerId, ...rest } = props;
   const [markerInfo, setMarkerInfo] = useState(null);
-
   const { markerRefs } = useMapContext();
-  
+
   const handleMarkerClick = async () => {
     try {
       const res = await fetch(
