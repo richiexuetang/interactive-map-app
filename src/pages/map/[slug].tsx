@@ -14,15 +14,28 @@ export async function getStaticProps(context) {
 
   const config = areaConfig.find((o) => o.name === areaId);
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}`
+  const textMarkerType = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}/2`
+  );
+  const textOverlay = await textMarkerType.json();
+
+  const markerType = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}/1`
+  );
+  const markersList = await markerType.json();
+
+  const pathType = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}/4`
   );
 
-  const { data: markers } = await res.json();
-  const markersList = [];
-  const textOverlay = [];
+  const pathMarkers = await pathType.json();
+
+  const clusterType = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}/3`
+  );
+  const clusterMarkers = await clusterType.json();
+
   const clusterGroups = [];
-  const pathMarkers = [];
 
   const markerGroups = [];
   const categoryCounts = {};
@@ -30,78 +43,41 @@ export async function getStaticProps(context) {
   const seenCategory = new Set();
   const categoryMap = [];
 
-  markers.map((marker) => {
-    const {
-      markerTypeId,
-      categoryId,
-      _id,
-      coordinate,
-      markerName,
-      zoomRange,
-      path,
-      parentId,
-      description,
-    } = marker;
+  clusterMarkers.map((marker) => {
+    const { categoryId, coordinate } = marker;
 
-    categoryCounts[categoryId] = categoryCounts[categoryId] + 1 || 1;
+    if (seen.has(categoryId)) {
+      clusterGroups.map((group, i) => {
+        if (group.categoryId === categoryId) {
+          const current = clusterGroups[i].coordinates;
+          const newCoords = [...current, coordinate];
+          clusterGroups[i].coordinates = [...newCoords];
+        }
+      });
+    } else {
+      let groupName = "";
+      categoryItemsConfig.map((item) => {
+        if (item.gameSlug === config.gameSlug) {
+          item.categoryGroups.map(({ members, name }) => {
+            if (members.includes(categoryId)) {
+              groupName = name;
+            }
+          });
+        }
+      });
 
-    if (markerTypeId === 1) {
-      const standard = {
-        id: _id,
-        coordinate: coordinate,
+      categoryMap.push(categoryId);
+      clusterGroups.push({
         categoryId: categoryId,
-        markerName: markerName,
-        description: description,
-      };
-
-      markersList.push(standard);
-    } else if (markerTypeId === 2) {
-      const textOverlayMarker = {
-        id: _id,
-        coordinate: coordinate,
-        markerName: markerName,
-        zoomRange: zoomRange,
-      };
-
-      textOverlay.push(textOverlayMarker);
-    } else if (markerTypeId === 3) {
-      if (seen.has(categoryId)) {
-        clusterGroups.map((group, i) => {
-          if (group.categoryId === categoryId) {
-            const current = clusterGroups[i].coordinates;
-            const newCoords = [...current, coordinate];
-            clusterGroups[i].coordinates = [...newCoords];
-          }
-        });
-      } else {
-        let groupName = "";
-        categoryItemsConfig.map((item) => {
-          if (item.gameSlug === config.gameSlug) {
-            item.categoryGroups.map(({ members, name }) => {
-              if (members.includes(categoryId)) {
-                groupName = name;
-              }
-            });
-          }
-        });
-
-        categoryMap.push(categoryId);
-        clusterGroups.push({
-          categoryId: categoryId,
-          coordinates: [coordinate],
-          group: groupName
-        });
-        seen.add(categoryId);
-      }
-    } else if (markerTypeId === 4) {
-      pathMarkers.push({ path: path, parentId: parentId });
+        coordinates: [coordinate],
+        group: groupName,
+      });
+      seen.add(categoryId);
     }
   });
 
-  const sortedMarkers = [...markersList];
-  sortedMarkers.sort((a, b) => b.coordinate[0] - a.coordinate[0]);
-
-  sortedMarkers.map(({ categoryId, coordinate, id }, rank) => {
+  markersList.map(({ categoryId, coordinate, _id }, rank) => {
+    categoryCounts[categoryId] = categoryCounts[categoryId] + 1 || 1;
     if (seenCategory.has(categoryId)) {
       markerGroups.map((group, i) => {
         const {
@@ -112,12 +88,12 @@ export async function getStaticProps(context) {
         } = group;
         if (currCategoryId === categoryId) {
           markerGroups[i].coordinates = [...groupCoordinates, coordinate];
-          markerGroups[i].ids = [...currIds, id];
+          markerGroups[i].ids = [...currIds, _id];
           markerGroups[i].ranks = [...ranks, rank];
         }
       });
     } else {
-      let groupName = "locations";
+      let groupName = "";
       categoryItemsConfig.map((item) => {
         if (item.gameSlug === config.gameSlug) {
           item.categoryGroups.map(({ members, name }) => {
@@ -132,7 +108,7 @@ export async function getStaticProps(context) {
       markerGroups.push({
         categoryId: categoryId,
         coordinates: [coordinate],
-        ids: [id],
+        ids: [_id],
         ranks: [rank],
         group: groupName,
       });
@@ -149,7 +125,7 @@ export async function getStaticProps(context) {
       clusterGroups,
       pathMarkers,
       markerGroups,
-      categoryMap
+      categoryMap,
     },
     revalidate: 10,
   };
@@ -178,7 +154,7 @@ const MapPage = ({
   clusterGroups,
   pathMarkers,
   markerGroups,
-  categoryMap
+  categoryMap,
 }) => {
   const [loading] = useLoading();
 
@@ -189,7 +165,7 @@ const MapPage = ({
     setPathMarkers,
     setClusterGroups,
     setMarkerGroups,
-    setCategoryMap
+    setCategoryMap,
   } = useMapContext();
 
   useEffect(() => {
@@ -199,7 +175,7 @@ const MapPage = ({
     setPathMarkers(pathMarkers);
     setClusterGroups(clusterGroups);
     setMarkerGroups(markerGroups);
-    setCategoryMap(categoryMap)
+    setCategoryMap(categoryMap);
   }, [areaId]);
 
   return (
@@ -208,7 +184,7 @@ const MapPage = ({
         title="Interactive Map for Zelda: Tears of the Kingdom totk | Witcher 3"
         description="Interactive Map for Zelda: Tears of the Kingdom totk | Witcher 3"
       />
-      {loading ? <Loader loading={loading}/> : <AppMap />}
+      {loading ? <Loader loading={loading} /> : <AppMap />}
     </>
   );
 };
