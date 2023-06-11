@@ -9,6 +9,20 @@ import AppMap from "@components/Map/AppMap";
 import { Loader } from "@components/Loader";
 import { useLoading } from "@hooks/useLoading";
 
+function getGroupName(gameSlug, categoryId) {
+  let groupName = "";
+  categoryItemsConfig.map((item) => {
+    if (item.gameSlug === gameSlug) {
+      item.categoryGroups.map(({ members, name }) => {
+        if (members.includes(categoryId)) {
+          groupName = name;
+        }
+      });
+    }
+  });
+  return groupName
+}
+
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
 
@@ -44,6 +58,8 @@ export async function getStaticProps(context) {
   const categoryMap = [];
 
   clusterMarkers.map((marker) => {
+    categoryCounts[marker.categoryId] =
+      categoryCounts[marker.categoryId] + 1 || 1;
     const { categoryId, coordinate } = marker;
 
     if (seen.has(categoryId)) {
@@ -55,16 +71,7 @@ export async function getStaticProps(context) {
         }
       });
     } else {
-      let groupName = "";
-      categoryItemsConfig.map((item) => {
-        if (item.gameSlug === config.gameSlug) {
-          item.categoryGroups.map(({ members, name }) => {
-            if (members.includes(categoryId)) {
-              groupName = name;
-            }
-          });
-        }
-      });
+      const groupName = getGroupName(config.gameSlug, categoryId);
 
       categoryMap.push(categoryId);
       clusterGroups.push({
@@ -93,16 +100,7 @@ export async function getStaticProps(context) {
         }
       });
     } else {
-      let groupName = "";
-      categoryItemsConfig.map((item) => {
-        if (item.gameSlug === config.gameSlug) {
-          item.categoryGroups.map(({ members, name }) => {
-            if (members.includes(categoryId)) {
-              groupName = name;
-            }
-          });
-        }
-      });
+      const groupName = getGroupName(config.gameSlug, categoryId);
 
       categoryMap.push(categoryId);
       markerGroups.push({
