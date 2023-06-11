@@ -20,7 +20,7 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { useMapContext } from "@context/app-context";
-import { CategoryGroup, SearchInput, SearchResults } from "@components/Sidebar";
+import { GroupItem, SearchInput, SearchResults } from "@components/Sidebar";
 import {
   SETTING_HIDE_ALL,
   SETTING_HIDE_COMPLETED,
@@ -29,6 +29,7 @@ import {
 } from "@data/LocalStorage";
 import { useRouter } from "next/router";
 import useLocalStorage from "@hooks/useLocalStorage";
+import GroupContainer from "@components/Sidebar/CategoryGroup/GroupContainer";
 
 const POSITION_CLASSES = {
   bottomleft: "leaflet-bottom leaflet-left",
@@ -51,7 +52,8 @@ function LayerControl({ position, children, setRefresh }) {
   const positionClass =
     (position && POSITION_CLASSES[position]) || POSITION_CLASSES.bottomleft;
   const [groupedLayers, setGroupedLayers] = useState({});
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState([]); //search
+  const [groupHiddenState, setGroupHiddenState] = useState(false);
 
   const [hideCompleted, setHideCompleted] = useState(
     storageSettings[SETTING_HIDE_COMPLETED]
@@ -73,11 +75,6 @@ function LayerControl({ position, children, setRefresh }) {
     layeradd: () => {
       // console.log("layer add");
     },
-    // click: (e) => {
-    //   var pixelPosition = e.layerPoint;
-    //   var latLng = map.layerPointToLatLng(pixelPosition);
-    //   console.log("" + latLng.lat + "," + latLng.lng);
-    // },
   });
 
   const onLayerClick = (layerObj) => {
@@ -155,7 +152,7 @@ function LayerControl({ position, children, setRefresh }) {
   const navigateToArea = (selection) => {
     const { to } = selection;
 
-    if (!map) return
+    if (!map) return;
 
     if (to === area) {
       map.flyTo(selection.location, selection.zoom, {
@@ -300,16 +297,11 @@ function LayerControl({ position, children, setRefresh }) {
                       <Box w="full">
                         {Object.keys(groupedLayers).map((section, index) => (
                           <React.Fragment key={`${section} ${index}`}>
-                            <Box textTransform="uppercase" py={3}>
-                              {section}
-                            </Box>
-                            {groupedLayers[section]?.map((layerObj) => (
-                              <CategoryGroup
-                                key={`${section} ${layerObj.name}`}
-                                onLayerClick={onLayerClick}
-                                layerObj={layerObj}
-                              />
-                            ))}
+                            <GroupContainer
+                              layerSection={groupedLayers[section]}
+                              section={section}
+                              onLayerClick={onLayerClick}
+                            />
                           </React.Fragment>
                         ))}
                       </Box>

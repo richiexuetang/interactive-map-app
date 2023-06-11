@@ -24,6 +24,18 @@ const CategoryGroup = ({ onLayerClick, layerObj }) => {
 
   const [show, setShow] = useState(layerObj.checked);
 
+  useEffect(() => {
+    if (storageSettings[SETTING_HIDDEN_CATEGORY][layerObj.name] === undefined) {
+      setStorageSettings((prevState) => ({
+        ...prevState,
+        hiddenCategories: {
+          ...prevState.hiddenCategories,
+          [layerObj.name]: true,
+        },
+      }));
+    }
+  }, []);
+
   const handleLayerClick = () => {
     const prev = categoryHiddenState(layerObj.name);
 
@@ -46,7 +58,7 @@ const CategoryGroup = ({ onLayerClick, layerObj }) => {
     }
     return result;
   }
-  
+
   useEffect(() => {
     setShow(
       !categoryHiddenState(layerObj.name) && !storageSettings[SETTING_HIDE_ALL]

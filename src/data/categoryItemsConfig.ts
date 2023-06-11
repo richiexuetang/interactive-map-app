@@ -120,6 +120,7 @@ export const categoryIdNameMap = {
   124: "Hylian Shroom",
   125: "Skyshroom",
   126: "Satori Tree",
+  127: "Hearty Truffle"
 };
 
 export const categoryItemsConfig = [
@@ -164,6 +165,10 @@ export const categoryItemsConfig = [
       {
         name: "fruits",
         members: [111, 112],
+      },
+      {
+        name: "mushrooms",
+        members: [127]
       },
       {
         name: "materials",
