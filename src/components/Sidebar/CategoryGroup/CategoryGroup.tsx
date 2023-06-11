@@ -4,6 +4,7 @@ import { Button, Box, Image, Flex } from "@chakra-ui/react";
 
 import { useMapContext } from "@context/.";
 import {
+  COMPLETED,
   SETTING_HIDDEN_CATEGORY,
   SETTING_HIDE_ALL,
   USER_SETTING,
@@ -18,6 +19,7 @@ const CategoryGroup = ({ onLayerClick, layerObj }) => {
     USER_SETTING,
     initialUserSettings
   );
+  const [completedMarkers] = useLocalStorage(COMPLETED, {});
   const { categoryCounts } = useMapContext();
 
   const [show, setShow] = useState(layerObj.checked);
@@ -37,6 +39,14 @@ const CategoryGroup = ({ onLayerClick, layerObj }) => {
     onLayerClick(layerObj);
   };
 
+  const getCompletedCount = (categoryId) => {
+    let result = 0;
+    for (const key in completedMarkers) {
+      result = completedMarkers[key] === categoryId ? result + 1 : result;
+    }
+    return result;
+  }
+  
   useEffect(() => {
     setShow(
       !categoryHiddenState(layerObj.name) && !storageSettings[SETTING_HIDE_ALL]
@@ -66,7 +76,7 @@ const CategoryGroup = ({ onLayerClick, layerObj }) => {
         {categoryIdNameMap[layerObj.name]}
       </Box>
       <Box fontSize="sm" textDecor={show ? "none" : "line-through"}>
-        {categoryCounts[layerObj.name]}
+        {getCompletedCount(layerObj.name)}/{categoryCounts[layerObj.name]}
       </Box>
     </Button>
   );

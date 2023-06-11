@@ -46,7 +46,7 @@ const MapPopup = (props) => {
   const handleCompleteCheck = (e) => {
     setCompletedMarkers((prev) => ({
       ...prev,
-      [markerId]: e.target.checked,
+      [markerId]: e.target.checked ? markerInfo.categoryId : null,
     }));
     setCompleted(e.target.checked);
   };

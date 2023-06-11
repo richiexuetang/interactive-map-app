@@ -119,7 +119,7 @@ export const categoryIdNameMap = {
   123: "Hylian Tomato",
   124: "Hylian Shroom",
   125: "Skyshroom",
-  126: "Satori Tree"
+  126: "Satori Tree",
 };
 
 export const categoryItemsConfig = [
