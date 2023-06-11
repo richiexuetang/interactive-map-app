@@ -30,11 +30,12 @@ const RMForm = (props) => {
   const { categoryMap } = useMapContext();
   const { markerInfo = {}, isOpen, onClose, onSubmit } = props;
   const {
-    lat = null,
-    lng = null,
+    lat,
+    lng,
     markerName = "",
     markerTypeId = 1,
     categoryId = 69,
+    description = ""
   } = markerInfo;
   console.log(markerInfo);
 
@@ -45,7 +46,7 @@ const RMForm = (props) => {
       categoryId: categoryId,
       lat: lat,
       lng: lng,
-      description: "",
+      description: description,
     },
     onSubmit: () => {},
     validationSchema: validationSchema,

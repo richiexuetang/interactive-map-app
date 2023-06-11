@@ -104,16 +104,7 @@ const MapPopup = (props) => {
       <RMForm
         onClose={onClose}
         isOpen={isOpen}
-        markerInfo={{
-          id: markerId,
-          lat: markerInfo.lat,
-          lng: markerInfo.lng,
-          coordinate: markerInfo.coordinate,
-          markerName: markerInfo.markerName,
-          description: markerInfo.description,
-          markerTypeId: markerInfo.markerTypeId,
-          categoryId: markerInfo.categoryId,
-        }}
+        markerInfo={markerInfo}
         onSubmit={onEditSubmit}
       />
     );

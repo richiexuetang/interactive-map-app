@@ -31,7 +31,7 @@ const NoteMarker = ({ position }) => {
   };
 
   const onCreateSubmit = async (values) => {
-    const { markerName, categoryId, markerType, description } = values;
+    const { markerName, categoryId, markerType, description, lat, lng } = values;
     try {
       let response = await fetch(
         `${process.env.NEXT_PUBLIC_APP_URL}/api/addMarker`,
@@ -44,9 +44,9 @@ const NoteMarker = ({ position }) => {
             mapSlug: config.name,
             gameSlug: config.gameSlug,
             markerTypeId: markerType,
-            lat: position[0],
-            lng: position[1],
-            coordinate: [lat, lng],
+            lat: parseFloat(lat),
+            lng: parseFloat(lng),
+            coordinate: [parseFloat(lat), parseFloat(lng)],
           }),
           headers: {
             Accept: "application/json, text/plain, */*",
