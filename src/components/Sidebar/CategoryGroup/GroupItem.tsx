@@ -23,6 +23,7 @@ const CategoryGroup = ({ onLayerClick, layerObj }) => {
   const { categoryCounts } = useMapContext();
 
   const [show, setShow] = useState(layerObj.checked);
+  const [imageUrl, setImageUrl] = useState(`/images/icons/${layerObj.name}.png`);
 
   useEffect(() => {
     if (storageSettings[SETTING_HIDDEN_CATEGORY][layerObj.name] === undefined) {
@@ -76,8 +77,9 @@ const CategoryGroup = ({ onLayerClick, layerObj }) => {
     >
       <Flex w={5} h={6} alignItems="center" justifyContent="center">
         <Image
-          src={`/images/icons/${layerObj.name}.png`}
+          src={imageUrl}
           opacity={show ? 1 : 0.5}
+          onError={()=>setImageUrl('/images/icons/111.png')}
         />
       </Flex>
       <Box

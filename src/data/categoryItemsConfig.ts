@@ -103,7 +103,7 @@ export const categoryIdNameMap = {
   106: "Fairy",
   107: "Bomb Flower",
   108: "Razor Claw Crab",
-  109: "Silentshroom",
+  109: "Silent Shroom",
   110: "Weapon",
   111: "Apple",
   112: "Golden Apple",
@@ -120,7 +120,42 @@ export const categoryIdNameMap = {
   124: "Hylian Shroom",
   125: "Skyshroom",
   126: "Satori Tree",
-  127: "Hearty Truffle"
+  127: "Hearty Truffle",
+  128: "Palm Fruit",
+  129: "Wildberry",
+  130: "Endura Shroom",
+  131: "Stamella Shroom",
+  132: "Big Hearty Truffle",
+  133: "Chillshroom",
+  134: "Sunshroom",
+  135: "Zapshroom",
+  136: "Rushshroom",
+  137: "Razorshroom",
+  138: "Ironshroom",
+  139: "Brightcap",
+  140: "Puffshroom",
+  141: "Hyrule Herb",
+  142: "Stambulb",
+  143: "Hearty Radish",
+  144: "Bg Hearty Radish",
+  145: "Cool Safflina",
+  146: "Warm Safflina",
+  147: "Electric Safflina",
+  148: "Swift Carrot",
+  149: "Edura Carrot",
+  150: "Fortified Pumpkin",
+  151: "Sun Pumpkin",
+  152: "Swift Violet", //104
+  153: "Armoranth",
+  154: "Blue Nightshade",
+  155: "Sundelion",
+  156: "Brightbloom Seed",
+  157: "Giant Brightbloom Seed",
+  158: "Muddle Bud", //107
+  159: "Silent Princess",
+  160: "Courser Bee Honey",
+  161: "Hylian Pine Cone",
+  162: "Korok Frond",
 };
 
 export const categoryItemsConfig = [
@@ -164,17 +199,31 @@ export const categoryItemsConfig = [
       },
       {
         name: "fruits",
-        members: [111, 112],
+        members: [
+          111, 112, 128, 129, 123, 122, 121, 120, 105, 119, 118, 117, 116, 114,
+          113,
+        ],
       },
       {
         name: "mushrooms",
-        members: [127]
+        members: [
+          124, 125, 130, 131, 127, 132, 133, 134, 135, 136, 137, 138, 109, 139,
+          140,
+        ],
+      },
+      {
+        name: "plants",
+        members: [
+          141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 104, 153,
+          154, 107, 159, 160, 161, 162,
+        ],
       },
       {
         name: "materials",
         groupId: 8,
-        members: [104, 105, 106, 107, 109],
+        members: [104, 106, 107],
       },
+
       {
         name: "creatures",
         groupId: 9,
@@ -187,9 +236,10 @@ export const categoryItemsConfig = [
     categoryGroups: [
       {
         name: "locations",
-        
+
         groupId: 1,
-        members: [5
+        members: [
+          5,
           // ["abandoned", "Abandoned Site"],
           // ["banditcamp", "Bandit Camp"],
           // ["contract", "Contract"],
@@ -217,9 +267,10 @@ export const categoryItemsConfig = [
       },
       {
         name: "services",
-        
+
         groupId: 2,
-        members: [4
+        members: [
+          4,
           // ["alchemy", "Alchemy Supplies"],
           // ["armourer", "Armorer"],
           // ["armourerstable", "Armorer's Table"],
@@ -236,9 +287,10 @@ export const categoryItemsConfig = [
       },
       {
         name: "quests",
-        
+
         groupId: 3,
-        members: [3
+        members: [
+          3,
           // ["bwquest", "Blood and Wine Quest"],
           // ["fistfight", "Fist Fight"],
           // ["hsquest", "Hearts of Stone Quest"],
@@ -251,9 +303,10 @@ export const categoryItemsConfig = [
       },
       {
         name: "items",
-        
+
         groupId: 4,
-        members: [2
+        members: [
+          2,
           // ["book", "Book"],
           // ["chest", "Chest"],
           // ["gwentcard", "Gwent Card"],
@@ -265,9 +318,10 @@ export const categoryItemsConfig = [
       },
       {
         name: "other",
-        
+
         groupId: 5,
-        members: [1
+        members: [
+          1,
           // ["miscellaneous", "Miscellaneous"],
           // ["npc", "NPC"],
         ],

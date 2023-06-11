@@ -149,7 +149,7 @@ const AppMap = () => {
                   group={groupName}
                 >
                   <LayerGroup>
-                    <MarkerClusterGroup key={categoryId}>
+                    <MarkerClusterGroup key={categoryId} fillColor={groupColor}>
                       {coordinates.map((coord) => {
                         return (
                           !hidden &&

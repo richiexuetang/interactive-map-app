@@ -37,7 +37,6 @@ const RMForm = (props) => {
     categoryId = 69,
     description = ""
   } = markerInfo;
-  console.log(markerInfo);
 
   const formik = useFormik({
     initialValues: {
