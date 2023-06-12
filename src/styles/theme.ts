@@ -22,17 +22,17 @@ const styles = {
       height: "auto",
     },
     ol: {
-        pl: '20px' 
+      pl: "20px",
     },
     ul: {
-        pl: '20px'
+      pl: "20px",
     },
     button: {
-      pointEvents: "pointer"
+      pointEvents: "pointer",
     },
     p: {
-      pt: '4px'
-    }
+      pt: "4px",
+    },
   }),
 };
 
@@ -60,6 +60,11 @@ const components = {
     },
   },
   Input: inputTheme,
+  Text: {
+    baseStyle: {
+      color: "#fbe4bd",
+    },
+  },
 };
 
 const config = {

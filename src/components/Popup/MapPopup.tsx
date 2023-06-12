@@ -77,7 +77,7 @@ const MapPopup = (props) => {
             lng: newLng,
             description: description,
             categoryId: categoryId,
-            markerTypeId: markerType
+            markerTypeId: markerType,
           }),
           headers: {
             Accept: "application/json, text/plain, */*",
@@ -146,7 +146,7 @@ const MapPopup = (props) => {
               {markerInfo.description && (
                 <div
                   key={markerInfo.description}
-                  style={{ margin: "0.25em" }}
+                  style={{ margin: "0.25em", color: "#fbe4bd" }}
                   dangerouslySetInnerHTML={{ __html: markerInfo.description }}
                 />
               )}
@@ -154,14 +154,17 @@ const MapPopup = (props) => {
           </HStack>
 
           <Divider pt={2} />
-          <Box my={2} textAlign="center" pl={3}>
+          <Box
+            textAlign="center"
+            _hover={{ cursor: "pointer", bg: "whiteAlpha.300" }}
+          >
             <Checkbox
+              py={2}
               isChecked={completed}
+              spacing={2}
               onChange={(e) => handleCompleteCheck(e)}
             >
-              <Text letterSpacing={0} mb="0 !important">
-                Completed
-              </Text>
+              Completed
             </Checkbox>
           </Box>
         </>

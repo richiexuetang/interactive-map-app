@@ -30,6 +30,7 @@ import {
 import { useRouter } from "next/router";
 import useLocalStorage from "@hooks/useLocalStorage";
 import GroupContainer from "@components/Sidebar/CategoryGroup/GroupContainer";
+import { Loader } from "@components/Loader";
 
 const POSITION_CLASSES = {
   bottomleft: "leaflet-bottom leaflet-left",
@@ -53,7 +54,8 @@ function LayerControl({ position, children, setRefresh }) {
     (position && POSITION_CLASSES[position]) || POSITION_CLASSES.bottomleft;
   const [groupedLayers, setGroupedLayers] = useState({});
   const [results, setResults] = useState([]); //search
-  const [groupHiddenState, setGroupHiddenState] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const [searchState, setSearchState] = useState("IDLE");
 
   const [hideCompleted, setHideCompleted] = useState(
     storageSettings[SETTING_HIDE_COMPLETED]
@@ -265,10 +267,6 @@ function LayerControl({ position, children, setRefresh }) {
                   >
                     {hideCompleted ? "Show Completed" : "Hide Completed"}
                   </Button>
-                  <Box mt={5}>
-                    <SearchInput setResults={setResults} />
-                  </Box>
-
                   {navSelections && (
                     <Box
                       display="flex"
@@ -289,11 +287,23 @@ function LayerControl({ position, children, setRefresh }) {
                       ))}
                     </Box>
                   )}
+                  <Box mt={5} w="full" px={4}>
+                    <SearchInput
+                      setResults={setResults}
+                      setSearching={setSearching}
+                      setSearchState={setSearchState}
+                    />
+                  </Box>
 
                   <Box w="full" p={3} pb={0}>
-                    {results && results.length ? (
+                    {searching && <Loader loading={searching} />}
+                    {!results.length && searchState === "NO RESULT" && (
+                      <Box textAlign="center">No Results Found</Box>
+                    )}
+                    {searchState === "COMPLETE" && (
                       <SearchResults results={results} />
-                    ) : (
+                    )}
+                    {searchState === "IDLE" && (
                       <Box w="full">
                         {Object.keys(groupedLayers).map((section, index) => (
                           <React.Fragment key={`${section} ${index}`}>

@@ -12,8 +12,8 @@ export default async (req, res) => {
         $and: [
           {
             $or: [
-              { markerName: { $regex: searchParam } },
-              { description: { $regex: searchParam } },
+              { markerName: { $regex: searchParam, $options: 'i' } },
+              { description: { $regex: searchParam, $options: 'i' } },
             ],
           },
           {
@@ -21,7 +21,7 @@ export default async (req, res) => {
           },
         ],
       })
-      .collation({ locale: "en", strength: 5 })
+      .collation({ locale: "en", strength: 1})
       .toArray();
 
     res.json(markers);
