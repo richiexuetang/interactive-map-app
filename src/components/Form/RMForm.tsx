@@ -34,7 +34,7 @@ const RMForm = (props) => {
     lng,
     markerName = "",
     markerTypeId = 1,
-    categoryId = 93,
+    categoryId = 58,
     description = ""
   } = markerInfo;
 

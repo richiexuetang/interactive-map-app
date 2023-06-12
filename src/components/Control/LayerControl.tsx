@@ -306,7 +306,7 @@ function LayerControl({ position, children, setRefresh }) {
 
                   <Box w="full" p={3} pb={0}>
                     {searching && <Loader loading={searching} />}
-                    {!results.length && searchState === "NO RESULT" && (
+                    {searchState === "NO RESULT" && (
                       <Box textAlign="center">No Results Found</Box>
                     )}
                     {searchState === "COMPLETE" && (

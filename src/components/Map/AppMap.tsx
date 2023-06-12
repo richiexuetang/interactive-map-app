@@ -4,12 +4,14 @@ import React, { useEffect, useState } from "react";
 import { useMapContext } from "@context/app-context";
 import {
   COMPLETED,
-  SETTING_HIDE_ALL,
   SETTING_HIDE_COMPLETED,
   USER_SETTING,
   initialUserSettings,
 } from "@data/LocalStorage";
-import { categoryIdNameMap } from "@data/categoryItemsConfig";
+import {
+  categoryIdNameMap,
+  categoryItemsConfig,
+} from "@data/categoryItemsConfig";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { categoryHiddenState } from "@lib/getHiddenState";
 
@@ -18,10 +20,6 @@ const NoteMarker = dynamic(() => import("@components/Marker/NoteMarker"), {
 });
 
 const RMTooltip = dynamic(() => import("@components/Popup/RMTooltip"), {
-  ssr: false,
-});
-
-const RMPopup = dynamic(() => import("@components/Popup/RMPopup"), {
   ssr: false,
 });
 
