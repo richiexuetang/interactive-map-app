@@ -13,7 +13,10 @@ import {
 } from "@chakra-ui/react";
 import RichEditor from "@components/Editor/RichEditor";
 import { useMapContext } from "@context/app-context";
-import { categoryIdNameMap } from "@data/categoryItemsConfig";
+import {
+  categoryIdNameMap,
+  categoryItemsConfig,
+} from "@data/categoryItemsConfig";
 import useMapObject from "@hooks/useMapObject";
 import { useFormik } from "formik";
 import * as React from "react";
@@ -27,7 +30,7 @@ const validationSchema = Yup.object({
 });
 
 const RMForm = (props) => {
-  const { categoryMap } = useMapContext();
+  const { categoryMap, setCategoryMap, config } = useMapContext();
   const { markerInfo = {}, isOpen, onClose, onSubmit } = props;
   const {
     lat,
@@ -35,7 +38,7 @@ const RMForm = (props) => {
     markerName = "",
     markerTypeId = 1,
     categoryId = 58,
-    description = ""
+    description = "",
   } = markerInfo;
 
   const formik = useFormik({
@@ -49,6 +52,20 @@ const RMForm = (props) => {
     },
     onSubmit: () => {},
     validationSchema: validationSchema,
+  });
+
+  React.useEffect(() => {
+    if (!categoryMap.length) {
+      const categoryGroups = categoryItemsConfig.find(
+        (item) => item.gameSlug === config.gameSlug
+      )?.categoryGroups;
+
+      categoryGroups.map(({members}) => {
+        members.map(member => {
+          setCategoryMap(prev => ([...prev, member]));
+        })
+      } )
+    }
   });
 
   return (

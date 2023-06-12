@@ -59,7 +59,7 @@ const GroupedLayer = dynamic(
 const AppMap = (props) => {
   const { textOverlay, pathMarkers } = props;
   const [storageSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
-  const { config, markerGroups, noteMarkers, setCategoryMap } = useMapContext();
+  const { config, markerGroups, noteMarkers } = useMapContext();
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
 
   const [userHideComplete, setUserHideComplete] = useState(
@@ -89,7 +89,6 @@ const AppMap = (props) => {
               { categoryId, coordinates, ids, ranks, group, markerTypeId },
               i
             ) => {
-              setCategoryMap(prev => ({...prev, categoryId}))
               const hidden = categoryHiddenState(categoryId);
               const groupColor =
                 "#" +
