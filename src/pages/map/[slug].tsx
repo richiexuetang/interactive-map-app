@@ -36,7 +36,6 @@ export async function getStaticProps(context) {
   const pathMarkers = await pathType.json();
 
   const categoryCounts = {};
-  const categoryMap = [];
 
   const markers = [...markersList, ...clusterMarkers];
   const groups = [];
@@ -74,7 +73,6 @@ export async function getStaticProps(context) {
       categoryCounts,
       textOverlay,
       pathMarkers,
-      categoryMap,
       groups
     },
     revalidate: 10,
@@ -101,7 +99,6 @@ const MapPage = ({
   categoryCounts,
   textOverlay,
   pathMarkers,
-  categoryMap,
   groups
 }) => {
   const {asPath} = useRouter();
@@ -110,15 +107,13 @@ const MapPage = ({
   const {
     setConfig,
     setCategoryCounts,
-    setMarkerGroups,
-    setCategoryMap,
+    setMarkerGroups
   } = useMapContext();
 
   useEffect(() => {
     setConfig(config);
     setCategoryCounts(categoryCounts);
     setMarkerGroups(groups);
-    setCategoryMap(categoryMap);
   }, [asPath]);
 
   return (
