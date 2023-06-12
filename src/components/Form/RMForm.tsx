@@ -17,7 +17,6 @@ import {
   categoryIdNameMap,
   categoryItemsConfig,
 } from "@data/categoryItemsConfig";
-import useMapObject from "@hooks/useMapObject";
 import { useFormik } from "formik";
 import * as React from "react";
 import * as Yup from "yup";
@@ -127,7 +126,7 @@ const RMForm = (props) => {
             />
 
             <FormLabel>New Description:</FormLabel>
-            <Box paddingInline="1rem" border="1px solid" h="400px">
+            <Box paddingInline="1rem" border="1px solid">
               <RichEditor
                 setFieldValue={(val) =>
                   formik.setFieldValue("description", val)
