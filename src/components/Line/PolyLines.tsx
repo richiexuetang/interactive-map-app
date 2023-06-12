@@ -5,17 +5,17 @@ import { useMapContext } from "@context/app-context";
 import { COMPLETED } from "@data/LocalStorage";
 import { categoryHiddenState } from "@lib/getHiddenState";
 
-const PolyLines = () => {
-  const { pathMarkers } = useMapContext();
+const PolyLines = (props) => {
+  const { pathMarkers } = props;
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
 
   return (
     <>
       {pathMarkers &&
-        pathMarkers.map(({ parentId, path }) => {
+        pathMarkers.map(({ parentId, path }, i) => {
           return (
             !completedMarkers[parentId] && !categoryHiddenState(89) && (
-              <Polyline key={parentId} path={path} />
+              <Polyline key={`${parentId} + i`} path={path} />
             )
           );
         })}

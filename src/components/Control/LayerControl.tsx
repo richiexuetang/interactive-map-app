@@ -22,6 +22,7 @@ import {
 import { useMapContext } from "@context/app-context";
 import { GroupItem, SearchInput, SearchResults } from "@components/Sidebar";
 import {
+  SETTING_HIDDEN_CATEGORY,
   SETTING_HIDE_ALL,
   SETTING_HIDE_COMPLETED,
   USER_SETTING,
@@ -121,9 +122,17 @@ function LayerControl({ position, children, setRefresh }) {
   };
 
   const handleHideShowAll = (val) => {
+    const hiddenState = storageSettings[SETTING_HIDDEN_CATEGORY];
+
+    for (const [key, value] of Object.entries(hiddenState)) {
+      hiddenState[key] = val;
+    }
+
     setStorageSettings((prev) => ({
       ...prev,
-      [SETTING_HIDE_ALL]: val,
+      [SETTING_HIDDEN_CATEGORY]: {
+        ...hiddenState,
+      },
     }));
     setRefresh(true);
   };

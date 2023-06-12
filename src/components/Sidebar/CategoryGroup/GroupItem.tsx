@@ -14,16 +14,18 @@ import useLocalStorage from "@hooks/useLocalStorage";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
 import { categoryHiddenState } from "@lib/getHiddenState";
 
-const CategoryGroup = ({ onLayerClick, layerObj }) => {
+const GroupItem = ({ onLayerClick, layerObj }) => {
   const [storageSettings, setStorageSettings] = useLocalStorage(
     USER_SETTING,
     initialUserSettings
   );
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
-  const { categoryCounts } = useMapContext();
+  const { categoryCounts, markerGroups } = useMapContext();
 
   const [show, setShow] = useState(layerObj.checked);
-  const [imageUrl, setImageUrl] = useState(`/images/icons/${layerObj.name}.png`);
+  const [imageUrl, setImageUrl] = useState(
+    `/images/icons/${layerObj.name}.png`
+  );
 
   useEffect(() => {
     if (storageSettings[SETTING_HIDDEN_CATEGORY][layerObj.name] === undefined) {
@@ -55,10 +57,17 @@ const CategoryGroup = ({ onLayerClick, layerObj }) => {
   const getCompletedCount = (categoryId) => {
     let result = 0;
     for (const key in completedMarkers) {
-      result = completedMarkers[key] === categoryId ? result + 1 : result;
+      markerGroups.map((group) => {
+        group.ids.some(id => {
+          if (id === key && categoryId === completedMarkers[key]) {
+            result++;
+            return;
+          }
+        })
+      });
     }
     return result;
-  }
+  };
 
   useEffect(() => {
     setShow(
@@ -79,7 +88,7 @@ const CategoryGroup = ({ onLayerClick, layerObj }) => {
         <Image
           src={imageUrl}
           opacity={show ? 1 : 0.5}
-          onError={()=>setImageUrl('/images/icons/111.png')}
+          onError={() => setImageUrl("/images/icons/111.png")}
         />
       </Flex>
       <Box
@@ -96,4 +105,4 @@ const CategoryGroup = ({ onLayerClick, layerObj }) => {
   );
 };
 
-export default CategoryGroup;
+export default GroupItem;

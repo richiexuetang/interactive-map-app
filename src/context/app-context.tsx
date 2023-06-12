@@ -9,12 +9,11 @@ export function MapProvider({ children }) {
   const [markerRefs, setMarkerRefs] = useState({});
   const [categoryCounts, setCategoryCounts] = useState({});
 
-  const [textOverlay, setTextOverlay] = useState([]);
-  const [clusterGroups, setClusterGroups] = useState([]);
-  const [pathMarkers, setPathMarkers] = useState([]);
   const [markerGroups, setMarkerGroups] = useState([]);
   const [noteMarkers, setNoteMarkers] = useState([]);
-  const [categoryMap, setCategoryMap] = useState<MapOrEntries<string, string>>([]);
+  const [categoryMap, setCategoryMap] = useState<MapOrEntries<string, string>>(
+    []
+  );
 
   return (
     <MapContext.Provider
@@ -27,12 +26,6 @@ export function MapProvider({ children }) {
         setMarkerRefs,
         categoryCounts,
         setCategoryCounts,
-        textOverlay,
-        setTextOverlay,
-        setClusterGroups,
-        clusterGroups,
-        pathMarkers,
-        setPathMarkers,
         markerGroups,
         setMarkerGroups,
         noteMarkers,

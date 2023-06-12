@@ -2,8 +2,8 @@ import React from "react";
 import TextContainer from "./TextContainer";
 import { useMapContext } from "@context/app-context";
 
-const TextLayer = () => {
-  const {textOverlay} = useMapContext();
+const TextLayer = (props) => {
+  const {textOverlay} = props;
 
   return (
     <>
