@@ -34,7 +34,7 @@ const RMForm = (props) => {
     lng,
     markerName = "",
     markerTypeId = 1,
-    categoryId = 69,
+    categoryId = 93,
     description = ""
   } = markerInfo;
 
@@ -43,8 +43,8 @@ const RMForm = (props) => {
       markerName: markerName,
       markerType: markerTypeId,
       categoryId: categoryId,
-      lat: lat,
-      lng: lng,
+      lat: parseFloat(lat),
+      lng: parseFloat(lng),
       description: description,
     },
     onSubmit: () => {},

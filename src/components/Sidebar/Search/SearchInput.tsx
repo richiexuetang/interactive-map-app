@@ -32,7 +32,6 @@ const SearchInput = ({ setResults, setSearching, setSearchState }) => {
           `&mapSlug=${config.name}`
       );
       const json = await res.json();
-      console.log(json);
       setResults(json);
       setSearching(false);
       if (json.length) {

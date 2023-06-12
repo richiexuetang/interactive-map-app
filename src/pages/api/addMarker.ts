@@ -22,6 +22,8 @@ export default async (req, res) => {
       markerTypeId,
       mapSlug: mapSlug,
       gameSlug: gameSlug,
+      lat: coordinate[0],
+      lng: coordinate[1]
     });
 
     res.json(marker);

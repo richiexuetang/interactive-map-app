@@ -2,7 +2,7 @@ import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
-import { EditIcon, LinkIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, LinkIcon } from "@chakra-ui/icons";
 import {
   Box,
   Checkbox,
@@ -93,6 +93,28 @@ const MapPopup = (props) => {
     }
   };
 
+  const onDelete = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/deleteMarker?id=` + markerId,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            id: markerId,
+          }),
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      await response.json();
+
+      toast.success("Marker delete success");
+    } catch (errorMessage: any) {
+      toast.error(errorMessage);
+    }
+  };
   useEffect(() => {
     if (markerInfo) {
       setLoaded(true);
@@ -132,11 +154,18 @@ const MapPopup = (props) => {
                   onClick={handleCopyLink}
                 />
                 {status === "authenticated" && (
-                  <EditIcon
-                    ml={3}
-                    _hover={{ cursor: "pointer" }}
-                    onClick={onOpen}
-                  />
+                  <>
+                    <EditIcon
+                      ml={3}
+                      _hover={{ cursor: "pointer" }}
+                      onClick={onOpen}
+                    />
+                    <DeleteIcon
+                      ml={3}
+                      _hover={{ cursor: "pointer" }}
+                      onClick={onDelete}
+                    />
+                  </>
                 )}
               </Text>
               <Text>
