@@ -174,7 +174,7 @@ const MapPopup = (props) => {
 
               {markerInfo.description && (
                 <div
-                  key={markerInfo.description}
+                  key={markerId}
                   style={{ margin: "0.25em", color: "#fbe4bd" }}
                   dangerouslySetInnerHTML={{ __html: markerInfo.description }}
                 />

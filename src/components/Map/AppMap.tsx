@@ -80,10 +80,7 @@ const AppMap = (props) => {
 
   return (
     <RMMapContainer>
-      {(
-        { LayerGroup, TileLayer, useMap, Marker, CircleMarker, Tooltip },
-        L
-      ) => (
+      {({ LayerGroup, TileLayer, useMap, Marker, CircleMarker }) => (
         <LayerControl position="topright" setRefresh={setRefresh}>
           <TileLayer
             url={`/tiles/${config.name}/{z}/{x}/{y}.png`}
@@ -96,6 +93,11 @@ const AppMap = (props) => {
               i
             ) => {
               const hidden = categoryHiddenState(categoryId);
+              const groupColor =
+                "#" +
+                (0x1000000 + Math.random() * 0xffffff)
+                  .toString(16)
+                  .substr(1, 6);
 
               return (
                 <GroupedLayer
@@ -106,12 +108,12 @@ const AppMap = (props) => {
                   group={group}
                 >
                   <LayerGroup>
-                    {coordinates.map((coordinate, i) => {
-                      const completed = completedMarkers[ids[i]];
-                      const hide = (completed && userHideComplete) || hidden;
+                    {markerTypeId === 1 &&
+                      coordinates.map((coordinate, i) => {
+                        const completed = completedMarkers[ids[i]];
+                        const hide = (completed && userHideComplete) || hidden;
 
-                      if (!hide) {
-                        if (markerTypeId === 1) {
+                        if (!hide) {
                           return (
                             <RMMarker
                               key={`${ids[i]} ${group}`}
@@ -124,47 +126,30 @@ const AppMap = (props) => {
                               rank={ranks[i]}
                             />
                           );
-                        } else {
-                          const groupColor =
-                            "#" +
-                            (0x1000000 + Math.random() * 0xffffff)
-                              .toString(16)
-                              .substr(1, 6);
-                          return (
-                            !hidden && (
-                              <GroupedLayer
-                                key={categoryId}
-                                checked={!hidden}
-                                id={group}
-                                name={categoryId}
-                                group={group}
-                              >
-                                <MarkerClusterGroup fillColor={groupColor}>
-                                  <LayerGroup>
-                                    {coordinates.map((coord) => {
-                                      return (
-                                        !hidden && (
-                                          <CircleMarker
-                                            key={`${coord[0]} ${coord[1]}`}
-                                            center={coord}
-                                            color={groupColor}
-                                            radius={2}
-                                          >
-                                            <RMTooltip>
-                                              {categoryIdNameMap[categoryId]}
-                                            </RMTooltip>
-                                          </CircleMarker>
-                                        )
-                                      );
-                                    })}
-                                  </LayerGroup>
-                                </MarkerClusterGroup>
-                              </GroupedLayer>
-                            )
-                          );
                         }
-                      }
-                    })}
+                      })}
+                    {markerTypeId === 3 && (
+                      <MarkerClusterGroup fillColor={groupColor}>
+                        <LayerGroup>
+                          {coordinates.map((coord) => {
+                            return (
+                              !hidden && (
+                                <CircleMarker
+                                  key={`${coord[0]} ${coord[1]}`}
+                                  center={coord}
+                                  color={groupColor}
+                                  radius={2}
+                                >
+                                  <RMTooltip>
+                                    {categoryIdNameMap[categoryId]}
+                                  </RMTooltip>
+                                </CircleMarker>
+                              )
+                            );
+                          })}
+                        </LayerGroup>
+                      </MarkerClusterGroup>
+                    )}
                   </LayerGroup>
                 </GroupedLayer>
               );
