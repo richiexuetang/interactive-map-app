@@ -9,6 +9,7 @@ import { Loader } from "@components/Loader";
 import { useLoading } from "@hooks/useLoading";
 import { getGroupName } from "@lib/getGroupName";
 import { useRouter } from "next/router";
+import { Box } from "@chakra-ui/react";
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
@@ -73,7 +74,7 @@ export async function getStaticProps(context) {
       categoryCounts,
       textOverlay,
       pathMarkers,
-      groups
+      groups,
     },
     revalidate: 10,
   };
@@ -99,16 +100,12 @@ const MapPage = ({
   categoryCounts,
   textOverlay,
   pathMarkers,
-  groups
+  groups,
 }) => {
-  const {asPath} = useRouter();
+  const { asPath } = useRouter();
   const [loading] = useLoading();
 
-  const {
-    setConfig,
-    setCategoryCounts,
-    setMarkerGroups
-  } = useMapContext();
+  const { setConfig, setCategoryCounts, setMarkerGroups } = useMapContext();
 
   useEffect(() => {
     setConfig(config);
@@ -122,7 +119,13 @@ const MapPage = ({
         title="Interactive Map for Zelda: Tears of the Kingdom totk | Witcher 3"
         description="Interactive Map for Zelda: Tears of the Kingdom totk | Witcher 3"
       />
-      {loading ? <Loader loading={loading} /> : <AppMap textOverlay={textOverlay} pathMarkers={pathMarkers}/>}
+      {loading ? (
+        <Box display="block" top="100px !important" mt="300px">
+          <Loader loading={loading} />
+        </Box>
+      ) : (
+        <AppMap textOverlay={textOverlay} pathMarkers={pathMarkers} />
+      )}
     </>
   );
 };
