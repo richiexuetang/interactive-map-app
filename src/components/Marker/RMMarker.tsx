@@ -15,14 +15,16 @@ const RMMarker = (props) => {
   const { markerRefs } = useMapContext();
 
   const handleMarkerClick = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/getMarker?id=` + markerId
-      );
-      const json = await res.json();
-      setMarkerInfo({ ...json });
-    } catch (error) {
-      console.log(error);
+    if (!markerInfo) {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_APP_URL}/api/getMarker?id=` + markerId
+        );
+        const json = await res.json();
+        setMarkerInfo({ ...json });
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 

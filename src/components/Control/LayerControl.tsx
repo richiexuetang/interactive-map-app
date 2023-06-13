@@ -52,7 +52,7 @@ function LayerControl({ position, children, setRefresh }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [layers, setLayers] = useState([]);
   const positionClass =
-    (position && POSITION_CLASSES[position]) || POSITION_CLASSES.bottomleft;
+    (position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright;
   const [groupedLayers, setGroupedLayers] = useState({});
   const [results, setResults] = useState([]); //search
   const [searching, setSearching] = useState(false);

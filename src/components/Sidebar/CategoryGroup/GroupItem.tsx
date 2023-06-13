@@ -14,6 +14,7 @@ import useLocalStorage from "@hooks/useLocalStorage";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
 import { categoryHiddenState } from "@lib/getHiddenState";
 
+
 const GroupItem = ({ onLayerClick, layerObj }) => {
   const [storageSettings, setStorageSettings] = useLocalStorage(
     USER_SETTING,
@@ -54,21 +55,6 @@ const GroupItem = ({ onLayerClick, layerObj }) => {
     onLayerClick(layerObj);
   };
 
-  const getCompletedCount = (categoryId) => {
-    let result = 0;
-    for (const key in completedMarkers) {
-      markerGroups.map((group) => {
-        group.ids.some(id => {
-          if (id === key && categoryId === completedMarkers[key]) {
-            result++;
-            return;
-          }
-        })
-      });
-    }
-    return result;
-  };
-
   useEffect(() => {
     setShow(
       !categoryHiddenState(layerObj.name) && !storageSettings[SETTING_HIDE_ALL]
@@ -99,7 +85,7 @@ const GroupItem = ({ onLayerClick, layerObj }) => {
         {categoryIdNameMap[layerObj.name]}
       </Box>
       <Box fontSize="sm" textDecor={show ? "none" : "line-through"}>
-        {getCompletedCount(layerObj.name)}/{categoryCounts[layerObj.name]}
+        {categoryCounts[layerObj.name]}
       </Box>
     </Button>
   );
