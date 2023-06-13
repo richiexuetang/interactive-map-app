@@ -1,5 +1,6 @@
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 import { DeleteIcon, EditIcon, LinkIcon } from "@chakra-ui/icons";
 import {
@@ -29,6 +30,7 @@ const RMTooltip = dynamic(() => import("@components/Popup/RMTooltip"), {
 });
 
 const MapPopup = (props) => {
+  const { status } = useSession();
   const { onOpen, isOpen, onClose } = useDisclosure();
   const { markerInfo, markerId } = props;
   const pathname = usePathname();
@@ -151,16 +153,20 @@ const MapPopup = (props) => {
                   _hover={{ cursor: "pointer" }}
                   onClick={handleCopyLink}
                 />
-                <EditIcon
-                  ml={3}
-                  _hover={{ cursor: "pointer" }}
-                  onClick={onOpen}
-                />
-                <DeleteIcon
-                  ml={3}
-                  _hover={{ cursor: "pointer" }}
-                  onClick={onDelete}
-                />
+                {status === "authenticated" && (
+                  <>
+                    <EditIcon
+                      ml={3}
+                      _hover={{ cursor: "pointer" }}
+                      onClick={onOpen}
+                    />
+                    <DeleteIcon
+                      ml={3}
+                      _hover={{ cursor: "pointer" }}
+                      onClick={onDelete}
+                    />
+                  </>
+                )}
               </Text>
               <Text>
                 {markerInfo && categoryIdNameMap[markerInfo.categoryId]}
