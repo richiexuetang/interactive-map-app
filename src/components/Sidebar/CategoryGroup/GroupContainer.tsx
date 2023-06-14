@@ -52,9 +52,9 @@ const GroupContainer = (props) => {
     <>
       <Flex flexDir="row" alignItems="center" cursor="pointer">
         {collapse ? (
-          <MinusIcon mr={3} onClick={() => setCollapse(false)} />
+          <AddIcon mr={3} onClick={() => setCollapse(false)} />
         ) : (
-          <AddIcon mr={3} onClick={() => setCollapse(true)} />
+          <MinusIcon mr={3} onClick={() => setCollapse(true)} />
         )}
         <Box textTransform="uppercase" py={3} onClick={handleGroupToggle}>
           {`${section}: `}
