@@ -12,13 +12,26 @@ import {
   Box,
   Text,
 } from "@chakra-ui/react";
-import { Select } from "chakra-react-select";
+import { ChakraStylesConfig, Select } from "chakra-react-select";
 import { COMPLETED, initialUserSettings } from "@data/LocalStorage";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { useMapContext } from "@context/app-context";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
 
 function ProgressTracker() {
+//   const chakraStyles: ChakraStylesConfig = {
+//     option: (provided, state) => ({
+//       ...provided,
+//       backgroundColor: "black",
+//       color: "black"
+//     }),
+//     groupHeading: (provided, state) => ({
+//         ...provided,
+//         backgroundColor: "black",
+//         color: "black"
+//       }),
+//   };
+
   const { markerGroups, categoryCounts } = useMapContext();
   const [completedMarkers] = useLocalStorage(COMPLETED, initialUserSettings);
   const [trackedCategory, setTrackedCategory] = useState([]);
@@ -37,14 +50,22 @@ function ProgressTracker() {
           const newGroupOption = {
             label: group.toUpperCase(),
             options: [
-              { value: categoryId, label: categoryIdNameMap[categoryId] },
+              {
+                value: categoryId,
+                label: categoryIdNameMap[categoryId],
+                group: group.toUpperCase(),
+              },
             ],
           };
           tempOptions = [...tempOptions, newGroupOption];
         } else {
           optionGroup.options = [
             ...optionGroup.options,
-            { value: categoryId, label: categoryIdNameMap[categoryId] },
+            {
+              value: categoryId,
+              label: categoryIdNameMap[categoryId],
+              group: group.toUpperCase(),
+            },
           ];
         }
       });
@@ -72,17 +93,20 @@ function ProgressTracker() {
   };
 
   const prepareCategoriesToTrack = (values) => {
-    values.map(({ value }) => {
-      setSelectedCategories((prev) => [...prev, value]);
+    values.map((item) => {
+      if (!selectedCategories.includes(item.value)) {
+        setSelectedCategories((prev) => [...prev, item.value]);
+      }
     });
   };
 
   const trackCategories = () => {
-    selectedCategories.map((selected) => {
-      if (!trackedCategory.includes(selected)) {
-        setTrackedCategory((prev) => [...prev, selected]);
+    selectedCategories.map((value) => {
+      if (!trackedCategory.includes(value)) {
+        setTrackedCategory((prev) => [...prev, value]);
       }
     });
+
     setSelectedCategories([]);
   };
 
@@ -133,23 +157,27 @@ function ProgressTracker() {
                 </HStack>
               ))}
 
-              {trackingOptions.length && (
-                <Select
-                  isMulti
-                  name="trackCategories"
-                  options={trackingOptions}
-                  placeholder="Select some categories to track..."
-                  closeMenuOnSelect={false}
-                  size="sm"
-                  onChange={(e) => prepareCategoriesToTrack(e)}
-                />
-              )}
+              <HStack>
+                {trackingOptions.length && (
+                  <Select
+                    // chakraStyles={chakraStyles}
+                    colorScheme="app.background"
+                    isMulti
+                    name="trackCategories"
+                    options={trackingOptions}
+                    placeholder="Select categories to track..."
+                    closeMenuOnSelect={false}
+                    size="sm"
+                    onChange={(e) => prepareCategoriesToTrack(e)}
+                  />
+                )}
 
-              {selectedCategories && (
-                <Button onClick={trackCategories} mt={6}>
-                  Track
-                </Button>
-              )}
+                {selectedCategories && (
+                  <Button onClick={trackCategories} mt={6}>
+                    Track
+                  </Button>
+                )}
+              </HStack>
             </CardBody>
           </Card>
         )}
