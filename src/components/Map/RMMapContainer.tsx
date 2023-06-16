@@ -27,6 +27,7 @@ const RMMapContainer = ({ children }) => {
   return (
     <MapContainer
       style={{ background: "black", height: "100vh", width: "100vw" }}
+      zoomControl={false}
       scrollWheelZoom={false}
       attributionControl={false}
       center={config.center}

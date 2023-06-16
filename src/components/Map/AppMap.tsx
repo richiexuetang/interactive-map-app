@@ -157,7 +157,7 @@ const AppMap = (props) => {
             noteMarkers.map((note) => (
               <NoteMarker key={note[0]} position={note} />
             ))}
-          <PolyLines pathMarkers={pathMarkers} />
+          <PolyLines pathMarkers={pathMarkers}/>
           <TextLayer textOverlay={textOverlay} />
         </LayerControl>
       )}

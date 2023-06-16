@@ -2,6 +2,7 @@ import { extendTheme } from "@chakra-ui/react";
 
 import { Button } from "./ButtonStyles";
 import { inputTheme } from "./InputTheme";
+import { cardTheme } from "./CardTheme";
 
 const styles = {
   global: () => ({
@@ -38,6 +39,7 @@ const styles = {
 
 const components = {
   Button,
+  Card: cardTheme,
   Modal: {
     baseStyle: () => ({
       dialog: {

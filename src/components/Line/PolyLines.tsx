@@ -14,8 +14,8 @@ const PolyLines = (props) => {
       {pathMarkers &&
         pathMarkers.map(({ parentId, path }, i) => {
           return (
-            !completedMarkers[parentId] && !categoryHiddenState(89) && (
-              <Polyline key={`${parentId} + i`} path={path} />
+            !completedMarkers[parentId] && !categoryHiddenState(completedMarkers[parentId]) && (
+              <Polyline key={`${parentId} + ${i}`} path={path} />
             )
           );
         })}

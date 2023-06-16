@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { NextSeo } from "next-seo";
 
 import { areaConfig } from "@data/areaConfig";
-import { mapConfig } from "@data/index";
+import { categoryItemsConfig, mapConfig } from "@data/index";
 import { useMapContext } from "@context/app-context";
 import AppMap from "@components/Map/AppMap";
 import { Loader } from "@components/Loader";
@@ -10,6 +10,7 @@ import { useLoading } from "@hooks/useLoading";
 import { getGroupName } from "@lib/getGroupName";
 import { useRouter } from "next/router";
 import { Box } from "@chakra-ui/react";
+import ProgressTracker from "@components/Sidebar/ProgressTracker";
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
@@ -105,7 +106,7 @@ const MapPage = ({
   const { asPath } = useRouter();
   const [loading] = useLoading();
 
-  const { setConfig, setCategoryCounts, setMarkerGroups } = useMapContext();
+  const { setConfig, setCategoryCounts, setMarkerGroups, categoryMap, setCategoryMap } = useMapContext();
 
   useEffect(() => {
     setConfig(config);
@@ -113,6 +114,20 @@ const MapPage = ({
     setMarkerGroups(groups);
   }, [asPath]);
 
+  useEffect(() => {
+    if (!categoryMap.length) {
+      const categoryGroups = categoryItemsConfig.find(
+        (item) => item.gameSlug === config.gameSlug
+      )?.categoryGroups;
+
+      categoryGroups.map(({members}) => {
+        members.map(member => {
+          setCategoryMap(prev => ([...prev, member]));
+        })
+      } )
+    }
+  });
+  
   return (
     <>
       <NextSeo
@@ -124,7 +139,10 @@ const MapPage = ({
           <Loader loading={loading} />
         </Box>
       ) : (
-        <AppMap textOverlay={textOverlay} pathMarkers={pathMarkers} />
+        <>
+          <AppMap textOverlay={textOverlay} pathMarkers={pathMarkers} />
+          <ProgressTracker />
+        </>
       )}
     </>
   );
