@@ -3,19 +3,17 @@ import React, { useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
   IconButton,
-  VStack,
   Button,
   HStack,
   Card,
   CardBody,
   CardHeader,
-  Heading,
   CloseButton,
   Select,
   Box,
+  Text,
 } from "@chakra-ui/react";
 import { COMPLETED, initialUserSettings } from "@data/LocalStorage";
-import { useRouter } from "next/router";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { useMapContext } from "@context/app-context";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
@@ -77,10 +75,10 @@ function ProgressTracker() {
             />
           </>
         ) : (
-          <Card colorScheme="app.modal" w='sm'>
+          <Card colorScheme="app.modal" w="sm">
             <CardHeader>
-              <HStack justifyContent='space-between'>
-                <Heading size="md">Progress Tracker</Heading>
+              <HStack justifyContent="space-between">
+                <Text fontSize="lg">Progress Tracker</Text>
                 <CloseButton onClick={() => setSidebarOpen(false)} />
               </HStack>
             </CardHeader>
