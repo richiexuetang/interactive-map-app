@@ -11,6 +11,8 @@ import {
   CloseButton,
   Box,
   Text,
+  Flex,
+  Image
 } from "@chakra-ui/react";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
 import { COMPLETED, initialUserSettings } from "@data/LocalStorage";
@@ -152,7 +154,21 @@ function ProgressTracker() {
             </CardHeader>
             <CardBody px="0">
               {trackedCategory.map((category) => (
-                <HStack mb={5} key={category}>
+                <Button
+                  display="flex"
+                  flexDir="row"
+                  justifyContent="space-between"
+                  w="full"
+                  bg="sidebar.content"
+                  mb={5}
+                >
+                  <Flex w={5} h={6} alignItems="center" justifyContent="center">
+                    <Image
+                      src={`/images/icons/${category}.png`}
+                      alt={`/images/icons/${category}.png`}
+                      fallbackSrc="/images/icons/111.png"
+                    />
+                  </Flex>
                   <Box>{categoryIdNameMap[category]}</Box>
                   <Box>
                     {getCompletedCount(category)}/{categoryCounts[category]}
@@ -160,7 +176,7 @@ function ProgressTracker() {
                   <CloseButton
                     onClick={() => removeTrackedCategory(category)}
                   />
-                </HStack>
+                </Button>
               ))}
 
               <HStack justifyContent="center">
