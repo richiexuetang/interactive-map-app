@@ -19,18 +19,24 @@ import { useMapContext } from "@context/app-context";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
 
 function ProgressTracker() {
-//   const chakraStyles: ChakraStylesConfig = {
-//     option: (provided, state) => ({
-//       ...provided,
-//       backgroundColor: "black",
-//       color: "black"
-//     }),
-//     groupHeading: (provided, state) => ({
-//         ...provided,
-//         backgroundColor: "black",
-//         color: "black"
-//       }),
-//   };
+  const chakraStyles: ChakraStylesConfig = {
+    option: (provided) => ({
+      ...provided,
+      backgroundColor: "app.modal",
+      _hover: { bg: "app.background" },
+    }),
+    groupHeading: (provided) => ({
+      ...provided,
+      backgroundColor: "app.modal",
+      color: "app.text",
+      fontSize: "12px",
+      fontWeight: 650,
+    }),
+    menuList: (provided) => ({
+      ...provided,
+      backgroundColor: "app.modal",
+    }),
+  };
 
   const { markerGroups, categoryCounts } = useMapContext();
   const [completedMarkers] = useLocalStorage(COMPLETED, initialUserSettings);
@@ -144,7 +150,7 @@ function ProgressTracker() {
                 <CloseButton onClick={() => setSidebarOpen(false)} />
               </HStack>
             </CardHeader>
-            <CardBody>
+            <CardBody px="0">
               {trackedCategory.map((category) => (
                 <HStack mb={5} key={category}>
                   <Box>{categoryIdNameMap[category]}</Box>
@@ -157,11 +163,10 @@ function ProgressTracker() {
                 </HStack>
               ))}
 
-              <HStack>
+              <HStack justifyContent="center">
                 {trackingOptions.length && (
                   <Select
-                    // chakraStyles={chakraStyles}
-                    colorScheme="app.background"
+                    chakraStyles={chakraStyles}
                     isMulti
                     name="trackCategories"
                     options={trackingOptions}
