@@ -122,7 +122,7 @@ function ProgressTracker() {
             </CardHeader>
             <CardBody>
               {trackedCategory.map((category) => (
-                <HStack mb={5}>
+                <HStack mb={5} key={category}>
                   <Box>{categoryIdNameMap[category]}</Box>
                   <Box>
                     {getCompletedCount(category)}/{categoryCounts[category]}
@@ -132,30 +132,6 @@ function ProgressTracker() {
                   />
                 </HStack>
               ))}
-
-              {/* <ChakraSelect
-                name="category"
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                mb={5}
-              >
-                {categoryMap.map((category) => {
-                  const groupExist = markerGroups.find(
-                    (item) => item.categoryId === category
-                  );
-                  const tracking = trackedCategory?.includes(
-                    category.toString()
-                  );
-                  return (
-                    groupExist &&
-                    !tracking && (
-                      <option value={category}>
-                        {categoryIdNameMap[category]}
-                      </option>
-                    )
-                  );
-                })}
-              </ChakraSelect> */}
 
               {trackingOptions.length && (
                 <Select
