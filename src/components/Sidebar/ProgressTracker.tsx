@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
@@ -9,43 +9,81 @@ import {
   CardBody,
   CardHeader,
   CloseButton,
-  Select,
   Box,
   Text,
 } from "@chakra-ui/react";
+import { Select } from "chakra-react-select";
 import { COMPLETED, initialUserSettings } from "@data/LocalStorage";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { useMapContext } from "@context/app-context";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
 
 function ProgressTracker() {
-  const { categoryMap, markerGroups, categoryCounts } = useMapContext();
+  const { markerGroups, categoryCounts } = useMapContext();
   const [completedMarkers] = useLocalStorage(COMPLETED, initialUserSettings);
   const [trackedCategory, setTrackedCategory] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [trackingOptions, setTrackingOptions] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+  useEffect(() => {
+    if (!trackingOptions.length) {
+      let tempOptions = [];
+      markerGroups.map(({ group, categoryId }) => {
+        const optionGroup = tempOptions.find(
+          (item) => item.label === group.toUpperCase()
+        );
+        if (!optionGroup) {
+          const newGroupOption = {
+            label: group.toUpperCase(),
+            options: [
+              { value: categoryId, label: categoryIdNameMap[categoryId] },
+            ],
+          };
+          tempOptions = [...tempOptions, newGroupOption];
+        } else {
+          optionGroup.options = [
+            ...optionGroup.options,
+            { value: categoryId, label: categoryIdNameMap[categoryId] },
+          ];
+        }
+      });
+      setTrackingOptions([...tempOptions]);
+    }
+  });
 
   const getCompletedCount = (categoryId) => {
     let result = 0;
+    const { ids } = markerGroups.find((item) => item.categoryId === categoryId);
+
+    if (!ids) {
+      return 0;
+    }
+
     for (const key in completedMarkers) {
-      markerGroups.map((group) => {
-        if (group.categoryId === categoryId) {
-          group.ids.some((id) => {
-            if (id === key && categoryId === completedMarkers[key]) {
-              result++;
-              return;
-            }
-          });
-        }
-      });
+      result = ids.includes(key) ? result + 1 : result;
+      continue;
     }
     return result;
   };
 
-  const trackCategory = () => {
-    setTrackedCategory((prev) => [...prev, selectedCategory]);
-    const count = getCompletedCount(parseInt(selectedCategory));
-    console.log(count);
+  const removeTrackedCategory = (category) => {
+    setTrackedCategory(trackedCategory.filter((item) => item !== category));
+  };
+
+  const prepareCategoriesToTrack = (values) => {
+    values.map(({ value }) => {
+      setSelectedCategories((prev) => [...prev, value]);
+    });
+  };
+
+  const trackCategories = () => {
+    selectedCategories.map((selected) => {
+      if (!trackedCategory.includes(selected)) {
+        setTrackedCategory((prev) => [...prev, selected]);
+      }
+    });
+    setSelectedCategories([]);
   };
 
   return (
@@ -87,28 +125,54 @@ function ProgressTracker() {
                 <HStack mb={5}>
                   <Box>{categoryIdNameMap[category]}</Box>
                   <Box>
-                    {getCompletedCount(parseInt(category))} /{" "}
-                    {categoryCounts[parseInt(category)]}
+                    {getCompletedCount(category)}/{categoryCounts[category]}
                   </Box>
+                  <CloseButton
+                    onClick={() => removeTrackedCategory(category)}
+                  />
                 </HStack>
               ))}
 
-              <Select
+              {/* <ChakraSelect
                 name="category"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 mb={5}
               >
                 {categoryMap.map((category) => {
+                  const groupExist = markerGroups.find(
+                    (item) => item.categoryId === category
+                  );
+                  const tracking = trackedCategory?.includes(
+                    category.toString()
+                  );
                   return (
-                    <option value={category}>
-                      {categoryIdNameMap[category]}
-                    </option>
+                    groupExist &&
+                    !tracking && (
+                      <option value={category}>
+                        {categoryIdNameMap[category]}
+                      </option>
+                    )
                   );
                 })}
-              </Select>
-              {selectedCategory && (
-                <Button onClick={trackCategory}>Track Category</Button>
+              </ChakraSelect> */}
+
+              {trackingOptions.length && (
+                <Select
+                  isMulti
+                  name="trackCategories"
+                  options={trackingOptions}
+                  placeholder="Select some categories to track..."
+                  closeMenuOnSelect={false}
+                  size="sm"
+                  onChange={(e) => prepareCategoriesToTrack(e)}
+                />
+              )}
+
+              {selectedCategories && (
+                <Button onClick={trackCategories} mt={6}>
+                  Track
+                </Button>
               )}
             </CardBody>
           </Card>

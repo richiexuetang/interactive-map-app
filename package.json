@@ -27,6 +27,7 @@
     "@types/react-leaflet": "^3.0.0",
     "add": "^2.0.6",
     "axios": "^1.4.0",
+    "chakra-react-select": "^4.6.0",
     "copy-webpack-plugin": "^11.0.0",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
