@@ -1,3 +1,3 @@
 export * from './CategoryGroup';
 export * from './Search';
-export * from './ProgressTracker';
+export {default as ProgressTracker} from './ProgressTracker';
