@@ -20,10 +20,9 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { useMapContext } from "@context/app-context";
-import { GroupItem, SearchInput, SearchResults } from "@components/Sidebar";
+import { SearchInput, SearchResults } from "@components/Sidebar";
 import {
   SETTING_HIDDEN_CATEGORY,
-  SETTING_HIDE_ALL,
   SETTING_HIDE_COMPLETED,
   USER_SETTING,
   initialUserSettings,

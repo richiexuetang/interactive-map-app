@@ -109,5 +109,5 @@ export const initialUserSettings = {
     213: true,
     214: true,
   },
-  hideAll: false,
+  tracker: {},
 };
