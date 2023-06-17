@@ -187,6 +187,27 @@ export const categoryIdNameMap = {
   191: "Hylian Retriever",
   192: "Blupee",
   193: "Bubbulfrog",
+  194: "Common Sparrow",
+  195: "Red Sparrow",
+  196: "Blue Sparrow",
+  197: "Rainbow Sparrow",
+  198: "Sand Sparrow",
+  199: "Golden Sparrow",
+  200: "Wood Pigeon",
+  201: "Rainbow Pigeon",
+  202: "Hotfeather Pigeon",
+  203: "White Pigeon",
+  204: "Accented Pigeon",
+  205: "Mountain Crow",
+  206: "Bright-Chested Duck",
+  207: "Blue-Winged Heron",
+  208: "Pink Heron",
+  209: "Islander Hawk",
+  210: "Seagull",
+  211: "Cloud Seagull",
+  212: "Eldin Ostrich",
+  213: "Forest Ostrich",
+  214: "Cucco",
 };
 
 export const categoryItemsConfig = [
@@ -264,7 +285,14 @@ export const categoryItemsConfig = [
         members: [
           163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176,
           177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190,
-          191, 192, 193
+          191, 192, 193,
+        ],
+      },
+      {
+        name: "birds",
+        members: [
+          194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
+          208, 209, 210, 211, 212, 213, 214,
         ],
       },
     ],
