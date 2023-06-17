@@ -90,8 +90,7 @@ function ProgressTracker() {
     }
 
     for (const key in completedMarkers) {
-      result = ids.includes(key) ? result + 1 : result;
-      continue;
+      result = completedMarkers[key] === categoryId ? result + 1 : result;
     }
     return result;
   };

@@ -12,7 +12,7 @@ const RMMarker = (props) => {
 
   const { Marker, coordinate, categoryId, rank, markerId, ...rest } = props;
   const [markerInfo, setMarkerInfo] = useState(null);
-  const { markerRefs } = useMapContext();
+  const { markerRefs, config } = useMapContext();
 
   const handleMarkerClick = async () => {
     if (!markerInfo) {
@@ -34,8 +34,21 @@ const RMMarker = (props) => {
         animate: true,
         duration: 0.5,
       });
+
+      window.history.replaceState(null, '', `/map/${config.name}`)
     }
-  });
+  }, [markerSearchParam]);
+
+  useEffect(() => {
+    if (params.has('x') && params.has('y') && params.has('zoom')) {
+      map.flyTo([params.get("x"), params.get("y")], params.get("zoom"), {
+        animate: true,
+        duration: 0.5,
+      });
+
+      window.history.replaceState(null, '', `/map/${config.name}`)
+    }
+  }, [params]);
 
   return (
     <Marker

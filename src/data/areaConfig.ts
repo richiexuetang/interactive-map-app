@@ -307,7 +307,7 @@ export const areaConfig = [
   },
   {
     name: "hyrule-depths",
-    maxZoom: 16,
+    maxZoom: 17,
     minZoom: 11,
     zoom: 11.91,
     center: [0.38807687744675806,-0.6575789401328614],

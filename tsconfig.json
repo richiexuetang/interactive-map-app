@@ -39,7 +39,7 @@
     "**/*.ts",
     "**/*.tsx",
     "src/components/Layer/MarkerOverlay",
-    "src/lib/leaflet.ellipse.js"
+    "src/components/Map/RMMapContainer.js"
   ],
   "exclude": ["node_modules"]
 }

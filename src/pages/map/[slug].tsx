@@ -42,6 +42,10 @@ export async function getStaticProps(context) {
   const markers = [...markersList, ...clusterMarkers];
   const groups = [];
 
+  pathMarkers.map(({categoryId}) => {
+    categoryCounts[categoryId] = categoryCounts[categoryId] + 1 || 1;
+  })
+  
   markers.map((marker, rank) => {
     categoryCounts[marker.categoryId] =
       categoryCounts[marker.categoryId] + 1 || 1;

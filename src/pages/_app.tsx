@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps<{ s
       <ToastContainer
         position="top-right"
         autoClose={500}
-        hideProgressBar={false}
+        hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
         rtl={false}
