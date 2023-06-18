@@ -6,12 +6,12 @@ import {
   InputLeftElement,
   InputRightAddon,
 } from "@chakra-ui/react";
+import { CloseIcon, Search2Icon } from "@chakra-ui/icons";
+
 import { useMapContext } from "@context/app-context";
-import { Search2Icon } from "@chakra-ui/icons";
 
 const SearchInput = ({ setResults, setSearching, setSearchState }) => {
   const [value, setValue] = useState("");
-  let seen = new Set();
   const { config } = useMapContext();
 
   const handleKeyPress = async (e) => {
@@ -23,7 +23,6 @@ const SearchInput = ({ setResults, setSearching, setSearchState }) => {
   const search = async (searchParam) => {
     setSearching(true);
     setResults([]);
-    seen = new Set();
 
     try {
       const res = await fetch(
@@ -44,27 +43,34 @@ const SearchInput = ({ setResults, setSearching, setSearchState }) => {
     }
   };
 
+  const resetInput = () => {
+    setValue("");
+    setResults([]);
+    setSearchState("IDLE");
+  };
+
   return (
     <>
       <InputGroup borderRadius={0} size="sm">
         <InputLeftElement
-          pointerEvents="none"
-          children={<Search2Icon color="#af894d" />}
+          children={
+            value ? (
+              <CloseIcon
+                color="#af894d"
+                _hover={{ cursor: "pointer" }}
+                onClick={resetInput}
+              />
+            ) : (
+              <Search2Icon color="#af894d" />
+            )
+          }
         />
         <Input
           variant="outlined"
-          border="1px solid #584835"
-          // borderColor="#584835"
-          focusBorderColor="#af894d"
           placeholder="Search..."
           value={value}
           onChange={(e) => {
             setValue(e.target.value);
-            setResults([]);
-            setSearchState("IDLE");
-          }}
-          onReset={() => {
-            setValue("");
             setResults([]);
             setSearchState("IDLE");
           }}
