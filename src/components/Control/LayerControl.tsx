@@ -20,12 +20,7 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { useMapContext } from "@context/app-context";
-import {
-  SearchInput,
-  SearchResults,
-  GroupContainer,
-  Loader,
-} from "@components/.";
+import { SearchInput, SearchResults } from "@components/Sidebar";
 import {
   SETTING_HIDDEN_CATEGORY,
   SETTING_HIDE_COMPLETED,
@@ -34,8 +29,17 @@ import {
 } from "@data/LocalStorage";
 import { useRouter } from "next/router";
 import useLocalStorage from "@hooks/useLocalStorage";
+import GroupContainer from "@components/Sidebar/CategoryGroup/GroupContainer";
+import { Loader } from "@components/Loader";
 
-function LayerControl({ children, setRefresh }) {
+const POSITION_CLASSES = {
+  bottomleft: "leaflet-bottom leaflet-left",
+  bottomright: "leaflet-bottom leaflet-right",
+  topleft: "leaflet-top leaflet-left",
+  topright: "leaflet-top leaflet-right",
+};
+
+function LayerControl({ position, children, setRefresh }) {
   const router = useRouter();
   const [storageSettings, setStorageSettings] = useLocalStorage(
     USER_SETTING,
@@ -46,6 +50,8 @@ function LayerControl({ children, setRefresh }) {
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [layers, setLayers] = useState([]);
+  const positionClass =
+    (position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright;
   const [groupedLayers, setGroupedLayers] = useState({});
   const [results, setResults] = useState([]); //search
   const [searching, setSearching] = useState(false);
@@ -175,7 +181,7 @@ function LayerControl({ children, setRefresh }) {
         addGroup: onGroupAdd,
       }}
     >
-      <div className="leaflet-top leaflet-right">
+      <div className={positionClass}>
         <div className="leaflet-control leaflet-bar">
           {!sidebarOpen && (
             <>

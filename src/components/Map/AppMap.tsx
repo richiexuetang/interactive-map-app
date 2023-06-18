@@ -89,7 +89,7 @@ const AppMap = (props) => {
               map={map}
             />
           )}
-          <LayerControl setRefresh={setRefresh}>
+          <LayerControl position="topright" setRefresh={setRefresh}>
             <TileLayer
               url={`/tiles/${config.name}/{z}/{x}/{y}.png`}
               noWrap

@@ -17,8 +17,9 @@ import { toast } from "react-toastify";
 import { COMPLETED } from "@data/LocalStorage";
 import { useCopyToClipboard, useLocalStorage } from "@hooks/index";
 import dynamic from "next/dynamic";
-import { Loader, RMForm } from "@components/.";
+import { Loader } from "@components/Loader";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
+import RMForm from "@components/Form/RMForm";
 
 const RMPopup = dynamic(() => import("@components/Popup/RMPopup"), {
   ssr: false,
