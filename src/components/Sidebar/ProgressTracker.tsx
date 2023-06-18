@@ -127,7 +127,8 @@ function ProgressTracker() {
     if (!ids) return 0;
 
     for (const key in completedMarkers) {
-      result = completedMarkers[key] === categoryId ? result + 1 : result;
+      result = ids.includes(key) ? result + 1 : result;
+      continue;
     }
     return result;
   };
