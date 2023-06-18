@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useState, useEffect } from "react";
 import { useMap } from "react-leaflet";
 import { MapPopup } from "@components/Popup";
@@ -14,7 +13,7 @@ const RMMarker = (props) => {
   const [markerInfo, setMarkerInfo] = useState(null);
   const { markerRefs, config } = useMapContext();
 
-  const handleMarkerClick = async () => {
+  const getMarkerInfo = async () => {
     if (!markerInfo) {
       try {
         const res = await fetch(
@@ -29,24 +28,30 @@ const RMMarker = (props) => {
   };
 
   useEffect(() => {
-    if (markerSearchParam && markerSearchParam === markerId) {
+    if (
+      markerSearchParam &&
+      markerSearchParam === markerId &&
+      markerRefs[markerId]
+    ) {
       map.flyTo(coordinate, map.getMaxZoom(), {
         animate: true,
         duration: 0.5,
       });
 
-      window.history.replaceState(null, '', `/map/${config.name}`)
+      markerRefs[markerId]?.openPopup();
+
+      window.history.replaceState(null, "", `/map/${config.name}`);
     }
   }, [markerSearchParam]);
 
   useEffect(() => {
-    if (params.has('x') && params.has('y') && params.has('zoom')) {
-      map.flyTo([params.get("x"), params.get("y")], params.get("zoom"), {
-        animate: true,
-        duration: 0.5,
-      });
+    if (params.has("x") && params.has("y") && params.has("zoom")) {
+      map.flyTo(
+        [parseFloat(params.get("x")), parseFloat(params.get("y"))],
+        parseFloat(params.get("zoom"))
+      );
 
-      window.history.replaceState(null, '', `/map/${config.name}`)
+      window.history.replaceState(null, "", `/map/${config.name}`);
     }
   }, [params]);
 
@@ -62,7 +67,9 @@ const RMMarker = (props) => {
       })}
       zIndexOffset={100 + rank}
       eventHandlers={{
-        click: () => handleMarkerClick(),
+        click: () => getMarkerInfo(),
+        popupopen: () => getMarkerInfo(),
+        mouseover: () => getMarkerInfo(),
       }}
       {...rest}
     >

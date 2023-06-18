@@ -56,9 +56,9 @@ const GroupedLayer = dynamic(
 );
 
 const AppMap = (props) => {
-  const { textOverlay, pathMarkers, noteMarkers, markerGroups } = props;
+  const { textOverlay, pathMarkers, markerGroups } = props;
   const [storageSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
-  const { config } = useMapContext();
+  const { config, noteMarkers } = useMapContext();
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
 
   const [userHideComplete, setUserHideComplete] = useState(
@@ -78,17 +78,13 @@ const AppMap = (props) => {
     <RMMapContainer>
       {(
         { LayerGroup, TileLayer, useMap, Marker, CircleMarker, useMapEvents },
-        setZoomLevel,
-        map
+        setZoomLevel
       ) => (
         <>
-          {map && (
-            <MapListener
-              setZoomLevel={setZoomLevel}
-              useMapEvents={useMapEvents}
-              map={map}
-            />
-          )}
+          <MapListener
+            setZoomLevel={setZoomLevel}
+            useMapEvents={useMapEvents}
+          />
           <LayerControl position="topright" setRefresh={setRefresh}>
             <TileLayer
               url={`/tiles/${config.name}/{z}/{x}/{y}.png`}

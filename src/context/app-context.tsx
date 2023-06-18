@@ -11,6 +11,7 @@ export function MapProvider({ children }) {
   const [categoryMap, setCategoryMap] = useState<MapOrEntries<string, string>>(
     []
   );
+  const [noteMarkers, setNoteMarkers] = useState([]);
 
   return (
     <MapContext.Provider
@@ -23,6 +24,8 @@ export function MapProvider({ children }) {
         setCategoryCounts,
         categoryMap,
         setCategoryMap,
+        noteMarkers,
+        setNoteMarkers,
       }}
     >
       {children}
