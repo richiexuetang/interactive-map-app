@@ -118,7 +118,7 @@ function ProgressTracker() {
       });
       setTrackingOptions([...tempOptions]);
     }
-  });
+  }, [userSettings[SETTING_TRACKER]]);
 
   const getCompletedCount = (categoryId) => {
     let result = 0;
@@ -133,7 +133,17 @@ function ProgressTracker() {
   };
 
   const removeTrackedCategory = (category) => {
-    setTrackedCategory(trackedCategory.filter((item) => item !== category));
+    const newList = userSettings[SETTING_TRACKER][gameSlug][mapSlug].filter(item => item !== category);
+    setUserSettings((prev) => ({
+      ...prev,
+      [SETTING_TRACKER]: {
+        ...prev[SETTING_TRACKER],
+        [gameSlug]: {
+          ...prev[SETTING_TRACKER][gameSlug],
+          [mapSlug]: newList,
+        },
+      },
+    }));
   };
 
   const prepareCategoriesToTrack = (values) => {
@@ -145,9 +155,9 @@ function ProgressTracker() {
   };
 
   const trackCategories = () => {
+    const tracked = userSettings[SETTING_TRACKER][gameSlug][mapSlug];
     selectedCategories.map((value) => {
-      if (!trackedCategory.includes(value)) {
-        setTrackedCategory((prev) => [...prev, value]);
+      if (!tracked.includes(value)) {
         setUserSettings((prev) => ({
           ...prev,
           [SETTING_TRACKER]: {
