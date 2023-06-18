@@ -6,15 +6,12 @@ import createControlledLayer from "./controlledLayer";
 
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
   Box,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerHeader,
-  IconButton as CIconButton,
   VStack,
   Button,
   HStack,
@@ -182,29 +179,19 @@ function LayerControl({ position, children, setRefresh }) {
       }}
     >
       <div className={positionClass}>
-        <div className="leaflet-control leaflet-bar">
+        <div className="leaflet-control leaflet-bar" style={{ margin: 0 }}>
           {!sidebarOpen && (
             <>
-              <CIconButton
-                icon={
-                  sidebarOpen ? (
-                    <ChevronRightIcon w="23px" h="48px" />
-                  ) : (
-                    <ChevronLeftIcon w="23px" h="48px" />
-                  )
-                }
-                zIndex="1000"
-                float="right"
-                right={2}
-                top="8px"
-                bg="#221c0f"
-                pos="absolute"
-                colorScheme="sidebarArrow"
-                variant="outline"
-                cursor="pointer"
+              <Box
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                aria-label="sidebar-button"
-              />
+                bg="#221c0f"
+                px={2}
+                py={3}
+                mt={4}
+                _hover={{ cursor: "pointer", border: "1px solid #fbe4bd" }}
+              >
+                &lt;
+              </Box>
             </>
           )}
           <Drawer
@@ -219,36 +206,32 @@ function LayerControl({ position, children, setRefresh }) {
             size="xs"
           >
             <DrawerContent>
-              <DrawerCloseButton />
-              <Box bg="#221c0f" position="absolute" left="100%" top="8px">
-                <CIconButton
-                  icon={
-                    sidebarOpen ? (
-                      <ChevronLeftIcon w="23px" h="48px" />
-                    ) : (
-                      <ChevronRightIcon w="23px" h="48px" />
-                    )
-                  }
-                  top="8px"
-                  bg="#221c0f"
-                  pos="absolute"
-                  colorScheme="sidebar.arrow"
-                  variant="outline"
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  aria-label="sidebar-button"
-                />
-              </Box>
-              <DrawerHeader textAlign="center" _hover={{ cursor: "pointer" }}>
-                <Link href={`/game/totk`}>
-                  <Image
-                    width={360}
-                    height={60}
-                    src={`/images/logos/totk/logo.png`}
-                    alt="logo"
-                    style={{ objectFit: "contain", height: "auto" }}
-                    priority={true}
-                  />
-                </Link>
+              <DrawerHeader
+                textAlign="center"
+                _hover={{ cursor: "pointer" }}
+                px={2}
+              >
+                <HStack>
+                  <Link href={`/game/totk`}>
+                    <Image
+                      width={360}
+                      height={60}
+                      src={`/images/logos/totk/logo.png`}
+                      alt="logo"
+                      style={{ objectFit: "contain", height: "auto" }}
+                      priority={true}
+                    />
+                  </Link>
+                  <Box
+                    onClick={() => setSidebarOpen(!sidebarOpen)}
+                    _hover={{
+                      cursor: "pointer",
+                    }}
+                    px={2}
+                  >
+                    X
+                  </Box>
+                </HStack>
               </DrawerHeader>
               <DrawerBody px="0" pb="0">
                 <VStack>

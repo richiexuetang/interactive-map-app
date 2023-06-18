@@ -5,12 +5,9 @@ const MapContext = createContext(undefined);
 
 export function MapProvider({ children }) {
   const [config, setConfig] = useState({});
-  const [categoryItems, setCategoryItems] = useState({});
   const [markerRefs, setMarkerRefs] = useState({});
   const [categoryCounts, setCategoryCounts] = useState({});
 
-  const [markerGroups, setMarkerGroups] = useState([]);
-  const [noteMarkers, setNoteMarkers] = useState([]);
   const [categoryMap, setCategoryMap] = useState<MapOrEntries<string, string>>(
     []
   );
@@ -20,16 +17,10 @@ export function MapProvider({ children }) {
       value={{
         config,
         setConfig,
-        categoryItems,
-        setCategoryItems,
         markerRefs,
         setMarkerRefs,
         categoryCounts,
         setCategoryCounts,
-        markerGroups,
-        setMarkerGroups,
-        noteMarkers,
-        setNoteMarkers,
         categoryMap,
         setCategoryMap,
       }}

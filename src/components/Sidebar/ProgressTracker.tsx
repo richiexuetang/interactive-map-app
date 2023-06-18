@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
-import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
-  IconButton,
   Button,
   HStack,
   Card,
@@ -13,6 +11,7 @@ import {
   Text,
   Flex,
   Image,
+  VStack,
 } from "@chakra-ui/react";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
 import {
@@ -25,7 +24,7 @@ import useLocalStorage from "@hooks/useLocalStorage";
 import { useMapContext } from "@context/app-context";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
 
-function ProgressTracker() {
+function ProgressTracker({ markerGroups }) {
   const chakraStyles: ChakraStylesConfig = {
     option: (provided) => ({
       ...provided,
@@ -45,22 +44,24 @@ function ProgressTracker() {
     }),
   };
 
-  const { markerGroups, categoryCounts, config } = useMapContext();
+  const { categoryCounts, config } = useMapContext();
   const { gameSlug, name: mapSlug } = config;
+
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
   const [userSettings, setUserSettings] = useLocalStorage(
     USER_SETTING,
     initialUserSettings
   );
+
   const [trackedCategory, setTrackedCategory] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [trackingOptions, setTrackingOptions] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  useEffect(() => {
-    const trackSettings = userSettings[SETTING_TRACKER];
+  const trackingSetting = userSettings[SETTING_TRACKER];
 
-    if (!trackSettings?.hasOwnProperty(gameSlug)) {
+  useMemo(() => {
+    if (!trackingSetting?.hasOwnProperty(gameSlug)) {
       setUserSettings((prev) => ({
         ...prev,
         [SETTING_TRACKER]: {
@@ -69,7 +70,7 @@ function ProgressTracker() {
         },
       }));
     }
-    if (!trackSettings[gameSlug]?.hasOwnProperty(mapSlug)) {
+    if (!trackingSetting[gameSlug]?.hasOwnProperty(mapSlug)) {
       setUserSettings((prev) => ({
         ...prev,
         [SETTING_TRACKER]: {
@@ -127,14 +128,15 @@ function ProgressTracker() {
     if (!ids) return 0;
 
     for (const key in completedMarkers) {
-      result = ids.includes(key) ? result + 1 : result;
-      continue;
+      result = completedMarkers[key] === categoryId ? result + 1 : result;
     }
     return result;
   };
 
   const removeTrackedCategory = (category) => {
-    const newList = userSettings[SETTING_TRACKER][gameSlug][mapSlug].filter(item => item !== category);
+    const newList = userSettings[SETTING_TRACKER][gameSlug][mapSlug].filter(
+      (item) => item !== category
+    );
     setUserSettings((prev) => ({
       ...prev,
       [SETTING_TRACKER]: {
@@ -156,16 +158,17 @@ function ProgressTracker() {
   };
 
   const trackCategories = () => {
-    const tracked = userSettings[SETTING_TRACKER][gameSlug][mapSlug];
+    let tracked = userSettings[SETTING_TRACKER][gameSlug][mapSlug];
     selectedCategories.map((value) => {
       if (!tracked.includes(value)) {
+        tracked = [...tracked, value];
         setUserSettings((prev) => ({
           ...prev,
           [SETTING_TRACKER]: {
             ...prev[SETTING_TRACKER],
             [gameSlug]: {
               ...prev[SETTING_TRACKER][gameSlug],
-              [mapSlug]: [...prev[SETTING_TRACKER][gameSlug][mapSlug], value],
+              [mapSlug]: tracked,
             },
           },
         }));
@@ -177,66 +180,74 @@ function ProgressTracker() {
 
   return (
     <div className="leaflet-top leaflet-left">
-      <div className="leaflet-control leaflet-bar">
+      <div className="leaflet-control leaflet-bar" style={{ margin: "0" }}>
         {!sidebarOpen ? (
-          <>
-            <IconButton
-              icon={
-                sidebarOpen ? (
-                  <ChevronLeftIcon w="23px" h="48px" />
-                ) : (
-                  <ChevronRightIcon w="23px" h="48px" />
-                )
-              }
-              zIndex="1000"
-              float="left"
-              left={1}
-              top="3px"
-              bg="#221c0f"
-              pos="absolute"
-              colorScheme="sidebarArrow"
-              variant="outline"
-              cursor="pointer"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              aria-label="sidebar-button"
-            />
-          </>
+          <Box
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            bg="#221c0f"
+            px={2}
+            py={4}
+            mt={4}
+            _hover={{ cursor: "pointer", border: "1px solid #fbe4bd" }}
+          >
+            &gt;
+          </Box>
         ) : (
-          <Card colorScheme="app.modal" w="sm">
+          <Card colorScheme="app.modal" maxW="300px">
             <CardHeader>
               <HStack justifyContent="space-between">
                 <Text fontSize="lg">Progress Tracker</Text>
-                <CloseButton onClick={() => setSidebarOpen(false)} />
+                <Box
+                  _hover={{
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  X
+                </Box>
               </HStack>
             </CardHeader>
-            <CardBody px="0">
+            <CardBody px={2}>
               {trackedCategory.map((category) => (
-                <Button
-                  display="flex"
-                  flexDir="row"
-                  justifyContent="space-between"
-                  w="full"
-                  bg="sidebar.content"
-                  mb={5}
-                >
-                  <Flex w={5} h={6} alignItems="center" justifyContent="center">
-                    <Image
-                      src={`/images/icons/${category}.png`}
-                      alt={`/images/icons/${category}.png`}
-                      fallbackSrc="/images/icons/111.png"
-                    />
-                  </Flex>
-                  <Box>{categoryIdNameMap[category]}</Box>
-                  <Box>
-                    {getCompletedCount(category)}/{categoryCounts[category]}
-                  </Box>
-                  <CloseButton
+                <Flex key={category} mb={5} alignItems="center">
+                  <Button
+                    justifyContent="space-between"
+                    w="full"
+                    bg="sidebar.content"
+                    _hover={{ bg: "#2a2927" }}
+                    py="0"
+                    px={2}
+                  >
+                    <Flex w={5} h={6}>
+                      <Image
+                        src={`/images/icons/${category}.png`}
+                        alt={`/images/icons/${category}.png`}
+                        fallbackSrc="/images/icons/111.png"
+                      />
+                    </Flex>
+                    <Text fontWeight="normal">
+                      {categoryIdNameMap[category]}
+                    </Text>
+                    <Text fontWeight="normal">
+                      {getCompletedCount(category)}/{categoryCounts[category]}
+                    </Text>
+                  </Button>
+                  <Box
                     onClick={() => removeTrackedCategory(category)}
-                  />
-                </Button>
+                    _hover={{
+                      cursor: "pointer",
+                      border: "1px solid #fbe4bd",
+                    }}
+                    border="1px solid #967959"
+                    px={2}
+                    mr={2}
+                  >
+                    X
+                  </Box>
+                </Flex>
               ))}
 
-              <HStack justifyContent="center">
+              <VStack gap={2}>
                 {trackingOptions.length && (
                   <Select
                     chakraStyles={chakraStyles}
@@ -251,11 +262,15 @@ function ProgressTracker() {
                 )}
 
                 {selectedCategories && (
-                  <Button onClick={trackCategories} mt={6}>
-                    Track
+                  <Button
+                    onClick={trackCategories}
+                    _hover={{ border: "1px solid #fbe4bd" }}
+                    mt={10}
+                  >
+                    <Text>Track</Text>
                   </Button>
                 )}
-              </HStack>
+              </VStack>
             </CardBody>
           </Card>
         )}

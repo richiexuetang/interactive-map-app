@@ -110,12 +110,11 @@ const MapPage = ({
   const { asPath } = useRouter();
   const [loading] = useLoading();
 
-  const { setConfig, setCategoryCounts, setMarkerGroups, categoryMap, setCategoryMap } = useMapContext();
+  const { setConfig, setCategoryCounts, categoryMap, setCategoryMap } = useMapContext();
 
   useEffect(() => {
     setConfig(config);
     setCategoryCounts(categoryCounts);
-    setMarkerGroups(groups);
   }, [asPath]);
 
   useEffect(() => {
@@ -144,8 +143,8 @@ const MapPage = ({
         </Box>
       ) : (
         <>
-          <AppMap textOverlay={textOverlay} pathMarkers={pathMarkers} />
-          <ProgressTracker />
+          <AppMap textOverlay={textOverlay} pathMarkers={pathMarkers} markerGroups={groups}/>
+          <ProgressTracker markerGroups={groups}/>
         </>
       )}
     </>

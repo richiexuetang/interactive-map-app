@@ -20,8 +20,8 @@ const GroupItem = ({ onLayerClick, layerObj }) => {
     USER_SETTING,
     initialUserSettings
   );
-  const [completedMarkers] = useLocalStorage(COMPLETED, {});
-  const { categoryCounts, markerGroups } = useMapContext();
+  
+  const { categoryCounts } = useMapContext();
 
   const [show, setShow] = useState(layerObj.checked);
   const [imageUrl, setImageUrl] = useState(

@@ -56,9 +56,9 @@ const GroupedLayer = dynamic(
 );
 
 const AppMap = (props) => {
-  const { textOverlay, pathMarkers } = props;
+  const { textOverlay, pathMarkers, noteMarkers, markerGroups } = props;
   const [storageSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
-  const { config, markerGroups, noteMarkers } = useMapContext();
+  const { config } = useMapContext();
   const [completedMarkers] = useLocalStorage(COMPLETED, {});
 
   const [userHideComplete, setUserHideComplete] = useState(
