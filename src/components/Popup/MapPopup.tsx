@@ -2,7 +2,7 @@ import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
-import { EditIcon, LinkIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, LinkIcon } from "@chakra-ui/icons";
 import {
   Box,
   Checkbox,
@@ -46,7 +46,7 @@ const MapPopup = (props) => {
   const handleCompleteCheck = (e) => {
     setCompletedMarkers((prev) => ({
       ...prev,
-      [markerId]: e.target.checked,
+      [markerId]: e.target.checked ? markerInfo.categoryId : null,
     }));
     setCompleted(e.target.checked);
   };
@@ -62,27 +62,22 @@ const MapPopup = (props) => {
       lat: newLat,
       lng: newLng,
       description,
+      categoryId,
+      markerType,
     } = values;
-    const { id, descriptions } = markerInfo;
 
     try {
-      let newDesc = [...descriptions];
-      if (descriptions.length > 0) {
-        newDesc = [...descriptions];
-      }
-      if (description) {
-        newDesc = [...newDesc, description];
-      }
-
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + id,
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/editMarker?id=` + markerId,
         {
           method: "POST",
           body: JSON.stringify({
             markerName: newName,
             lat: newLat,
             lng: newLng,
-            descriptions: newDesc,
+            description: description,
+            categoryId: categoryId,
+            markerTypeId: markerType,
           }),
           headers: {
             Accept: "application/json, text/plain, */*",
@@ -98,6 +93,28 @@ const MapPopup = (props) => {
     }
   };
 
+  const onDelete = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/deleteMarker?id=` + markerId,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            id: markerId,
+          }),
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      await response.json();
+
+      toast.success("Marker delete success");
+    } catch (errorMessage: any) {
+      toast.error(errorMessage);
+    }
+  };
   useEffect(() => {
     if (markerInfo) {
       setLoaded(true);
@@ -109,15 +126,7 @@ const MapPopup = (props) => {
       <RMForm
         onClose={onClose}
         isOpen={isOpen}
-        markerInfo={{
-          id: markerId,
-          lat: markerInfo.lat,
-          lng: markerInfo.lng,
-          markerName: markerInfo.markerName,
-          descriptions: markerInfo.descriptions,
-          markerTypeId: markerInfo.markerTypeId,
-          categoryId: markerInfo.categoryId,
-        }}
+        markerInfo={markerInfo}
         onSubmit={onEditSubmit}
       />
     );
@@ -145,37 +154,46 @@ const MapPopup = (props) => {
                   onClick={handleCopyLink}
                 />
                 {status === "authenticated" && (
-                  <EditIcon
-                    ml={3}
-                    _hover={{ cursor: "pointer" }}
-                    onClick={onOpen}
-                  />
+                  <>
+                    <EditIcon
+                      ml={3}
+                      _hover={{ cursor: "pointer" }}
+                      onClick={onOpen}
+                    />
+                    <DeleteIcon
+                      ml={3}
+                      _hover={{ cursor: "pointer" }}
+                      onClick={onDelete}
+                    />
+                  </>
                 )}
               </Text>
               <Text>
                 {markerInfo && categoryIdNameMap[markerInfo.categoryId]}
               </Text>
 
-              {markerInfo?.descriptions &&
-                markerInfo.descriptions.map((desc, i) => (
-                  <div
-                    key={i}
-                    style={{ margin: "0.25em" }}
-                    dangerouslySetInnerHTML={{ __html: desc }}
-                  />
-                ))}
+              {markerInfo.description && (
+                <div
+                  key={markerId}
+                  style={{ margin: "0.25em", color: "#fbe4bd" }}
+                  dangerouslySetInnerHTML={{ __html: markerInfo.description }}
+                />
+              )}
             </Stack>
           </HStack>
 
           <Divider pt={2} />
-          <Box my={2} textAlign="center" pl={3}>
+          <Box
+            textAlign="center"
+            _hover={{ cursor: "pointer", bg: "whiteAlpha.300" }}
+          >
             <Checkbox
+              py={2}
               isChecked={completed}
+              spacing={2}
               onChange={(e) => handleCompleteCheck(e)}
             >
-              <Text letterSpacing={0} mb="0 !important">
-                Completed
-              </Text>
+              Completed
             </Checkbox>
           </Box>
         </>

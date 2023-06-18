@@ -9,19 +9,21 @@ export default async (req, res) => {
       categoryId,
       mapSlug,
       gameSlug,
-      descriptions,
+      description,
       coordinate,
       markerTypeId,
     } = req.body;
 
     const marker = await db.collection("markers").insertOne({
-      markerName: markerName,
-      categoryId: categoryId,
+      markerName,
+      categoryId,
       coordinate: coordinate,
-      descriptions: descriptions,
-      markerTypeId: markerTypeId,
-      mapSlug: mapSlug, 
-      gameSlug: gameSlug
+      description: description,
+      markerTypeId,
+      mapSlug: mapSlug,
+      gameSlug: gameSlug,
+      lat: coordinate[0],
+      lng: coordinate[1]
     });
 
     res.json(marker);

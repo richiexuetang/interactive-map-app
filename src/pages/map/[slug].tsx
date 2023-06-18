@@ -1,139 +1,75 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { NextSeo } from "next-seo";
 
 import { areaConfig } from "@data/areaConfig";
-import { categoryItemsConfig } from "@data/categoryItemsConfig";
-import { mapConfig } from "@data/index";
-import { useMapContext } from "src/context/app-context";
+import { categoryItemsConfig, mapConfig } from "@data/index";
+import { useMapContext } from "@context/app-context";
 import AppMap from "@components/Map/AppMap";
 import { Loader } from "@components/Loader";
+import { useLoading } from "@hooks/useLoading";
+import { getGroupName } from "@lib/getGroupName";
 import { useRouter } from "next/router";
+import { Box } from "@chakra-ui/react";
+import ProgressTracker from "@components/Sidebar/ProgressTracker";
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
 
   const config = areaConfig.find((o) => o.name === areaId);
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}`
+  const markerType = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}/1`
   );
+  const markersList = await markerType.json();
 
-  const { data: markers } = await res.json();
-  const markersList = [];
-  const textOverlay = [];
-  const clusterGroups = [];
-  const pathMarkers = [];
+  const textMarkerType = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}/2`
+  );
+  const textOverlay = await textMarkerType.json();
 
-  const markerGroups = [];
+  const clusterType = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}/3`
+  );
+  const clusterMarkers = await clusterType.json();
+
+  const pathType = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}/4`
+  );
+  const pathMarkers = await pathType.json();
+
   const categoryCounts = {};
-  const seen = new Set();
-  const seenCategory = new Set();
 
-  markers.map((marker) => {
-    const {
-      markerTypeId,
-      categoryId,
-      _id,
-      coordinate,
-      markerName,
-      zoomRange,
-      path,
-      parentId,
-      descriptions,
-    } = marker;
+  const markers = [...markersList, ...clusterMarkers];
+  const groups = [];
 
+  pathMarkers.map(({categoryId}) => {
     categoryCounts[categoryId] = categoryCounts[categoryId] + 1 || 1;
+  })
+  
+  markers.map((marker, rank) => {
+    categoryCounts[marker.categoryId] =
+      categoryCounts[marker.categoryId] + 1 || 1;
+    const { categoryId, coordinate, markerTypeId, _id: id } = marker;
 
-    if (markerTypeId === 1) {
-      const standard = {
-        id: _id,
-        coordinate: coordinate,
-        categoryId: categoryId,
-        markerName: markerName,
-        descriptions: descriptions,
-      };
-
-      markersList.push(standard);
-    } else if (markerTypeId === 2) {
-      const textOverlayMarker = {
-        id: _id,
-        coordinate: coordinate,
-        markerName: markerName,
-        zoomRange: zoomRange,
-      };
-
-      textOverlay.push(textOverlayMarker);
-    } else if (markerTypeId === 3) {
-      if (seen.has(categoryId)) {
-        clusterGroups.map((group, i) => {
-          if (group.categoryId === categoryId) {
-            const current = clusterGroups[i].coordinates;
-            const newCoords = [...current, coordinate];
-            clusterGroups[i].coordinates = [...newCoords];
-          }
-        });
-      } else {
-        let groupName = "";
-        categoryItemsConfig.map((item) => {
-          if (item.gameSlug === config.gameSlug) {
-            item.categoryGroups.map(({ members, name }) => {
-              if (members.includes(categoryId)) {
-                groupName = name;
-              }
-            });
-          }
-        });
-
-        clusterGroups.push({
-          categoryId: categoryId,
-          coordinates: [coordinate],
-          group: groupName
-        });
-        seen.add(categoryId);
-      }
-    } else if (markerTypeId === 4) {
-      pathMarkers.push({ path: path, parentId: parentId });
-    }
-  });
-
-  const sortedMarkers = [...markersList];
-  sortedMarkers.sort((a, b) => b.coordinate[0] - a.coordinate[0]);
-
-  sortedMarkers.map(({ categoryId, coordinate, id }, rank) => {
-    if (seenCategory.has(categoryId)) {
-      markerGroups.map((group, i) => {
-        const {
-          coordinates: groupCoordinates,
-          ids: currIds,
-          categoryId: currCategoryId,
-          ranks,
-        } = group;
-        if (currCategoryId === categoryId) {
-          markerGroups[i].coordinates = [...groupCoordinates, coordinate];
-          markerGroups[i].ids = [...currIds, id];
-          markerGroups[i].ranks = [...ranks, rank];
-        }
-      });
-    } else {
-      let groupName = "locations";
-      categoryItemsConfig.map((item) => {
-        if (item.gameSlug === config.gameSlug) {
-          item.categoryGroups.map(({ members, name }) => {
-            if (members.includes(categoryId)) {
-              groupName = name;
-            }
-          });
-        }
-      });
-
-      markerGroups.push({
+    const groupIndex = groups.findIndex(
+      (group) => group.categoryId === categoryId
+    );
+    if (groupIndex === -1) {
+      const groupName = getGroupName(config.gameSlug, categoryId);
+      const newGroup = {
         categoryId: categoryId,
         coordinates: [coordinate],
+        group: groupName,
+        markerTypeId: markerTypeId,
         ids: [id],
         ranks: [rank],
-        group: groupName,
-      });
-      seenCategory.add(categoryId);
+      };
+      groups.push(newGroup);
+    } else {
+      const categoryGroup = groups[groupIndex];
+      categoryGroup.coordinates = [...categoryGroup.coordinates, coordinate];
+      categoryGroup.ids = [...categoryGroup.ids, id];
+      categoryGroup.ranks = [...categoryGroup.ranks, rank];
     }
   });
 
@@ -142,9 +78,8 @@ export async function getStaticProps(context) {
       config,
       categoryCounts,
       textOverlay,
-      clusterGroups,
       pathMarkers,
-      markerGroups,
+      groups,
     },
     revalidate: 10,
   };
@@ -169,58 +104,49 @@ const MapPage = ({
   config,
   categoryCounts,
   textOverlay,
-  clusterGroups,
   pathMarkers,
-  markerGroups,
+  groups,
 }) => {
-  const router = useRouter();
+  const { asPath } = useRouter();
+  const [loading] = useLoading();
 
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const handleStart = (url) => url !== router.asPath && setLoading(true);
-    const handleComplete = (url) => url === router.asPath && setLoading(false);
-
-    router.events.on("routeChangeStart", handleStart);
-    router.events.on("routeChangeComplete", handleComplete);
-    router.events.on("routeChangeError", handleComplete);
-
-    return () => {
-      router.events.off("routeChangeStart", handleStart);
-      router.events.off("routeChangeComplete", handleComplete);
-      router.events.off("routeChangeError", handleComplete);
-    };
-  });
-
-  const {
-    setConfig,
-    setCategoryCounts,
-    setTextOverlay,
-    setPathMarkers,
-    setClusterGroups,
-    setMarkerGroups,
-  } = useMapContext();
+  const { setConfig, setCategoryCounts, categoryMap, setCategoryMap } = useMapContext();
 
   useEffect(() => {
     setConfig(config);
     setCategoryCounts(categoryCounts);
-    setTextOverlay(textOverlay);
-    setPathMarkers(pathMarkers);
-    setClusterGroups(clusterGroups);
-    setMarkerGroups(markerGroups);
-  }, []);
+  }, [asPath]);
 
-  if (loading) {
-    return <Loader loading={loading} />;
-  }
+  useEffect(() => {
+    if (!categoryMap.length) {
+      const categoryGroups = categoryItemsConfig.find(
+        (item) => item.gameSlug === config.gameSlug
+      )?.categoryGroups;
 
+      categoryGroups.map(({members}) => {
+        members.map(member => {
+          setCategoryMap(prev => ([...prev, member]));
+        })
+      } )
+    }
+  });
+  
   return (
     <>
       <NextSeo
         title="Interactive Map for Zelda: Tears of the Kingdom totk | Witcher 3"
         description="Interactive Map for Zelda: Tears of the Kingdom totk | Witcher 3"
       />
-      <AppMap />
+      {loading ? (
+        <Box display="block" top="100px !important" mt="300px">
+          <Loader loading={loading} />
+        </Box>
+      ) : (
+        <>
+          <AppMap textOverlay={textOverlay} pathMarkers={pathMarkers} markerGroups={groups}/>
+          <ProgressTracker markerGroups={groups}/>
+        </>
+      )}
     </>
   );
 };

@@ -1,32 +1,46 @@
 //@ts-nocheck
 import React, { useState } from "react";
 import * as ReactLeaflet from "react-leaflet";
-import L from "leaflet";
+import { usePathname } from "next/navigation";
 
-import "leaflet/dist/leaflet.css";
 import "leaflet-contextmenu";
+import "leaflet/dist/leaflet.css";
 import "leaflet-contextmenu/dist/leaflet.contextmenu.css";
 import "./leaflet.smooth-wheel-zoom.js";
 import { useMapContext } from "@context/.";
+import { useCopyToClipboard } from "@hooks/index";
 
 const { MapContainer } = ReactLeaflet;
 
 const RMMapContainer = ({ children }) => {
-  const { setNoteMarkers } = useMapContext();
-  const [map, setMap] = useState(null);
-  const { config } = useMapContext();
+  const pathname = usePathname();
+  const { config, setNoteMarkers } = useMapContext();
+  const [zoomLevel, setZoomLevel] = useState(config.zoom);
+
+  const [value, copy] = useCopyToClipboard();
 
   const addMarker = (e) => {
     const currentPosition = e.latlng;
+
     setNoteMarkers((prev) => [
       ...prev,
       [currentPosition.lat, currentPosition.lng],
     ]);
   };
 
+  const copyMapViewUrl = (e) => {
+    const { lat, lng } = e.latlng;
+
+    console.log(zoomLevel);
+    copy(
+      `${process.env.BASE_URL}${pathname}?x=${lat}&y=${lng}&zoom=${zoomLevel}`
+    );
+  };
+
   return (
     <MapContainer
       style={{ background: "black", height: "100vh", width: "100vw" }}
+      zoomControl={false}
       scrollWheelZoom={false}
       attributionControl={false}
       center={config.center}
@@ -34,18 +48,21 @@ const RMMapContainer = ({ children }) => {
       bounds={config.bounds}
       minZoom={config.minZoom}
       maxZoom={config.maxZoom}
-      whenReady={(map) => setMap(map)}
       contextmenu={true}
       contextmenuItems={[
         {
           text: "Add marker",
           callback: (e) => addMarker(e),
         },
+        {
+          text: "Copy Map View Url",
+          callback: (e) => copyMapViewUrl(e),
+        },
       ]}
       smoothWheelZoom={true}
       smoothSensitivity={15}
     >
-      {children(ReactLeaflet, L)}
+      {children(ReactLeaflet, setZoomLevel)}
     </MapContainer>
   );
 };

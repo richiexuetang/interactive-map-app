@@ -6,16 +6,14 @@ import { Box, Flex } from "@chakra-ui/react";
 
 import { useMapContext } from "src/context/app-context";
 import { useMap } from "react-leaflet";
-import { useRouter } from "next/router";
 
 const SearchResult = ({ result }) => {
-  const router = useRouter();
   const { markerRefs, config } = useMapContext();
   const {
     _id: id,
     categoryId,
     markerName,
-    descriptions,
+    description,
     coordinate,
     mapSlug,
   } = result;
@@ -28,13 +26,11 @@ const SearchResult = ({ result }) => {
     if (mapSlug === config.name) {
       map.flyTo(coordinate, map.getMaxZoom(), {
         animate: true,
-        duration: 0.5,
+        duration: 1,
       });
-    } else {
-      router.replace(`/map/${mapSlug}?markerId=${id}`, undefined, {
-        shallow: true,
-      });
-    }
+      
+      markerRefs?.[id]?.openPopup();
+    } 
   };
 
   const handleMouseEnter = () => {
@@ -44,10 +40,7 @@ const SearchResult = ({ result }) => {
       });
       setMarkerOverlays({ ...markerOverlays, [id]: overlay });
       map.addLayer(overlay);
-      map.flyTo(coordinate, map.getMaxZoom(), {
-        animate: true,
-        duration: 0.5,
-      });
+      map.flyTo(coordinate, map.getMaxZoom() - 2);
     }
   };
 
@@ -102,13 +95,9 @@ const SearchResult = ({ result }) => {
         <Box>{markerName} </Box>
       </Flex>
 
-      {descriptions && descriptions.map((desc, i) => {
-        return (
-          <Box mb="1rem" key={id + i}>
-            <div dangerouslySetInnerHTML={{ __html: desc }} />
-          </Box>
-        );
-      })}
+      <Box mb="1rem">
+        <div dangerouslySetInnerHTML={{ __html: description }} />
+      </Box>
     </Box>
   );
 };

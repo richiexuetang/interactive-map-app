@@ -2,6 +2,7 @@ import { extendTheme } from "@chakra-ui/react";
 
 import { Button } from "./ButtonStyles";
 import { inputTheme } from "./InputTheme";
+import { cardTheme } from "./CardTheme";
 
 const styles = {
   global: () => ({
@@ -22,22 +23,23 @@ const styles = {
       height: "auto",
     },
     ol: {
-        pl: '20px' 
+      pl: "20px",
     },
     ul: {
-        pl: '20px'
+      pl: "20px",
     },
     button: {
-      pointEvents: "pointer"
+      pointEvents: "pointer",
     },
     p: {
-      pt: '4px'
-    }
+      pt: "4px",
+    },
   }),
 };
 
 const components = {
   Button,
+  Card: cardTheme,
   Modal: {
     baseStyle: () => ({
       dialog: {
@@ -60,6 +62,11 @@ const components = {
     },
   },
   Input: inputTheme,
+  Text: {
+    baseStyle: {
+      color: "#fbe4bd",
+    },
+  },
 };
 
 const config = {

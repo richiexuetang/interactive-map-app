@@ -1,17 +1,16 @@
+import { MapOrEntries } from "@hooks/useMapObject";
 import { createContext, useContext, useState } from "react";
 
 const MapContext = createContext(undefined);
 
 export function MapProvider({ children }) {
   const [config, setConfig] = useState({});
-  const [categoryItems, setCategoryItems] = useState({});
   const [markerRefs, setMarkerRefs] = useState({});
   const [categoryCounts, setCategoryCounts] = useState({});
 
-  const [textOverlay, setTextOverlay] = useState([]);
-  const [clusterGroups, setClusterGroups] = useState([]);
-  const [pathMarkers, setPathMarkers] = useState([]);
-  const [markerGroups, setMarkerGroups] = useState([]);
+  const [categoryMap, setCategoryMap] = useState<MapOrEntries<string, string>>(
+    []
+  );
   const [noteMarkers, setNoteMarkers] = useState([]);
 
   return (
@@ -19,20 +18,12 @@ export function MapProvider({ children }) {
       value={{
         config,
         setConfig,
-        categoryItems,
-        setCategoryItems,
         markerRefs,
         setMarkerRefs,
         categoryCounts,
         setCategoryCounts,
-        textOverlay,
-        setTextOverlay,
-        setClusterGroups,
-        clusterGroups,
-        pathMarkers,
-        setPathMarkers,
-        markerGroups,
-        setMarkerGroups,
+        categoryMap,
+        setCategoryMap,
         noteMarkers,
         setNoteMarkers,
       }}

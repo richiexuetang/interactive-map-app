@@ -9,8 +9,14 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Select,
 } from "@chakra-ui/react";
 import RichEditor from "@components/Editor/RichEditor";
+import { useMapContext } from "@context/app-context";
+import {
+  categoryIdNameMap,
+  categoryItemsConfig,
+} from "@data/categoryItemsConfig";
 import { useFormik } from "formik";
 import * as React from "react";
 import * as Yup from "yup";
@@ -23,13 +29,15 @@ const validationSchema = Yup.object({
 });
 
 const RMForm = (props) => {
+  const { categoryMap, setCategoryMap, config } = useMapContext();
   const { markerInfo = {}, isOpen, onClose, onSubmit } = props;
   const {
-    lat = null,
-    lng = null,
+    lat,
+    lng,
     markerName = "",
     markerTypeId = 1,
-    categoryId = 69,
+    categoryId = 58,
+    description = "",
   } = markerInfo;
 
   const formik = useFormik({
@@ -37,12 +45,26 @@ const RMForm = (props) => {
       markerName: markerName,
       markerType: markerTypeId,
       categoryId: categoryId,
-      lat: lat,
-      lng: lng,
-      description: "",
+      lat: parseFloat(lat),
+      lng: parseFloat(lng),
+      description: description,
     },
     onSubmit: () => {},
     validationSchema: validationSchema,
+  });
+
+  React.useEffect(() => {
+    if (!categoryMap.length) {
+      const categoryGroups = categoryItemsConfig.find(
+        (item) => item.gameSlug === config.gameSlug
+      )?.categoryGroups;
+
+      categoryGroups.map(({members}) => {
+        members.map(member => {
+          setCategoryMap(prev => ([...prev, member]));
+        })
+      } )
+    }
   });
 
   return (
@@ -75,6 +97,19 @@ const RMForm = (props) => {
               onChange={formik.handleChange}
               value={formik.values.categoryId}
             />
+            <Select
+              name="categoryId"
+              onChange={formik.handleChange}
+              value={formik.values.categoryId}
+            >
+              {categoryMap.map((category) => {
+                return (
+                  <option value={category}>
+                    {categoryIdNameMap[category]}
+                  </option>
+                );
+              })}
+            </Select>
 
             <FormLabel>Latitude:</FormLabel>
             <Input
@@ -91,7 +126,7 @@ const RMForm = (props) => {
             />
 
             <FormLabel>New Description:</FormLabel>
-            <Box paddingInline="1rem" border="1px solid" h="400px">
+            <Box paddingInline="1rem" border="1px solid">
               <RichEditor
                 setFieldValue={(val) =>
                   formik.setFieldValue("description", val)

@@ -1,19 +1,19 @@
 import Polyline from "./PolyLine";
 
-import { useMapContext } from "@context/app-context";
+const PolyLines = (props) => {
+  const { pathMarkers } = props;
 
-const PolyLines = () => {
-  const { pathMarkers } = useMapContext();
-  
   return (
     <>
       {pathMarkers &&
-        pathMarkers.map(({parentId, path}) => {
+        pathMarkers.map(({ parentId, path, _id, categoryId }, i) => {
           return (
             <Polyline
-              key={parentId}
-              parentId={parentId}
+              key={`${parentId} + ${i}`}
               path={path}
+              parentId={parentId}
+              categoryId={categoryId}
+              id={_id}
             />
           );
         })}

@@ -1,47 +1,94 @@
 import React, { useState } from "react";
-import { Input } from "@chakra-ui/react";
+import {
+  Button,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightAddon,
+} from "@chakra-ui/react";
+import { CloseIcon, Search2Icon } from "@chakra-ui/icons";
+
 import { useMapContext } from "@context/app-context";
 
-const SearchInput = ({ setResults }) => {
+const SearchInput = ({ setResults, setSearching, setSearchState }) => {
   const [value, setValue] = useState("");
-  let seen = new Set();
-  const {config} = useMapContext();
+  const { config } = useMapContext();
 
   const handleKeyPress = async (e) => {
     if (e.key === "Enter") {
-      setResults([]);
-      seen = new Set();
-
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_APP_URL}/api/findMarker?searchParam=` +
-            e.target.value + `&mapSlug=${config.name}`
-        );
-        const json = await res.json();
-        setResults([...json]);
-      } catch (error) {
-        console.log(error);
-      }
+      await search(e.target.value);
     }
   };
 
+  const search = async (searchParam) => {
+    setSearching(true);
+    setResults([]);
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/findMarker?searchParam=` +
+          searchParam +
+          `&mapSlug=${config.name}`
+      );
+      const json = await res.json();
+      setResults(json);
+      setSearching(false);
+      if (json.length) {
+        setSearchState("COMPLETE");
+      } else {
+        setSearchState("NO RESULT");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const resetInput = () => {
+    setValue("");
+    setResults([]);
+    setSearchState("IDLE");
+  };
+
   return (
-    <Input
-      variant="outlined"
-      borderColor="#584835"
-      focusBorderColor="#af894d"
-      placeholder="Search..."
-      value={value}
-      onChange={(e) => {
-        setValue(e.target.value);
-        setResults([]);
-      }}
-      onReset={() => {
-        setValue("");
-        setResults([]);
-      }}
-      onKeyUp={(e) => handleKeyPress(e)}
-    />
+    <>
+      <InputGroup borderRadius={0} size="sm">
+        <InputLeftElement
+          children={
+            value ? (
+              <CloseIcon
+                color="#af894d"
+                _hover={{ cursor: "pointer" }}
+                onClick={resetInput}
+              />
+            ) : (
+              <Search2Icon color="#af894d" />
+            )
+          }
+        />
+        <Input
+          variant="outlined"
+          placeholder="Search..."
+          value={value}
+          onChange={(e) => {
+            setValue(e.target.value);
+            setResults([]);
+            setSearchState("IDLE");
+          }}
+          onKeyUp={(e) => handleKeyPress(e)}
+        />
+        <InputRightAddon p={0} border="none">
+          <Button
+            size="sm"
+            borderLeftRadius={0}
+            borderRightRadius={3.3}
+            border="1px solid #af894d"
+            onClick={() => search(value)}
+          >
+            Search
+          </Button>
+        </InputRightAddon>
+      </InputGroup>
+    </>
   );
 };
 

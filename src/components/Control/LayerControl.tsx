@@ -6,29 +6,28 @@ import createControlledLayer from "./controlledLayer";
 
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
   Box,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerHeader,
-  IconButton as CIconButton,
   VStack,
   Button,
   HStack,
 } from "@chakra-ui/react";
 import { useMapContext } from "@context/app-context";
-import { CategoryGroup, SearchInput, SearchResults } from "@components/Sidebar";
+import { SearchInput, SearchResults } from "@components/Sidebar";
 import {
-  SETTING_HIDE_ALL,
+  SETTING_HIDDEN_CATEGORY,
   SETTING_HIDE_COMPLETED,
   USER_SETTING,
   initialUserSettings,
 } from "@data/LocalStorage";
 import { useRouter } from "next/router";
 import useLocalStorage from "@hooks/useLocalStorage";
+import GroupContainer from "@components/Sidebar/CategoryGroup/GroupContainer";
+import { Loader } from "@components/Loader";
 
 const POSITION_CLASSES = {
   bottomleft: "leaflet-bottom leaflet-left",
@@ -49,9 +48,11 @@ function LayerControl({ position, children, setRefresh }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [layers, setLayers] = useState([]);
   const positionClass =
-    (position && POSITION_CLASSES[position]) || POSITION_CLASSES.bottomleft;
+    (position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright;
   const [groupedLayers, setGroupedLayers] = useState({});
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState([]); //search
+  const [searching, setSearching] = useState(false);
+  const [searchState, setSearchState] = useState("IDLE");
 
   const [hideCompleted, setHideCompleted] = useState(
     storageSettings[SETTING_HIDE_COMPLETED]
@@ -73,11 +74,6 @@ function LayerControl({ position, children, setRefresh }) {
     layeradd: () => {
       // console.log("layer add");
     },
-    // click: (e) => {
-    //   var pixelPosition = e.layerPoint;
-    //   var latLng = map.layerPointToLatLng(pixelPosition);
-    //   console.log("" + latLng.lat + "," + latLng.lng);
-    // },
   });
 
   const onLayerClick = (layerObj) => {
@@ -122,9 +118,17 @@ function LayerControl({ position, children, setRefresh }) {
   };
 
   const handleHideShowAll = (val) => {
+    const hiddenState = storageSettings[SETTING_HIDDEN_CATEGORY];
+
+    for (const [key, value] of Object.entries(hiddenState)) {
+      hiddenState[key] = val;
+    }
+
     setStorageSettings((prev) => ({
       ...prev,
-      [SETTING_HIDE_ALL]: val,
+      [SETTING_HIDDEN_CATEGORY]: {
+        ...hiddenState,
+      },
     }));
     setRefresh(true);
   };
@@ -155,13 +159,7 @@ function LayerControl({ position, children, setRefresh }) {
   const navigateToArea = (selection) => {
     const { to } = selection;
 
-    if (!map) {
-      return;
-    }
-
-    // console.log("" + map.getCenter().lat + "," + map.getCenter().lng);
-    // console.log(map.getZoom());
-    // console.log(map.getBounds())
+    if (!map) return;
 
     if (to === area) {
       map.flyTo(selection.location, selection.zoom, {
@@ -181,29 +179,19 @@ function LayerControl({ position, children, setRefresh }) {
       }}
     >
       <div className={positionClass}>
-        <div className="leaflet-control leaflet-bar">
+        <div className="leaflet-control leaflet-bar" style={{ margin: 0 }}>
           {!sidebarOpen && (
             <>
-              <CIconButton
-                icon={
-                  sidebarOpen ? (
-                    <ChevronRightIcon w="23px" h="48px" />
-                  ) : (
-                    <ChevronLeftIcon w="23px" h="48px" />
-                  )
-                }
-                zIndex="1000"
-                float="right"
-                right={2}
-                top="8px"
-                bg="#221c0f"
-                pos="absolute"
-                colorScheme="sidebarArrow"
-                variant="outline"
-                cursor="pointer"
+              <Box
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                aria-label="sidebar-button"
-              />
+                bg="#221c0f"
+                px={2}
+                py={3}
+                mt={4}
+                _hover={{ cursor: "pointer", border: "1px solid #fbe4bd" }}
+              >
+                &lt;
+              </Box>
             </>
           )}
           <Drawer
@@ -218,36 +206,32 @@ function LayerControl({ position, children, setRefresh }) {
             size="xs"
           >
             <DrawerContent>
-              <DrawerCloseButton />
-              <Box bg="#221c0f" position="absolute" left="100%" top="8px">
-                <CIconButton
-                  icon={
-                    sidebarOpen ? (
-                      <ChevronLeftIcon w="23px" h="48px" />
-                    ) : (
-                      <ChevronRightIcon w="23px" h="48px" />
-                    )
-                  }
-                  top="8px"
-                  bg="#221c0f"
-                  pos="absolute"
-                  colorScheme="sidebar.arrow"
-                  variant="outline"
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  aria-label="sidebar-button"
-                />
-              </Box>
-              <DrawerHeader textAlign="center" _hover={{ cursor: "pointer" }}>
-                <Link href={`/game/totk`}>
-                  <Image
-                    width={360}
-                    height={60}
-                    src={`/images/logos/totk/logo.png`}
-                    alt="logo"
-                    style={{ objectFit: "contain", height: "auto" }}
-                    priority={true}
-                  />
-                </Link>
+              <DrawerHeader
+                textAlign="center"
+                _hover={{ cursor: "pointer" }}
+                px={2}
+              >
+                <HStack>
+                  <Link href={`/game/totk`}>
+                    <Image
+                      width={360}
+                      height={60}
+                      src={`/images/logos/totk/logo.png`}
+                      alt="logo"
+                      style={{ objectFit: "contain", height: "auto" }}
+                      priority={true}
+                    />
+                  </Link>
+                  <Box
+                    onClick={() => setSidebarOpen(!sidebarOpen)}
+                    _hover={{
+                      cursor: "pointer",
+                    }}
+                    px={2}
+                  >
+                    X
+                  </Box>
+                </HStack>
               </DrawerHeader>
               <DrawerBody px="0" pb="0">
                 <VStack>
@@ -274,10 +258,6 @@ function LayerControl({ position, children, setRefresh }) {
                   >
                     {hideCompleted ? "Show Completed" : "Hide Completed"}
                   </Button>
-                  <Box mt={5}>
-                    <SearchInput setResults={setResults} />
-                  </Box>
-
                   {navSelections && (
                     <Box
                       display="flex"
@@ -298,24 +278,31 @@ function LayerControl({ position, children, setRefresh }) {
                       ))}
                     </Box>
                   )}
+                  <Box mt={5} w="full" px={4}>
+                    <SearchInput
+                      setResults={setResults}
+                      setSearching={setSearching}
+                      setSearchState={setSearchState}
+                    />
+                  </Box>
 
                   <Box w="full" p={3} pb={0}>
-                    {results && results.length ? (
+                    {searching && <Loader loading={searching} />}
+                    {searchState === "NO RESULT" && (
+                      <Box textAlign="center">No Results Found</Box>
+                    )}
+                    {searchState === "COMPLETE" && (
                       <SearchResults results={results} />
-                    ) : (
+                    )}
+                    {searchState === "IDLE" && (
                       <Box w="full">
                         {Object.keys(groupedLayers).map((section, index) => (
                           <React.Fragment key={`${section} ${index}`}>
-                            <Box textTransform="uppercase" py={3}>
-                              {section}
-                            </Box>
-                            {groupedLayers[section]?.map((layerObj) => (
-                              <CategoryGroup
-                                key={`${section} ${layerObj.name}`}
-                                onLayerClick={onLayerClick}
-                                layerObj={layerObj}
-                              />
-                            ))}
+                            <GroupContainer
+                              layerSection={groupedLayers[section]}
+                              section={section}
+                              onLayerClick={onLayerClick}
+                            />
                           </React.Fragment>
                         ))}
                       </Box>
