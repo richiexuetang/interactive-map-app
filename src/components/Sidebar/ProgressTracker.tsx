@@ -12,15 +12,10 @@ import {
   Box,
   Text,
   Flex,
-  Image,
+  Image
 } from "@chakra-ui/react";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
-import {
-  COMPLETED,
-  SETTING_TRACKER,
-  USER_SETTING,
-  initialUserSettings,
-} from "@data/LocalStorage";
+import { COMPLETED, initialUserSettings } from "@data/LocalStorage";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { useMapContext } from "@context/app-context";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
@@ -45,46 +40,12 @@ function ProgressTracker() {
     }),
   };
 
-  const { markerGroups, categoryCounts, config } = useMapContext();
-  const { gameSlug, name: mapSlug } = config;
-  const [completedMarkers] = useLocalStorage(COMPLETED, {});
-  const [userSettings, setUserSettings] = useLocalStorage(
-    USER_SETTING,
-    initialUserSettings
-  );
+  const { markerGroups, categoryCounts } = useMapContext();
+  const [completedMarkers] = useLocalStorage(COMPLETED, initialUserSettings);
   const [trackedCategory, setTrackedCategory] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [trackingOptions, setTrackingOptions] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
-
-  useEffect(() => {
-    const trackSettings = userSettings[SETTING_TRACKER];
-
-    if (!trackSettings?.hasOwnProperty(gameSlug)) {
-      setUserSettings((prev) => ({
-        ...prev,
-        [SETTING_TRACKER]: {
-          ...prev[SETTING_TRACKER],
-          [gameSlug]: {},
-        },
-      }));
-    }
-    if (!trackSettings[gameSlug]?.hasOwnProperty(mapSlug)) {
-      setUserSettings((prev) => ({
-        ...prev,
-        [SETTING_TRACKER]: {
-          ...prev[SETTING_TRACKER],
-          [gameSlug]: {
-            ...prev[SETTING_TRACKER][gameSlug],
-            [mapSlug]: [],
-          },
-        },
-      }));
-    } else {
-      const tracked = userSettings[SETTING_TRACKER][gameSlug][mapSlug];
-      setTrackedCategory([...tracked]);
-    }
-  }, [userSettings]);
 
   useEffect(() => {
     if (!trackingOptions.length) {
@@ -124,7 +85,9 @@ function ProgressTracker() {
     let result = 0;
     const { ids } = markerGroups.find((item) => item.categoryId === categoryId);
 
-    if (!ids) return 0;
+    if (!ids) {
+      return 0;
+    }
 
     for (const key in completedMarkers) {
       result = completedMarkers[key] === categoryId ? result + 1 : result;
@@ -148,16 +111,6 @@ function ProgressTracker() {
     selectedCategories.map((value) => {
       if (!trackedCategory.includes(value)) {
         setTrackedCategory((prev) => [...prev, value]);
-        setUserSettings((prev) => ({
-          ...prev,
-          [SETTING_TRACKER]: {
-            ...prev[SETTING_TRACKER],
-            [gameSlug]: {
-              ...prev[SETTING_TRACKER][gameSlug],
-              [mapSlug]: [...prev[SETTING_TRACKER][gameSlug][mapSlug], value],
-            },
-          },
-        }));
       }
     });
 
