@@ -6,7 +6,6 @@ import {
   Card,
   CardBody,
   CardHeader,
-  CloseButton,
   Box,
   Text,
   Flex,

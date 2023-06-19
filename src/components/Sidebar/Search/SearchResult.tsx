@@ -24,10 +24,7 @@ const SearchResult = ({ result }) => {
 
   const goToPosition = () => {
     if (mapSlug === config.name) {
-      map.flyTo(coordinate, map.getMaxZoom(), {
-        animate: true,
-        duration: 1,
-      });
+      map.flyTo(coordinate, map.getZoom());
       
       markerRefs?.[id]?.openPopup();
     } 
@@ -40,7 +37,7 @@ const SearchResult = ({ result }) => {
       });
       setMarkerOverlays({ ...markerOverlays, [id]: overlay });
       map.addLayer(overlay);
-      map.flyTo(coordinate, map.getMaxZoom() - 2);
+      map.flyTo(coordinate, map.getZoom());
     }
   };
 

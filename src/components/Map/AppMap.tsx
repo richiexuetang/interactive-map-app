@@ -85,7 +85,7 @@ const AppMap = (props) => {
             setZoomLevel={setZoomLevel}
             useMapEvents={useMapEvents}
           />
-          <LayerControl position="topright" setRefresh={setRefresh}>
+          <LayerControl setRefresh={setRefresh}>
             <TileLayer
               url={`/tiles/${config.name}/{z}/{x}/{y}.png`}
               noWrap
