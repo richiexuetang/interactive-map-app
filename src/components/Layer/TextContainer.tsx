@@ -12,6 +12,8 @@ const TextContainer = ({ id, position, minZoom, maxZoom, content }) => {
 
   const icon = divIcon({
     className: "map-label",
+    iconSize: [100, 12],
+    iconAnchor: [50, 12],
     html: `<span>${content}</span>`,
   });
 

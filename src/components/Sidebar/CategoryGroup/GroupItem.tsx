@@ -4,7 +4,6 @@ import { Button, Box, Image, Flex } from "@chakra-ui/react";
 
 import { useMapContext } from "@context/.";
 import {
-  COMPLETED,
   SETTING_HIDDEN_CATEGORY,
   SETTING_HIDE_ALL,
   USER_SETTING,

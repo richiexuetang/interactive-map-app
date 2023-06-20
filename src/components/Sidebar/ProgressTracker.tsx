@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   Button,
@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
 import {
-  COMPLETED,
+  COMPLETION_TRACK,
   SETTING_TRACKER,
   USER_SETTING,
   initialUserSettings,
@@ -46,7 +46,11 @@ function ProgressTracker({ markerGroups }) {
   const { categoryCounts, config } = useMapContext();
   const { gameSlug, name: mapSlug } = config;
 
-  const [completedMarkers] = useLocalStorage(COMPLETED, {});
+  const [completionTrack] = useLocalStorage(
+    COMPLETION_TRACK,
+    { [mapSlug]: { completed: {}, category: {} } }
+  );
+
   const [userSettings, setUserSettings] = useLocalStorage(
     USER_SETTING,
     initialUserSettings
@@ -120,17 +124,19 @@ function ProgressTracker({ markerGroups }) {
     }
   }, [userSettings[SETTING_TRACKER]]);
 
-  const getCompletedCount = (categoryId) => {
+  const getCompletedCount = useCallback((categoryId) => {
     let result = 0;
     const { ids } = markerGroups.find((item) => item.categoryId === categoryId);
 
     if (!ids) return 0;
 
-    for (const key in completedMarkers) {
-      result = completedMarkers[key] === categoryId ? result + 1 : result;
+    const mapCompleteInfo = completionTrack[config.name];
+
+    for (const key in mapCompleteInfo?.["completed"]) {
+      result = completionTrack[config.name]["completed"][key] === categoryId ? result + 1 : result;
     }
     return result;
-  };
+  }, [completionTrack]);
 
   const removeTrackedCategory = (category) => {
     const newList = userSettings[SETTING_TRACKER][gameSlug][mapSlug].filter(

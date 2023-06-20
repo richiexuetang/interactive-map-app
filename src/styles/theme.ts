@@ -15,8 +15,8 @@ const styles = {
     },
     span: {
       textWrap: "nowrap !important",
-      textAlign: "left",
-      overflowWrap: "break-word",
+      textAlign: "center",
+      overflowWrap: "initial",
     },
     img: {
       maxWidth: "100%",

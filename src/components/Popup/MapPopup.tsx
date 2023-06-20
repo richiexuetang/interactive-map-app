@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 
-import { COMPLETED } from "@data/LocalStorage";
+import { COMPLETION_TRACK } from "@data/LocalStorage";
 import { useCopyToClipboard, useLocalStorage } from "@hooks/index";
 import dynamic from "next/dynamic";
 import { Loader, RMForm } from "@components/.";
@@ -30,32 +30,55 @@ const RMTooltip = dynamic(() => import("@components/Popup/RMTooltip"), {
 });
 
 const MapPopup = (props) => {
+  const { markerRefs, config } = useMapContext();
+
   const { status } = useSession();
   const { onOpen, isOpen, onClose } = useDisclosure();
   const { markerInfo, markerId, triggerPopup, setTriggerPopup } = props;
   const pathname = usePathname();
-  const [completedMarkers, setCompletedMarkers] = useLocalStorage(
-    COMPLETED,
-    {}
+  const [completionTrack, setCompletionTrack] = useLocalStorage(
+    COMPLETION_TRACK,
+    { [config.name]: { completed: {}, category: {} } }
   );
+  const mapCompleteTrack = completionTrack[config.name];
   const [loaded, setLoaded] = useState(false);
 
   const [value, copy] = useCopyToClipboard();
-  const [completed, setCompleted] = useState(completedMarkers[markerId]);
+  const [completed, setCompleted] = useState(null);
 
-  const {markerRefs} = useMapContext();
+  useEffect(() => {
+    if (!completed && config.name) {
+      setCompleted(mapCompleteTrack?.["completed"][markerId]);
+    }
+  }, [config.name]);
 
   useEffect(() => {
     if (triggerPopup) {
       markerRefs[markerId]?.openPopup();
       setTriggerPopup(false);
     }
-  }, [triggerPopup])
+  }, [triggerPopup]);
 
   const handleCompleteCheck = (e) => {
-    setCompletedMarkers((prev) => ({
+    if (!completionTrack[config.name]) {
+      completionTrack[config.name] = {completed: {}, category: {}}
+    }
+    
+    setCompletionTrack((prev) => ({
       ...prev,
-      [markerId]: e.target.checked ? markerInfo.categoryId : null,
+      [config.name]: {
+        ...prev[config.name],
+        completed: {
+          ...prev[config.name]["completed"],
+          [markerId]: e.target.checked ? markerInfo.categoryId : null,
+        },
+        category: {
+          ...prev[config.name]["category"],
+          [markerInfo.categoryId]: e.target.checked
+            ? prev[config.name]["category"][markerInfo.categoryId] + 1 || 1
+            : prev[config.name]["category"][markerInfo.categoryId] - 1,
+        },
+      },
     }));
     setCompleted(e.target.checked);
   };
@@ -124,7 +147,7 @@ const MapPopup = (props) => {
       toast.error(errorMessage);
     }
   };
-  
+
   useEffect(() => {
     if (markerInfo) {
       setLoaded(true);

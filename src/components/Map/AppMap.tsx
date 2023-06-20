@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 import { useMapContext } from "@context/app-context";
 import {
-  COMPLETED,
+  COMPLETION_TRACK,
   SETTING_HIDE_COMPLETED,
   USER_SETTING,
   initialUserSettings,
@@ -58,7 +58,6 @@ const AppMap = (props) => {
   const { textOverlay, pathMarkers, markerGroups } = props;
   const [storageSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
   const { config, noteMarkers } = useMapContext();
-  const [completedMarkers] = useLocalStorage(COMPLETED, {});
 
   const [userHideComplete, setUserHideComplete] = useState(
     storageSettings[SETTING_HIDE_COMPLETED]
@@ -66,6 +65,11 @@ const AppMap = (props) => {
   const [searchState, setSearchState] = useState("IDLE");
   const [results, setResults] = useState([]); //search
   const [refresh, setRefresh] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const [completionTrack, setCompletionTrack] = useLocalStorage(COMPLETION_TRACK, {
+    [config.name]: { completed: {}, category: {} },
+  });
 
   useEffect(() => {
     if (refresh) {
@@ -74,6 +78,18 @@ const AppMap = (props) => {
       setRefresh(false);
     }
   }, [storageSettings, refresh]);
+
+  useEffect(() => {
+    if (!config.name) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  }, [config.name])
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <RMMapContainer>
@@ -95,11 +111,12 @@ const AppMap = (props) => {
               <>
                 {results.map((result, i) => {
                   const { _id: id, coordinate, categoryId } = result;
-                  const completed = completedMarkers[id];
+                  const mapCompleteInfo = completionTrack[config.name];
+                  const completed = mapCompleteInfo?.completed[id];
 
                   return (
                     <RMMarker
-                      key={`${result._id}`}
+                      key={`${id}`}
                       opacity={completed ? 0.5 : 1}
                       Marker={Marker}
                       coordinate={coordinate}
@@ -136,7 +153,8 @@ const AppMap = (props) => {
                     <LayerGroup>
                       {markerTypeId === 1 &&
                         coordinates.map((coordinate, i) => {
-                          const completed = completedMarkers[ids[i]];
+                          const mapCompleteInfo = completionTrack[config.name];
+                          const completed = mapCompleteInfo?.completed[ids[i]];
                           const hide =
                             (completed && userHideComplete) || hidden;
 
