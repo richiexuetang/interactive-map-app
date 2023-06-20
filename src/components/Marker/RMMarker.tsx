@@ -34,6 +34,7 @@ const RMMarker = (props) => {
         fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/getMarker?id=` + markerId)
           .then((res) => res.json())
           .then((data) => setMarkerInfo(data));
+        setTriggerPopup(false);
       } catch (error) {
         console.log(error);
       }
@@ -48,8 +49,8 @@ const RMMarker = (props) => {
       });
 
       setTriggerPopup(true);
+      window.history.replaceState(null, "", `/map/${config.name}`);
     }
-    window.history.replaceState(null, "", `/map/${config.name}`);
   }, [markerSearchParam]);
 
   useEffect(() => {
@@ -58,8 +59,8 @@ const RMMarker = (props) => {
         [parseFloat(params.get("x")), parseFloat(params.get("y"))],
         parseFloat(params.get("zoom"))
       );
+      window.history.replaceState(null, "", `/map/${config.name}`);
     }
-    window.history.replaceState(null, "", `/map/${config.name}`);
   }, [params]);
 
   return (
