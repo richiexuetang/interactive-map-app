@@ -12,7 +12,6 @@ import { useCopyToClipboard } from "@hooks/index";
 const { MapContainer } = ReactLeaflet;
 
 const RMMapContainer = ({ children }) => {
-  const [map, setMap] = useState();
   const pathname = usePathname();
   const { config, setNoteMarkers } = useMapContext();
   const [zoomLevel, setZoomLevel] = useState(config.zoom);
@@ -64,7 +63,7 @@ const RMMapContainer = ({ children }) => {
        //@ts-ignore
        whenCreated={map=>setMap(map)}
     >
-      {children(ReactLeaflet, setZoomLevel)}
+      {children(ReactLeaflet)}
     </MapContainer>
   );
 };

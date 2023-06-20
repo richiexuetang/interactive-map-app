@@ -11,7 +11,6 @@ import {
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { categoryHiddenState } from "@lib/getHiddenState";
-import MapListener from "./MapListener";
 
 const NoteMarker = dynamic(() => import("@components/Marker/NoteMarker"), {
   ssr: false,
@@ -78,15 +77,8 @@ const AppMap = (props) => {
 
   return (
     <RMMapContainer>
-      {(
-        { LayerGroup, TileLayer, useMap, Marker, CircleMarker, useMapEvents },
-        setZoomLevel
-      ) => (
+      {({ LayerGroup, TileLayer, useMap, Marker, CircleMarker }) => (
         <>
-          <MapListener
-            setZoomLevel={setZoomLevel}
-            useMapEvents={useMapEvents}
-          />
           <LayerControl
             setRefresh={setRefresh}
             searchState={searchState}
@@ -190,19 +182,19 @@ const AppMap = (props) => {
                 );
               }
             )}
-
-            {searchState !== "COMPLETE" && (
-              <PolyLines pathMarkers={pathMarkers} />
-            )}
-            {searchState !== "COMPLETE" && (
-              <TextLayer textOverlay={textOverlay} />
-            )}
-
-            {noteMarkers &&
-              noteMarkers.map((note) => (
-                <NoteMarker key={note[0]} position={note} />
-              ))}
           </LayerControl>
+          {searchState !== "COMPLETE" && (
+            <>
+              <TextLayer textOverlay={textOverlay} />
+
+              <PolyLines pathMarkers={pathMarkers} />
+            </>
+          )}
+
+          {noteMarkers &&
+            noteMarkers.map((note) => (
+              <NoteMarker key={note[0]} position={note} />
+            ))}
         </>
       )}
     </RMMapContainer>
