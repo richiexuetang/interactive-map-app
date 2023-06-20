@@ -116,7 +116,7 @@ const AppMap = (props) => {
                 })}
               </>
             )}
-            {searchState === "IDLE" && (
+            {searchState !== "COMPLETE" && (
               <>
                 {markerGroups.map(
                   (
