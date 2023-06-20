@@ -17,7 +17,12 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { useMapContext } from "@context/app-context";
-import { SearchInput, SearchResults, Loader, GroupContainer } from "@components/.";
+import {
+  SearchInput,
+  SearchResults,
+  Loader,
+  GroupContainer,
+} from "@components/.";
 import {
   SETTING_HIDDEN_CATEGORY,
   SETTING_HIDE_COMPLETED,
@@ -27,7 +32,14 @@ import {
 import { useRouter } from "next/router";
 import useLocalStorage from "@hooks/useLocalStorage";
 
-function LayerControl({ children, setRefresh }) {
+function LayerControl({
+  children,
+  setRefresh,
+  searchState,
+  setSearchState,
+  results,
+  setResults,
+}) {
   const router = useRouter();
   const [storageSettings, setStorageSettings] = useLocalStorage(
     USER_SETTING,
@@ -39,9 +51,8 @@ function LayerControl({ children, setRefresh }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [layers, setLayers] = useState([]);
   const [groupedLayers, setGroupedLayers] = useState({});
-  const [results, setResults] = useState([]); //search
+
   const [searching, setSearching] = useState(false);
-  const [searchState, setSearchState] = useState("IDLE");
 
   const [hideCompleted, setHideCompleted] = useState(
     storageSettings[SETTING_HIDE_COMPLETED]

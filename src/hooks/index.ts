@@ -5,3 +5,4 @@ export * from './useLoading';
 export * from './useIsomorphicLayoutEffect';
 export {default as useEventListener} from './useEventListener';
 export {default as useEventCallback} from './useEventCallback';
+export {default as useEffectOnce} from './useEffectOnce';

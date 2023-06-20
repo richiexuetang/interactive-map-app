@@ -19,6 +19,7 @@ import { useCopyToClipboard, useLocalStorage } from "@hooks/index";
 import dynamic from "next/dynamic";
 import { Loader, RMForm } from "@components/.";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
+import { useMapContext } from "@context/app-context";
 
 const RMPopup = dynamic(() => import("@components/Popup/RMPopup"), {
   ssr: false,
@@ -31,7 +32,7 @@ const RMTooltip = dynamic(() => import("@components/Popup/RMTooltip"), {
 const MapPopup = (props) => {
   const { status } = useSession();
   const { onOpen, isOpen, onClose } = useDisclosure();
-  const { markerInfo, markerId } = props;
+  const { markerInfo, markerId, triggerPopup, setTriggerPopup } = props;
   const pathname = usePathname();
   const [completedMarkers, setCompletedMarkers] = useLocalStorage(
     COMPLETED,
@@ -41,6 +42,15 @@ const MapPopup = (props) => {
 
   const [value, copy] = useCopyToClipboard();
   const [completed, setCompleted] = useState(completedMarkers[markerId]);
+
+  const {markerRefs} = useMapContext();
+
+  useEffect(() => {
+    if (triggerPopup) {
+      markerRefs[markerId]?.openPopup();
+      setTriggerPopup(false);
+    }
+  }, [triggerPopup])
 
   const handleCompleteCheck = (e) => {
     setCompletedMarkers((prev) => ({
@@ -114,6 +124,7 @@ const MapPopup = (props) => {
       toast.error(errorMessage);
     }
   };
+  
   useEffect(() => {
     if (markerInfo) {
       setLoaded(true);

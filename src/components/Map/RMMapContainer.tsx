@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useState } from "react";
 import * as ReactLeaflet from "react-leaflet";
 import { usePathname } from "next/navigation";
@@ -13,6 +12,7 @@ import { useCopyToClipboard } from "@hooks/index";
 const { MapContainer } = ReactLeaflet;
 
 const RMMapContainer = ({ children }) => {
+  const [map, setMap] = useState();
   const pathname = usePathname();
   const { config, setNoteMarkers } = useMapContext();
   const [zoomLevel, setZoomLevel] = useState(config.zoom);
@@ -31,7 +31,6 @@ const RMMapContainer = ({ children }) => {
   const copyMapViewUrl = (e) => {
     const { lat, lng } = e.latlng;
 
-    console.log(zoomLevel);
     copy(
       `${process.env.BASE_URL}${pathname}?x=${lat}&y=${lng}&zoom=${zoomLevel}`
     );
@@ -48,6 +47,7 @@ const RMMapContainer = ({ children }) => {
       bounds={config.bounds}
       minZoom={config.minZoom}
       maxZoom={config.maxZoom}
+      //@ts-ignore
       contextmenu={true}
       contextmenuItems={[
         {
@@ -61,6 +61,8 @@ const RMMapContainer = ({ children }) => {
       ]}
       smoothWheelZoom={true}
       smoothSensitivity={15}
+       //@ts-ignore
+       whenCreated={map=>setMap(map)}
     >
       {children(ReactLeaflet, setZoomLevel)}
     </MapContainer>

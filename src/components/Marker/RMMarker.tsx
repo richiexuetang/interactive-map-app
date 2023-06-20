@@ -11,6 +11,7 @@ const RMMarker = (props) => {
 
   const { Marker, coordinate, categoryId, rank, markerId, ...rest } = props;
   const [markerInfo, setMarkerInfo] = useState(null);
+  const [triggerPopup, setTriggerPopup] = useState(false);
   const { markerRefs, config } = useMapContext();
 
   const getMarkerInfo = async () => {
@@ -28,20 +29,27 @@ const RMMarker = (props) => {
   };
 
   useEffect(() => {
-    if (
-      markerSearchParam &&
-      markerSearchParam === markerId &&
-      markerRefs[markerId]
-    ) {
+    if (triggerPopup) {
+      try {
+        fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/getMarker?id=` + markerId)
+          .then((res) => res.json())
+          .then((data) => setMarkerInfo(data));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [triggerPopup]);
+
+  useEffect(() => {
+    if (markerSearchParam && markerSearchParam === markerId) {
       map.flyTo(coordinate, map.getMaxZoom(), {
         animate: true,
         duration: 0.5,
       });
 
-      markerRefs[markerId]?.openPopup();
-
-      window.history.replaceState(null, "", `/map/${config.name}`);
+      setTriggerPopup(true);
     }
+    window.history.replaceState(null, "", `/map/${config.name}`);
   }, [markerSearchParam]);
 
   useEffect(() => {
@@ -50,9 +58,8 @@ const RMMarker = (props) => {
         [parseFloat(params.get("x")), parseFloat(params.get("y"))],
         parseFloat(params.get("zoom"))
       );
-
-      window.history.replaceState(null, "", `/map/${config.name}`);
     }
+    window.history.replaceState(null, "", `/map/${config.name}`);
   }, [params]);
 
   return (
@@ -67,13 +74,17 @@ const RMMarker = (props) => {
       })}
       zIndexOffset={100 + rank}
       eventHandlers={{
-        click: () => getMarkerInfo(),
         popupopen: () => getMarkerInfo(),
         mouseover: () => getMarkerInfo(),
       }}
       {...rest}
     >
-      <MapPopup markerId={markerId} markerInfo={markerInfo} />
+      <MapPopup
+        markerId={markerId}
+        markerInfo={markerInfo}
+        triggerPopup={triggerPopup}
+        setTriggerPopup={setTriggerPopup}
+      />
     </Marker>
   );
 };
