@@ -102,13 +102,17 @@ const AppMap = (props) => {
             {searchState === "COMPLETE" && (
               <>
                 {results.map((result, i) => {
+                  const { _id: id, coordinate, categoryId } = result;
+                  const completed = completedMarkers[id];
+
                   return (
                     <RMMarker
                       key={`${result._id}`}
+                      opacity={completed ? 0.5 : 1}
                       Marker={Marker}
-                      coordinate={result.coordinate}
-                      categoryId={result.categoryId}
-                      markerId={result._id}
+                      coordinate={coordinate}
+                      categoryId={categoryId}
+                      markerId={id}
                       useMap={useMap}
                       rank={i}
                     />
@@ -116,87 +120,82 @@ const AppMap = (props) => {
                 })}
               </>
             )}
-            {searchState !== "COMPLETE" && (
-              <>
-                {markerGroups.map(
-                  (
-                    {
-                      categoryId,
-                      coordinates,
-                      ids,
-                      ranks,
-                      group,
-                      markerTypeId,
-                    },
-                    i
-                  ) => {
-                    const hidden = categoryHiddenState(categoryId);
-                    const groupColor =
-                      "#" +
-                      (0x1000000 + Math.random() * 0xffffff)
-                        .toString(16)
-                        .substr(1, 6);
 
-                    return (
-                      <GroupedLayer
-                        key={`${categoryId} + ${ids[i]}`}
-                        checked={!hidden}
-                        id={group}
-                        name={categoryId}
-                        group={group}
-                      >
-                        <LayerGroup>
-                          {markerTypeId === 1 &&
-                            coordinates.map((coordinate, i) => {
-                              const completed = completedMarkers[ids[i]];
-                              const hide =
-                                (completed && userHideComplete) || hidden;
+            {markerGroups.map(
+              (
+                { categoryId, coordinates, ids, ranks, group, markerTypeId },
+                i
+              ) => {
+                const hidden = categoryHiddenState(categoryId);
+                const groupColor =
+                  "#" +
+                  (0x1000000 + Math.random() * 0xffffff)
+                    .toString(16)
+                    .substr(1, 6);
 
-                              if (!hide) {
-                                return (
-                                  <RMMarker
-                                    key={`${ids[i]} ${group}`}
-                                    opacity={completed ? 0.5 : 1}
-                                    Marker={Marker}
-                                    coordinate={coordinate}
-                                    categoryId={categoryId}
-                                    markerId={ids[i]}
-                                    useMap={useMap}
-                                    rank={ranks[i]}
-                                  />
-                                );
-                              }
+                return (
+                  <GroupedLayer
+                    key={`${categoryId} + ${ids[i]}`}
+                    checked={!hidden}
+                    id={group}
+                    name={categoryId}
+                    group={group}
+                  >
+                    <LayerGroup>
+                      {markerTypeId === 1 &&
+                        coordinates.map((coordinate, i) => {
+                          const completed = completedMarkers[ids[i]];
+                          const hide =
+                            (completed && userHideComplete) || hidden;
+
+                          if (!hide && searchState !== "COMPLETE") {
+                            return (
+                              <RMMarker
+                                key={`${ids[i]} ${group}`}
+                                opacity={completed ? 0.5 : 1}
+                                Marker={Marker}
+                                coordinate={coordinate}
+                                categoryId={categoryId}
+                                markerId={ids[i]}
+                                useMap={useMap}
+                                rank={ranks[i]}
+                              />
+                            );
+                          }
+                        })}
+                      {markerTypeId === 3 && (
+                        <MarkerClusterGroup fillColor={groupColor}>
+                          <LayerGroup>
+                            {coordinates.map((coord) => {
+                              return (
+                                !hidden && (
+                                  <CircleMarker
+                                    key={`${coord[0]} ${coord[1]}`}
+                                    center={coord}
+                                    color={groupColor}
+                                    radius={2}
+                                  >
+                                    <RMTooltip>
+                                      {categoryIdNameMap[categoryId]}
+                                    </RMTooltip>
+                                  </CircleMarker>
+                                )
+                              );
                             })}
-                          {markerTypeId === 3 && (
-                            <MarkerClusterGroup fillColor={groupColor}>
-                              <LayerGroup>
-                                {coordinates.map((coord) => {
-                                  return (
-                                    !hidden && (
-                                      <CircleMarker
-                                        key={`${coord[0]} ${coord[1]}`}
-                                        center={coord}
-                                        color={groupColor}
-                                        radius={2}
-                                      >
-                                        <RMTooltip>
-                                          {categoryIdNameMap[categoryId]}
-                                        </RMTooltip>
-                                      </CircleMarker>
-                                    )
-                                  );
-                                })}
-                              </LayerGroup>
-                            </MarkerClusterGroup>
-                          )}
-                        </LayerGroup>
-                      </GroupedLayer>
-                    );
-                  }
-                )}
-                <PolyLines pathMarkers={pathMarkers} />
-                <TextLayer textOverlay={textOverlay} />
-              </>
+                          </LayerGroup>
+                        </MarkerClusterGroup>
+                      )}
+                    </LayerGroup>
+                  </GroupedLayer>
+                );
+              }
+            )}
+
+            {searchState !== "COMPLETE" && (
+              <PolyLines pathMarkers={pathMarkers} />
+            )}
+            {searchState !== "COMPLETE" && (
+              <TextLayer textOverlay={textOverlay} />
             )}
 
             {noteMarkers &&
