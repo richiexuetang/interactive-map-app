@@ -5,12 +5,14 @@ import useLocalStorageState from "use-local-storage-state";
 import { useMapContext } from "@context/app-context";
 import {
   COMPLETION_TRACK,
+  SETTING_HIDDEN_CATEGORY,
   SETTING_HIDE_COMPLETED,
   USER_SETTING,
   initialUserSettings,
 } from "@data/LocalStorage";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
 import { categoryHiddenState } from "@lib/getHiddenState";
+import { getTarget } from "@lib/getTargetProperty";
 
 const NoteMarker = dynamic(() => import("@components/Marker/NoteMarker"), {
   ssr: false,
@@ -123,8 +125,7 @@ const AppMap = (props) => {
               <>
                 {results.map((result, i) => {
                   const { _id: id, coordinate, categoryId } = result;
-                  const mapCompleteInfo = completionTrack[config.name];
-                  const completed = mapCompleteInfo?.completed[id];
+                  const completed = getTarget(completionTrack, [config.name, "completed", id]);
 
                   return (
                     <RMMarker
@@ -147,13 +148,12 @@ const AppMap = (props) => {
                 { categoryId, coordinates, ids, ranks, group, markerTypeId },
                 i
               ) => {
-                const hidden = categoryHiddenState(categoryId);
+                const hidden = getTarget(storageSettings, [SETTING_HIDDEN_CATEGORY, categoryId]);
                 const groupColor =
                   "#" +
                   (0x1000000 + Math.random() * 0xffffff)
                     .toString(16)
                     .substr(1, 6);
-
                 return (
                   <GroupedLayer
                     key={`${categoryId} + ${ids[i]}`}

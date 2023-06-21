@@ -10,7 +10,6 @@ import { useLoading } from "@hooks/useLoading";
 import { getGroupName } from "@lib/getGroupName";
 import { useRouter } from "next/router";
 import { Box } from "@chakra-ui/react";
-import ProgressTracker from "@components/Sidebar/ProgressTracker";
 
 export async function getStaticProps(context) {
   const areaId = context.params.slug;
@@ -42,10 +41,10 @@ export async function getStaticProps(context) {
   const markers = [...markersList, ...clusterMarkers];
   const groups = [];
 
-  pathMarkers.map(({categoryId}) => {
+  pathMarkers.map(({ categoryId }) => {
     categoryCounts[categoryId] = categoryCounts[categoryId] + 1 || 1;
-  })
-  
+  });
+
   markers.map((marker, rank) => {
     categoryCounts[marker.categoryId] =
       categoryCounts[marker.categoryId] + 1 || 1;
@@ -110,7 +109,8 @@ const MapPage = ({
   const { asPath } = useRouter();
   const [loading] = useLoading();
 
-  const { setConfig, setCategoryCounts, categoryMap, setCategoryMap } = useMapContext();
+  const { setConfig, setCategoryCounts, categoryMap, setCategoryMap } =
+    useMapContext();
 
   useEffect(() => {
     setConfig(config);
@@ -123,14 +123,14 @@ const MapPage = ({
         (item) => item.gameSlug === config.gameSlug
       )?.categoryGroups;
 
-      categoryGroups.map(({members}) => {
-        members.map(member => {
-          setCategoryMap(prev => ([...prev, member]));
-        })
-      } )
+      categoryGroups.map(({ members }) => {
+        members.map((member) => {
+          setCategoryMap((prev) => [...prev, member]);
+        });
+      });
     }
   });
-  
+
   return (
     <>
       <NextSeo
@@ -142,10 +142,11 @@ const MapPage = ({
           <Loader loading={loading} />
         </Box>
       ) : (
-        <>
-          <AppMap textOverlay={textOverlay} pathMarkers={pathMarkers} markerGroups={groups}/>
-          <ProgressTracker markerGroups={groups}/>
-        </>
+        <AppMap
+          textOverlay={textOverlay}
+          pathMarkers={pathMarkers}
+          markerGroups={groups}
+        />
       )}
     </>
   );

@@ -2,6 +2,7 @@ import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import useLocalStorageState from "use-local-storage-state";
+import dynamic from "next/dynamic";
 
 import { DeleteIcon, EditIcon, LinkIcon } from "@chakra-ui/icons";
 import {
@@ -17,10 +18,10 @@ import { toast } from "react-toastify";
 
 import { COMPLETION_TRACK } from "@data/LocalStorage";
 import { useCopyToClipboard } from "@hooks/index";
-import dynamic from "next/dynamic";
 import { Loader, RMForm } from "@components/.";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
 import { useMapContext } from "@context/app-context";
+import { getTarget } from "@lib/getTargetProperty";
 
 const RMPopup = dynamic(() => import("@components/Popup/RMPopup"), {
   ssr: false,
@@ -32,6 +33,7 @@ const RMTooltip = dynamic(() => import("@components/Popup/RMTooltip"), {
 
 const MapPopup = (props) => {
   const { markerRefs, config } = useMapContext();
+  const { name: mapSlug } = config;
 
   const { status } = useSession();
   const { onOpen, isOpen, onClose } = useDisclosure();
@@ -39,19 +41,19 @@ const MapPopup = (props) => {
   const pathname = usePathname();
   const [completionTrack, setCompletionTrack] = useLocalStorageState(
     COMPLETION_TRACK,
-    { defaultValue: { [config.name]: { completed: {}, category: {} } } }
+    { defaultValue: { [mapSlug]: { completed: {}, category: {} } } }
   );
-  const mapCompleteTrack = completionTrack[config.name];
+  const mapCompleteTrack = completionTrack[mapSlug];
   const [loaded, setLoaded] = useState(false);
 
   const [value, copy] = useCopyToClipboard();
   const [completed, setCompleted] = useState(null);
 
   useEffect(() => {
-    if (completed === null && config.name) {
-      setCompleted(mapCompleteTrack?.["completed"][markerId]);
+    if (completed === null && mapSlug) {
+      setCompleted(getTarget(mapCompleteTrack, ["completed", markerId]));
     }
-  }, [config.name]);
+  }, [mapSlug]);
 
   useEffect(() => {
     if (triggerPopup) {
@@ -60,28 +62,40 @@ const MapPopup = (props) => {
     }
   }, [triggerPopup]);
 
+  useEffect(() => {
+    setLoaded(markerInfo ? true : false);
+  }, [markerInfo]);
+
   const handleCompleteCheck = (e) => {
-    if (!completionTrack[config.name]) {
-      completionTrack[config.name] = {completed: {}, category: {}}
+    const { categoryId } = markerInfo;
+
+    if (!completionTrack[mapSlug]) {
+      completionTrack[mapSlug] = { completed: {}, category: {} };
     }
-    
+
+    let completed = completionTrack[mapSlug]["completed"];
+    if (e.target.checked) {
+      completed = { ...completed, [markerId]: categoryId };
+    } else {
+      delete completed[markerId];
+    }
+    setCompleted(e.target.checked);
+
     setCompletionTrack((prev) => ({
       ...prev,
-      [config.name]: {
-        ...prev[config.name],
+      [mapSlug]: {
+        ...prev[mapSlug],
         completed: {
-          ...prev[config.name]["completed"],
-          [markerId]: e.target.checked ? markerInfo.categoryId : null,
+          ...completed,
         },
         category: {
-          ...prev[config.name]["category"],
-          [markerInfo.categoryId]: e.target.checked
-            ? prev[config.name]["category"][markerInfo.categoryId] + 1 || 1
-            : prev[config.name]["category"][markerInfo.categoryId] - 1,
+          ...getTarget(prev, [mapSlug, "category"]),
+          [categoryId]: e.target.checked
+            ? getTarget(prev, [mapSlug, "category", categoryId]) + 1 || 1
+            : getTarget(prev, [mapSlug, "category", categoryId]) - 1,
         },
       },
     }));
-    setCompleted(e.target.checked);
   };
 
   const handleCopyLink = () => {
@@ -148,12 +162,6 @@ const MapPopup = (props) => {
       toast.error(errorMessage);
     }
   };
-
-  useEffect(() => {
-    if (markerInfo) {
-      setLoaded(true);
-    }
-  }, [markerInfo]);
 
   if (isOpen) {
     return (

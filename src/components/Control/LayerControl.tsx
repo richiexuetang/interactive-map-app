@@ -59,7 +59,7 @@ function LayerControl({
     storageSettings[SETTING_HIDE_COMPLETED]
   );
 
-  const toggle = (key) => {
+  const toggle = () => {
     setStorageSettings((prev) => ({
       ...prev,
       hideCompletedMarkers: !hideCompleted,
@@ -253,7 +253,7 @@ function LayerControl({
                     </Button>
                   </HStack>
                   <Button
-                    onClick={() => toggle(SETTING_HIDE_COMPLETED)}
+                    onClick={toggle}
                     variant="underlined"
                     fontSize="12px"
                   >
