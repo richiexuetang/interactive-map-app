@@ -67,9 +67,16 @@ const AppMap = (props) => {
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const [completionTrack, setCompletionTrack] = useLocalStorage(COMPLETION_TRACK, {
-    [config.name]: { completed: {}, category: {} },
-  });
+  const [completionTrack, setCompletionTrack] = useState(null);
+
+  useEffect(() => {
+    const compTrack = JSON.parse(window.localStorage.getItem(COMPLETION_TRACK));
+    if (!compTrack[config.name]) {
+      compTrack[config.name] = { completed: {}, category: {} };
+      window.localStorage.setItem(COMPLETION_TRACK, JSON.stringify(compTrack));
+    }
+    setCompletionTrack(compTrack);
+  }, [completionTrack]);
 
   useEffect(() => {
     if (refresh) {
@@ -85,7 +92,7 @@ const AppMap = (props) => {
     } else {
       setLoading(false);
     }
-  }, [config.name])
+  }, [config.name]);
 
   if (loading) {
     return null;
