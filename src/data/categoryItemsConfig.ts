@@ -208,6 +208,7 @@ export const categoryIdNameMap = {
   212: "Eldin Ostrich",
   213: "Forest Ostrich",
   214: "Cucco",
+  215: "Flux Construct",
 };
 
 export const categoryItemsConfig = [
@@ -242,7 +243,7 @@ export const categoryItemsConfig = [
       {
         name: "enemies",
         groupId: 6,
-        members: [68, 66, 70, 78, 96],
+        members: [68, 66, 70, 78, 96, 215],
       },
       {
         name: "other",
