@@ -17,9 +17,6 @@ const nextConfig = {
       },
     ],
   },
-  sassOptions: {
-    includePaths: [path.join(__dirname, 'styles')],
-  },
   webpack: (config) => {
     config.plugins.push(
       new CopyPlugin({
