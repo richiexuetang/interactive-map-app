@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex } from "@chakra-ui/react";
+import useLocalStorageState from "use-local-storage-state";
 
 import GroupItem from "./GroupItem";
-import { useLocalStorage } from "@hooks/index";
 import {
   SETTING_HIDDEN_CATEGORY,
   USER_SETTING,
@@ -15,10 +15,9 @@ const GroupContainer = (props) => {
 
   const [collapse, setCollapse] = useState(false);
   const [groupHiddenState, setGroupHiddenState] = useState(null);
-  const [storageSettings, setStorageSettings] = useLocalStorage(
-    USER_SETTING,
-    initialUserSettings
-  );
+  const [storageSettings, setStorageSettings] = useLocalStorageState(USER_SETTING, {
+    defaultValue: initialUserSettings,
+  });
 
   useEffect(() => {
     if (groupHiddenState === null) {

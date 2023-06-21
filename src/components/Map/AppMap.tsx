@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
+import useLocalStorageState from "use-local-storage-state";
 
 import { useMapContext } from "@context/app-context";
 import {
@@ -9,7 +10,6 @@ import {
   initialUserSettings,
 } from "@data/LocalStorage";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
-import useLocalStorage from "@hooks/useLocalStorage";
 import { categoryHiddenState } from "@lib/getHiddenState";
 
 const NoteMarker = dynamic(() => import("@components/Marker/NoteMarker"), {
@@ -56,7 +56,9 @@ const GroupedLayer = dynamic(
 
 const AppMap = (props) => {
   const { textOverlay, pathMarkers, markerGroups } = props;
-  const [storageSettings] = useLocalStorage(USER_SETTING, initialUserSettings);
+  const [storageSettings] = useLocalStorageState(USER_SETTING, {
+    defaultValue: initialUserSettings,
+  });
   const { config, noteMarkers } = useMapContext();
 
   const [userHideComplete, setUserHideComplete] = useState(
@@ -67,16 +69,19 @@ const AppMap = (props) => {
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const [completionTrack, setCompletionTrack] = useState(null);
+  const [completionTrack, setCompletionTrack] = useLocalStorageState(
+    COMPLETION_TRACK,
+    { defaultValue: { [config.name]: { completed: {}, category: {} } } }
+  );
 
   useEffect(() => {
-    const compTrack = JSON.parse(window.localStorage.getItem(COMPLETION_TRACK));
-    if (!compTrack[config.name]) {
-      compTrack[config.name] = { completed: {}, category: {} };
-      window.localStorage.setItem(COMPLETION_TRACK, JSON.stringify(compTrack));
+    if (config.name && !completionTrack[config.name]) {
+      setCompletionTrack({
+        ...completionTrack,
+        [config.name]: { completed: {}, category: {} },
+      });
     }
-    setCompletionTrack(compTrack);
-  }, [completionTrack]);
+  }, [config]);
 
   useEffect(() => {
     if (refresh) {

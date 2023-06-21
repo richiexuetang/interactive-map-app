@@ -1,6 +1,7 @@
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import useLocalStorageState from "use-local-storage-state";
 
 import { DeleteIcon, EditIcon, LinkIcon } from "@chakra-ui/icons";
 import {
@@ -15,7 +16,7 @@ import {
 import { toast } from "react-toastify";
 
 import { COMPLETION_TRACK } from "@data/LocalStorage";
-import { useCopyToClipboard, useLocalStorage } from "@hooks/index";
+import { useCopyToClipboard } from "@hooks/index";
 import dynamic from "next/dynamic";
 import { Loader, RMForm } from "@components/.";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
@@ -36,9 +37,9 @@ const MapPopup = (props) => {
   const { onOpen, isOpen, onClose } = useDisclosure();
   const { markerInfo, markerId, triggerPopup, setTriggerPopup } = props;
   const pathname = usePathname();
-  const [completionTrack, setCompletionTrack] = useLocalStorage(
+  const [completionTrack, setCompletionTrack] = useLocalStorageState(
     COMPLETION_TRACK,
-    { [config.name]: { completed: {}, category: {} } }
+    { defaultValue: { [config.name]: { completed: {}, category: {} } } }
   );
   const mapCompleteTrack = completionTrack[config.name];
   const [loaded, setLoaded] = useState(false);
@@ -47,7 +48,7 @@ const MapPopup = (props) => {
   const [completed, setCompleted] = useState(null);
 
   useEffect(() => {
-    if (!completed && config.name) {
+    if (completed === null && config.name) {
       setCompleted(mapCompleteTrack?.["completed"][markerId]);
     }
   }, [config.name]);

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import useLocalStorageState from "use-local-storage-state";
 
 import {
   Button,
@@ -46,15 +47,13 @@ function ProgressTracker({ markerGroups }) {
   const { categoryCounts, config } = useMapContext();
   const { gameSlug, name: mapSlug } = config;
 
-  const [completionTrack] = useLocalStorage(
-    COMPLETION_TRACK,
-    { [mapSlug]: { completed: {}, category: {} } }
-  );
+  const [completionTrack] = useLocalStorageState(COMPLETION_TRACK, {
+    defaultValue: { [config.name]: { completed: {}, category: {} } },
+  });
 
-  const [userSettings, setUserSettings] = useLocalStorage(
-    USER_SETTING,
-    initialUserSettings
-  );
+  const [userSettings, setUserSettings] = useLocalStorageState(USER_SETTING, {
+    defaultValue: initialUserSettings,
+  });
 
   const [trackedCategory, setTrackedCategory] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -124,19 +123,27 @@ function ProgressTracker({ markerGroups }) {
     }
   }, [userSettings[SETTING_TRACKER]]);
 
-  const getCompletedCount = useCallback((categoryId) => {
-    let result = 0;
-    const { ids } = markerGroups.find((item) => item.categoryId === categoryId);
+  const getCompletedCount = useCallback(
+    (categoryId) => {
+      let result = 0;
+      const { ids } = markerGroups.find(
+        (item) => item.categoryId === categoryId
+      );
 
-    if (!ids) return 0;
+      if (!ids) return 0;
 
-    const mapCompleteInfo = completionTrack[config.name];
+      const mapCompleteInfo = completionTrack[config.name];
 
-    for (const key in mapCompleteInfo?.["completed"]) {
-      result = completionTrack[config.name]["completed"][key] === categoryId ? result + 1 : result;
-    }
-    return result;
-  }, [completionTrack]);
+      for (const key in mapCompleteInfo?.["completed"]) {
+        result =
+          completionTrack[config.name]["completed"][key] === categoryId
+            ? result + 1
+            : result;
+      }
+      return result;
+    },
+    [completionTrack]
+  );
 
   const removeTrackedCategory = (category) => {
     const newList = userSettings[SETTING_TRACKER][gameSlug][mapSlug].filter(

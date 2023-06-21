@@ -3,6 +3,7 @@ import { useMapEvents } from "react-leaflet";
 import { Util } from "leaflet";
 import { LayersControlProvider } from "@context/layer-control-context";
 import createControlledLayer from "./controlledLayer";
+import useLocalStorageState from "use-local-storage-state";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -41,9 +42,9 @@ function LayerControl({
   setResults,
 }) {
   const router = useRouter();
-  const [storageSettings, setStorageSettings] = useLocalStorage(
+  const [storageSettings, setStorageSettings] = useLocalStorageState(
     USER_SETTING,
-    initialUserSettings
+    {defaultValue: initialUserSettings}
   );
   const { config } = useMapContext();
   const { subSelections: navSelections, name: area } = config;

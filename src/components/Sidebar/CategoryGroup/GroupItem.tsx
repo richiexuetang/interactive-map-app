@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import useLocalStorageState from "use-local-storage-state";
 
 import { Button, Box, Image, Flex } from "@chakra-ui/react";
 
@@ -9,17 +10,14 @@ import {
   USER_SETTING,
   initialUserSettings,
 } from "@data/LocalStorage";
-import useLocalStorage from "@hooks/useLocalStorage";
 import { categoryIdNameMap } from "@data/categoryItemsConfig";
 import { categoryHiddenState } from "@lib/getHiddenState";
 
-
 const GroupItem = ({ onLayerClick, layerObj }) => {
-  const [storageSettings, setStorageSettings] = useLocalStorage(
-    USER_SETTING,
-    initialUserSettings
-  );
-  
+  const [storageSettings, setStorageSettings] = useLocalStorageState(USER_SETTING, {
+    defaultValue: initialUserSettings,
+  });
+
   const { categoryCounts } = useMapContext();
 
   const [show, setShow] = useState(layerObj.checked);
