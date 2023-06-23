@@ -11,30 +11,44 @@ const PolyLine = ({ path, parentId, categoryId, id }) => {
     "rm.completion_track",
     { defaultValue: { [config.name]: { completed: {}, category: {} } } }
   );
-  const mapCompleteTrack = completionTrack[config.name]
+  const mapCompleteTrack = completionTrack[config.name];
   const complete = mapCompleteTrack?.["completed"];
 
   useEffect(() => {
     if (complete && complete[parentId] && !complete[id]) {
       setCompletionTrack((prev) => ({
         ...prev,
-        [config.name]: { ...prev[config.name], completed: {
-          ...prev[config.name]["completed"],
-          [id]: categoryId
-        } },
+        [config.name]: {
+          ...prev[config.name],
+          completed: {
+            ...prev[config.name]["completed"],
+            [id]: categoryId,
+          },
+          category: {
+            ...prev[config.name]["category"],
+            [categoryId]: prev[config.name]["category"][categoryId] + 1
+          },
+        },
       }));
     } else if (complete && !complete[parentId] && complete[id]) {
       setCompletionTrack((prev) => ({
         ...prev,
-        [config.name]: { ...prev[config.name], completed: {
-          ...prev[config.name]["completed"],
-          [id]: null
-        } },
+        [config.name]: {
+          ...prev[config.name],
+          completed: {
+            ...prev[config.name]["completed"],
+            [id]: null,
+          },
+          category: {
+            ...prev[config.name]["category"],
+            [categoryId]: prev[config.name]["category"][categoryId] - 1
+          },
+        },
       }));
     }
-  }, [completionTrack]);
+  }, [complete[parentId]]);
 
-  if ((complete &&complete[parentId]) || categoryHiddenState(categoryId)) {
+  if ((complete && complete[parentId]) || categoryHiddenState(categoryId)) {
     return null;
   }
 

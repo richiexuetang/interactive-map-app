@@ -32,12 +32,11 @@ const RMForm = (props) => {
   const { categoryMap, setCategoryMap, config } = useMapContext();
   const { markerInfo = {}, isOpen, onClose, onSubmit } = props;
   const {
-    lat,
-    lng,
     markerName = "",
     markerTypeId = 1,
     categoryId = 58,
     description = "",
+    coordinate,
   } = markerInfo;
 
   const formik = useFormik({
@@ -45,8 +44,8 @@ const RMForm = (props) => {
       markerName: markerName,
       markerType: markerTypeId,
       categoryId: categoryId,
-      lat: parseFloat(lat),
-      lng: parseFloat(lng),
+      lat: parseFloat(coordinate[0]),
+      lng: parseFloat(coordinate[1]),
       description: description,
     },
     onSubmit: () => {},
@@ -59,11 +58,11 @@ const RMForm = (props) => {
         (item) => item.gameSlug === config.gameSlug
       )?.categoryGroups;
 
-      categoryGroups.map(({members}) => {
-        members.map(member => {
-          setCategoryMap(prev => ([...prev, member]));
-        })
-      } )
+      categoryGroups.map(({ members }) => {
+        members.map((member) => {
+          setCategoryMap((prev) => [...prev, member]);
+        });
+      });
     }
   });
 

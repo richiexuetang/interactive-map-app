@@ -65,7 +65,6 @@ const NoteMarker = ({ position }) => {
   };
   return (
     <Marker
-      key={lat}
       ref={dragRef}
       position={[lat, lng]}
       draggable={true}
@@ -82,7 +81,7 @@ const NoteMarker = ({ position }) => {
           onSubmit={onCreateSubmit}
           onClose={onClose}
           isOpen={isOpen}
-          markerInfo={{ lat: position[0], lng: position[1] }}
+          markerInfo={{coordinate: [lat, lng]}}
         />
       )}
       {!isOpen && (

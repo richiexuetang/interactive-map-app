@@ -87,7 +87,7 @@ const GroupItem = ({ onLayerClick, layerObj }) => {
         {categoryIdNameMap[layerObj.name]}
       </Box>
       <Box fontSize="sm" textDecor={show ? "none" : "line-through"}>
-        {completionTrack?.[config.name]["category"][layerObj.name]}/
+        {completionTrack?.[config.name]["category"][layerObj.name] || 0}/
         {categoryCounts[layerObj.name]}
       </Box>
     </Button>

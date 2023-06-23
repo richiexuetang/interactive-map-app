@@ -168,6 +168,7 @@ const AppMap = (props) => {
                             mapCompleteInfo?.completed[location._id];
                           const hide =
                             (completed && userHideComplete) || hidden;
+                            
                           if (
                             !hide &&
                             searchState !== "COMPLETE" &&
