@@ -1,9 +1,7 @@
-import { SETTING_HIDDEN_CATEGORY, USER_SETTING } from "@data/LocalStorage"
-
 export const categoryHiddenState = (key) => {
-    const item = JSON.parse(window.localStorage.getItem(USER_SETTING));
+    const item = JSON.parse(window.localStorage.getItem("interactive_map_user_setting"));
     if (!item) {
         return null;
     }
-    return item[SETTING_HIDDEN_CATEGORY][key];
+    return item["hiddenCategories"][key];
 }

@@ -1,4 +1,4 @@
-import { categoryItemsConfig } from "@data/categoryItemsConfig";
+import { categoryItemsConfig } from "@data/config/categoryItemsConfig";
 
 export const getGroupName = (gameSlug, categoryId) => {
   let groupName = "";

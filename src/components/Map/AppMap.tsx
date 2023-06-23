@@ -3,15 +3,8 @@ import React, { useEffect, useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
 
 import { useMapContext } from "@context/app-context";
-import {
-  COMPLETION_TRACK,
-  SETTING_HIDDEN_CATEGORY,
-  SETTING_HIDE_COMPLETED,
-  USER_SETTING,
-  initialUserSettings,
-} from "@data/LocalStorage";
-import { categoryIdNameMap } from "@data/categoryItemsConfig";
-import { categoryHiddenState } from "@lib/getHiddenState";
+import {categoryIdNameMap,
+  initialUserSettings} from '@data/.'
 import { getTarget } from "@lib/getTargetProperty";
 
 const NoteMarker = dynamic(() => import("@components/Marker/NoteMarker"), {
@@ -57,14 +50,15 @@ const GroupedLayer = dynamic(
 );
 
 const AppMap = (props) => {
-  const { textOverlay, pathMarkers, markerGroups } = props;
-  const [storageSettings] = useLocalStorageState(USER_SETTING, {
+  const { textOverlay, pathMarkers, locations, locationGroups } = props;
+
+  const [storageSettings] = useLocalStorageState("interactive_map_user_setting", {
     defaultValue: initialUserSettings,
   });
   const { config, noteMarkers } = useMapContext();
 
   const [userHideComplete, setUserHideComplete] = useState(
-    storageSettings[SETTING_HIDE_COMPLETED]
+    storageSettings["hideCompletedMarkers"]
   );
   const [searchState, setSearchState] = useState("IDLE");
   const [results, setResults] = useState([]); //search
@@ -72,7 +66,7 @@ const AppMap = (props) => {
   const [loading, setLoading] = useState(true);
 
   const [completionTrack, setCompletionTrack] = useLocalStorageState(
-    COMPLETION_TRACK,
+    "rm.completion_track",
     { defaultValue: { [config.name]: { completed: {}, category: {} } } }
   );
 
@@ -87,7 +81,7 @@ const AppMap = (props) => {
 
   useEffect(() => {
     if (refresh) {
-      const curr = storageSettings[SETTING_HIDE_COMPLETED];
+      const curr = storageSettings["hideCompletedMarkers"];
       setUserHideComplete(curr);
       setRefresh(false);
     }
@@ -124,31 +118,34 @@ const AppMap = (props) => {
             {searchState === "COMPLETE" && (
               <>
                 {results.map((result, i) => {
-                  const { _id: id, coordinate, categoryId } = result;
-                  const completed = getTarget(completionTrack, [config.name, "completed", id]);
+                  const { _id: id } = result;
+                  const completed = getTarget(completionTrack, [
+                    config.name,
+                    "completed",
+                    id,
+                  ]);
+                  const data = locations.find((item) => item._id === id);
 
                   return (
                     <RMMarker
                       key={`${id}`}
                       opacity={completed ? 0.5 : 1}
                       Marker={Marker}
-                      coordinate={coordinate}
-                      categoryId={categoryId}
-                      markerId={id}
                       useMap={useMap}
                       rank={i}
+                      data={data}
                     />
                   );
                 })}
               </>
             )}
 
-            {markerGroups.map(
-              (
-                { categoryId, coordinates, ids, ranks, group, markerTypeId },
-                i
-              ) => {
-                const hidden = getTarget(storageSettings, [SETTING_HIDDEN_CATEGORY, categoryId]);
+            {locationGroups.map(
+              ({ categoryId, ranks, group, markerTypeId }, i) => {
+                const hidden = getTarget(storageSettings, [
+                  "hiddenCategories",
+                  categoryId,
+                ]);
                 const groupColor =
                   "#" +
                   (0x1000000 + Math.random() * 0xffffff)
@@ -156,7 +153,7 @@ const AppMap = (props) => {
                     .substr(1, 6);
                 return (
                   <GroupedLayer
-                    key={`${categoryId} + ${ids[i]}`}
+                    key={`${categoryId} + ${group}`}
                     checked={!hidden}
                     id={group}
                     name={categoryId}
@@ -164,23 +161,26 @@ const AppMap = (props) => {
                   >
                     <LayerGroup>
                       {markerTypeId === 1 &&
-                        coordinates.map((coordinate, i) => {
+                        ranks.map((rank, i) => {
+                          const location = locations[rank];
                           const mapCompleteInfo = completionTrack[config.name];
-                          const completed = mapCompleteInfo?.completed[ids[i]];
+                          const completed =
+                            mapCompleteInfo?.completed[location._id];
                           const hide =
                             (completed && userHideComplete) || hidden;
-
-                          if (!hide && searchState !== "COMPLETE") {
+                          if (
+                            !hide &&
+                            searchState !== "COMPLETE" &&
+                            location?.coordinate
+                          ) {
                             return (
                               <RMMarker
-                                key={`${ids[i]} ${group}`}
+                                key={`${location._id} ${group}`}
                                 opacity={completed ? 0.5 : 1}
                                 Marker={Marker}
-                                coordinate={coordinate}
-                                categoryId={categoryId}
-                                markerId={ids[i]}
                                 useMap={useMap}
-                                rank={ranks[i]}
+                                rank={rank}
+                                data={location}
                               />
                             );
                           }
@@ -188,12 +188,13 @@ const AppMap = (props) => {
                       {markerTypeId === 3 && (
                         <MarkerClusterGroup fillColor={groupColor}>
                           <LayerGroup>
-                            {coordinates.map((coord) => {
+                            {ranks.map((rank, i) => {
+                              const location = locations[rank];
                               return (
                                 !hidden && (
                                   <CircleMarker
-                                    key={`${coord[0]} ${coord[1]}`}
-                                    center={coord}
+                                    key={`${rank}`}
+                                    center={location.coordinate}
                                     color={groupColor}
                                     radius={2}
                                   >

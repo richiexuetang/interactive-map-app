@@ -3,11 +3,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import useLocalStorageState from "use-local-storage-state";
 
 import GroupItem from "./GroupItem";
-import {
-  SETTING_HIDDEN_CATEGORY,
-  USER_SETTING,
-  initialUserSettings,
-} from "@data/LocalStorage";
+import { initialUserSettings } from "@data/LocalStorage";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 
 const GroupContainer = (props) => {
@@ -15,14 +11,17 @@ const GroupContainer = (props) => {
 
   const [collapse, setCollapse] = useState(false);
   const [groupHiddenState, setGroupHiddenState] = useState(null);
-  const [storageSettings, setStorageSettings] = useLocalStorageState(USER_SETTING, {
-    defaultValue: initialUserSettings,
-  });
+  const [storageSettings, setStorageSettings] = useLocalStorageState(
+    "interactive_map_user_setting",
+    {
+      defaultValue: initialUserSettings,
+    }
+  );
 
   useEffect(() => {
     if (groupHiddenState === null) {
       layerSection?.map((layerObj) => {
-        if (storageSettings[SETTING_HIDDEN_CATEGORY][layerObj.name] === true) {
+        if (storageSettings["hiddenCategories"][layerObj.name] === true) {
           setGroupHiddenState(false);
         }
       });
@@ -34,13 +33,13 @@ const GroupContainer = (props) => {
   }, [groupHiddenState]);
 
   const handleGroupToggle = () => {
-    const newHidden = storageSettings[SETTING_HIDDEN_CATEGORY];
+    const newHidden = storageSettings["hiddenCategories"];
     layerSection?.map((layerObj) => {
       newHidden[layerObj.name] = !groupHiddenState;
     });
     setStorageSettings((prev) => ({
       ...prev,
-      [SETTING_HIDDEN_CATEGORY]: {
+      ["hiddenCategories"]: {
         ...newHidden,
       },
     }));
@@ -59,13 +58,14 @@ const GroupContainer = (props) => {
           {`${section}: `}
         </Box>
       </Flex>
-      {!collapse && layerSection?.map((layerObj) => (
-        <GroupItem
-          key={`${section} ${layerObj.name}`}
-          onLayerClick={onLayerClick}
-          layerObj={layerObj}
-        />
-      ))}
+      {!collapse &&
+        layerSection?.map((layerObj) => (
+          <GroupItem
+            key={`${section} ${layerObj.name}`}
+            onLayerClick={onLayerClick}
+            layerObj={layerObj}
+          />
+        ))}
     </>
   );
 };

@@ -1,5 +1,4 @@
 import { useMapContext } from "@context/app-context";
-import { COMPLETION_TRACK } from "@data/LocalStorage";
 import { categoryHiddenState } from "@lib/getHiddenState";
 import { useEffect } from "react";
 import { Polyline } from "react-leaflet";
@@ -9,7 +8,7 @@ const PolyLine = ({ path, parentId, categoryId, id }) => {
   const { config } = useMapContext();
 
   const [completionTrack, setCompletionTrack] = useLocalStorageState(
-    COMPLETION_TRACK,
+    "rm.completion_track",
     { defaultValue: { [config.name]: { completed: {}, category: {} } } }
   );
   const mapCompleteTrack = completionTrack[config.name]

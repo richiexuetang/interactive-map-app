@@ -24,14 +24,9 @@ import {
   Loader,
   GroupContainer,
 } from "@components/.";
-import {
-  SETTING_HIDDEN_CATEGORY,
-  SETTING_HIDE_COMPLETED,
-  USER_SETTING,
-  initialUserSettings,
-} from "@data/LocalStorage";
+import { initialUserSettings } from "@data/LocalStorage/initial";
+import { Storage } from "@data/LocalStorage";
 import { useRouter } from "next/router";
-import useLocalStorage from "@hooks/useLocalStorage";
 
 function LayerControl({
   children,
@@ -43,8 +38,8 @@ function LayerControl({
 }) {
   const router = useRouter();
   const [storageSettings, setStorageSettings] = useLocalStorageState(
-    USER_SETTING,
-    {defaultValue: initialUserSettings}
+    Storage.USER_SETTING,
+    { defaultValue: initialUserSettings }
   );
   const { config } = useMapContext();
   const { subSelections: navSelections, name: area } = config;
@@ -56,7 +51,7 @@ function LayerControl({
   const [searching, setSearching] = useState(false);
 
   const [hideCompleted, setHideCompleted] = useState(
-    storageSettings[SETTING_HIDE_COMPLETED]
+    storageSettings["hideCompletedMarkers"]
   );
 
   const toggle = () => {
@@ -119,7 +114,7 @@ function LayerControl({
   };
 
   const handleHideShowAll = (val) => {
-    const hiddenState = storageSettings[SETTING_HIDDEN_CATEGORY];
+    const hiddenState = storageSettings["hiddenCategories"];
 
     for (const [key, value] of Object.entries(hiddenState)) {
       hiddenState[key] = val;
@@ -127,7 +122,7 @@ function LayerControl({
 
     setStorageSettings((prev) => ({
       ...prev,
-      [SETTING_HIDDEN_CATEGORY]: {
+      ["hiddenCategories"]: {
         ...hiddenState,
       },
     }));
@@ -252,11 +247,7 @@ function LayerControl({
                       Hide All
                     </Button>
                   </HStack>
-                  <Button
-                    onClick={toggle}
-                    variant="underlined"
-                    fontSize="12px"
-                  >
+                  <Button onClick={toggle} variant="underlined" fontSize="12px">
                     {hideCompleted ? "Show Completed" : "Hide Completed"}
                   </Button>
                   {navSelections && (

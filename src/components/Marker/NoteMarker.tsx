@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 
 import { useMapContext } from "@context/app-context";
 import RMForm from "@components/Form/RMForm";
+import useCopyToClipboard from "@hooks/useCopyToClipboard";
 
 const RMPopup = dynamic(() => import("@components/Popup/RMPopup"), {
   ssr: false,
@@ -20,6 +21,7 @@ const NoteMarker = ({ position }) => {
 
   const [lat, setLat] = useState<number>(position[0]);
   const [lng, setLng] = useState<number>(position[1]);
+  const [value, copy] = useCopyToClipboard();
 
   const getNewPos = () => {
     const marker = dragRef.current;
@@ -27,6 +29,7 @@ const NoteMarker = ({ position }) => {
       const newPos = { ...marker.getLatLng() };
       setLat(newPos.lat);
       setLng(newPos.lng);
+      copy(`${newPos.lat}, ${newPos.lng}`)
     }
   };
 

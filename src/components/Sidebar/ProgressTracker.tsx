@@ -14,15 +14,9 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
-import {
-  COMPLETION_TRACK,
-  SETTING_TRACKER,
-  USER_SETTING,
-  initialUserSettings,
-} from "@data/LocalStorage";
-import useLocalStorage from "@hooks/useLocalStorage";
+import { initialUserSettings } from "@data/LocalStorage";
 import { useMapContext } from "@context/app-context";
-import { categoryIdNameMap } from "@data/categoryItemsConfig";
+import { categoryIdNameMap } from "@data/config/categoryItemsConfig";
 
 function ProgressTracker({ markerGroups }) {
   const chakraStyles: ChakraStylesConfig = {
@@ -47,27 +41,30 @@ function ProgressTracker({ markerGroups }) {
   const { categoryCounts, config } = useMapContext();
   const { gameSlug, name: mapSlug } = config;
 
-  const [completionTrack] = useLocalStorageState(COMPLETION_TRACK, {
+  const [completionTrack] = useLocalStorageState("rm.completion_track", {
     defaultValue: { [config.name]: { completed: {}, category: {} } },
   });
 
-  const [storageSettings, setStorageSettings] = useLocalStorageState(USER_SETTING, {
-    defaultValue: initialUserSettings,
-  });
+  const [storageSettings, setStorageSettings] = useLocalStorageState(
+    "interactive_map_user_setting",
+    {
+      defaultValue: initialUserSettings,
+    }
+  );
 
   const [trackedCategory, setTrackedCategory] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [trackingOptions, setTrackingOptions] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  const trackingSetting = storageSettings[SETTING_TRACKER];
+  const trackingSetting = storageSettings["tracker"];
 
   useMemo(() => {
     if (!trackingSetting?.hasOwnProperty(gameSlug)) {
       setStorageSettings((prev) => ({
         ...prev,
-        [SETTING_TRACKER]: {
-          ...prev[SETTING_TRACKER],
+        ["tracker"]: {
+          ...prev["tracker"],
           [gameSlug]: {},
         },
       }));
@@ -75,16 +72,16 @@ function ProgressTracker({ markerGroups }) {
     if (!trackingSetting[gameSlug]?.hasOwnProperty(mapSlug)) {
       setStorageSettings((prev) => ({
         ...prev,
-        [SETTING_TRACKER]: {
-          ...prev[SETTING_TRACKER],
+        ["tracker"]: {
+          ...prev["tracker"],
           [gameSlug]: {
-            ...prev[SETTING_TRACKER][gameSlug],
+            ...prev["tracker"][gameSlug],
             [mapSlug]: [],
           },
         },
       }));
     } else {
-      const tracked = storageSettings[SETTING_TRACKER][gameSlug][mapSlug];
+      const tracked = storageSettings["tracker"][gameSlug][mapSlug];
       setTrackedCategory([...tracked]);
     }
   }, [storageSettings]);
@@ -121,7 +118,7 @@ function ProgressTracker({ markerGroups }) {
       });
       setTrackingOptions([...tempOptions]);
     }
-  }, [storageSettings[SETTING_TRACKER]]);
+  }, [storageSettings["tracker"]]);
 
   const getCompletedCount = useCallback(
     (categoryId) => {
@@ -146,15 +143,15 @@ function ProgressTracker({ markerGroups }) {
   );
 
   const removeTrackedCategory = (category) => {
-    const newList = storageSettings[SETTING_TRACKER][gameSlug][mapSlug].filter(
+    const newList = storageSettings["tracker"][gameSlug][mapSlug].filter(
       (item) => item !== category
     );
     setStorageSettings((prev) => ({
       ...prev,
-      [SETTING_TRACKER]: {
-        ...prev[SETTING_TRACKER],
+      ["tracker"]: {
+        ...prev["tracker"],
         [gameSlug]: {
-          ...prev[SETTING_TRACKER][gameSlug],
+          ...prev["tracker"][gameSlug],
           [mapSlug]: newList,
         },
       },
@@ -170,16 +167,16 @@ function ProgressTracker({ markerGroups }) {
   };
 
   const trackCategories = () => {
-    let tracked = storageSettings[SETTING_TRACKER][gameSlug][mapSlug];
+    let tracked = storageSettings["tracker"][gameSlug][mapSlug];
     selectedCategories.map((value) => {
       if (!tracked.includes(value)) {
         tracked = [...tracked, value];
         setStorageSettings((prev) => ({
           ...prev,
-          [SETTING_TRACKER]: {
-            ...prev[SETTING_TRACKER],
+          ["tracker"]: {
+            ...prev["tracker"],
             [gameSlug]: {
-              ...prev[SETTING_TRACKER][gameSlug],
+              ...prev["tracker"][gameSlug],
               [mapSlug]: tracked,
             },
           },

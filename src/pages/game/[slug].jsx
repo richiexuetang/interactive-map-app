@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { chakra, Box } from "@chakra-ui/react";
 
 import Layout from "@components/Layout";
-import { mapConfig } from "@data/.";
+import { mapConfig } from "@data/config";
 import useMapObject from "@hooks/useMapObject";
 import { ImageLayout } from "@layout/Image";
 import Link from "next/link";

@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { Tooltip, CircleMarker } from "react-leaflet";
 import useLocalStorageState from "use-local-storage-state";
 
 import { useMapContext } from "@context/app-context";
 import MarkerClusterGroup from "@components/Marker/MarkerClusterGroup";
-import { categoryIdNameMap } from "@data/categoryItemsConfig";
+import { categoryIdNameMap } from "@data/config/categoryItemsConfig";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
-import { SETTING_HIDDEN_CATEGORY, USER_SETTING, initialUserSettings } from "@data/LocalStorage";
+import { initialUserSettings } from "@data/LocalStorage";
 
 const ClusterLayer = () => {
   const [storageSettings] = useLocalStorageState(
-    USER_SETTING,
+    "interactive_map_user_setting",
     {defaultValue: initialUserSettings}
   );
   const {clusterGroups} = useMapContext();
@@ -19,7 +19,7 @@ const ClusterLayer = () => {
   return (
     <>
       {clusterGroups.length && clusterGroups.map((group) => {
-        const hidden = storageSettings[SETTING_HIDDEN_CATEGORY][group.categoryId];
+        const hidden = storageSettings["hiddenCategories"][group.categoryId];
         if (!hidden) {
           return (
             <MarkerClusterGroup key={group.categoryId}>

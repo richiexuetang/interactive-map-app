@@ -16,10 +16,9 @@ import {
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 
-import { COMPLETION_TRACK } from "@data/LocalStorage";
 import { useCopyToClipboard } from "@hooks/index";
 import { Loader, RMForm } from "@components/.";
-import { categoryIdNameMap } from "@data/categoryItemsConfig";
+import { categoryIdNameMap } from "@data/config/categoryItemsConfig";
 import { useMapContext } from "@context/app-context";
 import { getTarget } from "@lib/getTargetProperty";
 
@@ -37,10 +36,11 @@ const MapPopup = (props) => {
 
   const { status } = useSession();
   const { onOpen, isOpen, onClose } = useDisclosure();
-  const { markerInfo, markerId, triggerPopup, setTriggerPopup } = props;
+  const { markerInfo, triggerPopup, setTriggerPopup } = props;
+  const {_id: markerId} = markerInfo
   const pathname = usePathname();
   const [completionTrack, setCompletionTrack] = useLocalStorageState(
-    COMPLETION_TRACK,
+    "rm.completion_track",
     { defaultValue: { [mapSlug]: { completed: {}, category: {} } } }
   );
   const mapCompleteTrack = completionTrack[mapSlug];

@@ -16,7 +16,7 @@ import { useMapContext } from "@context/app-context";
 import {
   categoryIdNameMap,
   categoryItemsConfig,
-} from "@data/categoryItemsConfig";
+} from "@data/config/categoryItemsConfig";
 import { useFormik } from "formik";
 import * as React from "react";
 import * as Yup from "yup";

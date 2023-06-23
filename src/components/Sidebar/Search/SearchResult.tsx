@@ -9,6 +9,7 @@ import { useMap } from "react-leaflet";
 
 const SearchResult = ({ result }) => {
   const { markerRefs, config } = useMapContext();
+  
   const {
     _id: id,
     categoryId,

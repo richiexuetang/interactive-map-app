@@ -1,43 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { useMap } from "react-leaflet";
 import { MapPopup } from "@components/Popup";
 import { useMapContext } from "@context/app-context";
 import { useSearchParams } from "next/navigation";
 
 const RMMarker = (props) => {
-  const map = useMap();
   const params = useSearchParams();
   const markerSearchParam = params.get("markerId");
 
-  const { Marker, coordinate, categoryId, rank, markerId, ...rest } = props;
-  const [markerInfo, setMarkerInfo] = useState(null);
+  const { Marker, rank, data, useMap, hide, ...rest } = props;
+
+  const { coordinate, _id: markerId, categoryId } = data;
+  const map = useMap();
+
   const [triggerPopup, setTriggerPopup] = useState(false);
   const { markerRefs, config } = useMapContext();
 
-  const getMarkerInfo = async () => {
-    if (!markerInfo) {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_APP_URL}/api/getMarker?id=` + markerId
-        );
-        const json = await res.json();
-        setMarkerInfo({ ...json });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
   useEffect(() => {
     if (triggerPopup) {
-      try {
-        fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/getMarker?id=` + markerId)
-          .then((res) => res.json())
-          .then((data) => setMarkerInfo(data));
-        setTriggerPopup(false);
-      } catch (error) {
-        console.log(error);
-      }
+      setTriggerPopup(false);
     }
   }, [triggerPopup]);
 
@@ -66,7 +46,6 @@ const RMMarker = (props) => {
   return (
     <Marker
       ref={(ref) => (markerRefs[markerId] = ref)}
-      key={coordinate[0] + ", " + coordinate[1]}
       position={coordinate}
       icon={L.icon({
         iconUrl: `/images/icons/${categoryId}.png`,
@@ -74,15 +53,10 @@ const RMMarker = (props) => {
         iconAnchor: [17, 45],
       })}
       zIndexOffset={100 + rank}
-      eventHandlers={{
-        popupopen: () => getMarkerInfo(),
-        mouseover: () => getMarkerInfo(),
-      }}
       {...rest}
     >
       <MapPopup
-        markerId={markerId}
-        markerInfo={markerInfo}
+        markerInfo={data}
         triggerPopup={triggerPopup}
         setTriggerPopup={setTriggerPopup}
       />

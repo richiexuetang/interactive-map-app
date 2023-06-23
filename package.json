@@ -1,6 +1,6 @@
 {
-  "name": "interactive-map-rpg",
-  "homepage": "https://next-leaflet-starter.netlify.app",
+  "name": "ritcher-interactive-map",
+  "homepage": "https://ritcher-maps.vercel.app",
   "version": "0.1.0",
   "license": "MIT",
   "author": "Richard Tang <richard772794659@gmail.com>",

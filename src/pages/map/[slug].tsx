@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
 import { NextSeo } from "next-seo";
 
-import { areaConfig } from "@data/areaConfig";
-import { categoryItemsConfig, mapConfig } from "@data/index";
+import { categoryItemsConfig, mapConfig, areaConfig } from "@data/config";
 import { useMapContext } from "@context/app-context";
 import AppMap from "@components/Map/AppMap";
 import { Loader } from "@components/Loader";
 import { useLoading } from "@hooks/useLoading";
-import { getGroupName } from "@lib/getGroupName";
 import { useRouter } from "next/router";
 import { Box } from "@chakra-ui/react";
 
@@ -16,60 +14,41 @@ export async function getStaticProps(context) {
 
   const config = areaConfig.find((o) => o.name === areaId);
 
-  const markerType = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}/1`
+  const all = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/area/${areaId}`
   );
-  const markersList = await markerType.json();
 
-  const textMarkerType = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}/2`
-  );
-  const textOverlay = await textMarkerType.json();
+  const locations = await all.json();
 
-  const clusterType = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}/3`
-  );
-  const clusterMarkers = await clusterType.json();
-
-  const pathType = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/markers/${areaId}/4`
-  );
-  const pathMarkers = await pathType.json();
+  const textOverlay = locations.filter((item) => item.markerTypeId === 2);
+  const pathMarkers = locations.filter((item) => item.markerTypeId === 4);
 
   const categoryCounts = {};
-
-  const markers = [...markersList, ...clusterMarkers];
-  const groups = [];
 
   pathMarkers.map(({ categoryId }) => {
     categoryCounts[categoryId] = categoryCounts[categoryId] + 1 || 1;
   });
 
-  markers.map((marker, rank) => {
-    categoryCounts[marker.categoryId] =
-      categoryCounts[marker.categoryId] + 1 || 1;
-    const { categoryId, coordinate, markerTypeId, _id: id } = marker;
-
-    const groupIndex = groups.findIndex(
-      (group) => group.categoryId === categoryId
-    );
-    if (groupIndex === -1) {
-      const groupName = getGroupName(config.gameSlug, categoryId);
-      const newGroup = {
-        categoryId: categoryId,
-        coordinates: [coordinate],
-        group: groupName,
-        markerTypeId: markerTypeId,
-        ids: [id],
-        ranks: [rank],
-      };
-      groups.push(newGroup);
-    } else {
-      const categoryGroup = groups[groupIndex];
-      categoryGroup.coordinates = [...categoryGroup.coordinates, coordinate];
-      categoryGroup.ids = [...categoryGroup.ids, id];
-      categoryGroup.ranks = [...categoryGroup.ranks, rank];
-    }
+  let locationGroups = [];
+  const categoryConfig = categoryItemsConfig.find((item) =>
+    item.mapSlugs.includes(areaId)
+  );
+  
+  categoryConfig.categoryGroups.map(({ name, members, groupType }) => {
+    members.map((item) => {
+      const positions = locations
+        .map((el, i) => (el.categoryId === item ? i : undefined))
+        .filter((x) => x);
+      if (positions.length) {
+        locationGroups.push({
+          group: name,
+          ranks: [...positions],
+          categoryId: item,
+          markerTypeId: groupType,
+        });
+        categoryCounts[item] = positions.length;
+      }
+    });
   });
 
   return {
@@ -78,7 +57,8 @@ export async function getStaticProps(context) {
       categoryCounts,
       textOverlay,
       pathMarkers,
-      groups,
+      locations,
+      locationGroups
     },
     revalidate: 10,
   };
@@ -104,7 +84,8 @@ const MapPage = ({
   categoryCounts,
   textOverlay,
   pathMarkers,
-  groups,
+  locations,
+  locationGroups
 }) => {
   const { asPath } = useRouter();
   const [loading] = useLoading();
@@ -145,7 +126,8 @@ const MapPage = ({
         <AppMap
           textOverlay={textOverlay}
           pathMarkers={pathMarkers}
-          markerGroups={groups}
+          locations={locations}
+          locationGroups={locationGroups}
         />
       )}
     </>

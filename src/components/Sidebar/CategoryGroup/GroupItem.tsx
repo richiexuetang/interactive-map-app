@@ -4,26 +4,20 @@ import useLocalStorageState from "use-local-storage-state";
 import { Button, Box, Image, Flex } from "@chakra-ui/react";
 
 import { useMapContext } from "@context/.";
-import {
-  COMPLETION_TRACK,
-  SETTING_HIDDEN_CATEGORY,
-  SETTING_HIDE_ALL,
-  USER_SETTING,
-  initialUserSettings,
-} from "@data/LocalStorage";
-import { categoryIdNameMap } from "@data/categoryItemsConfig";
+import { categoryIdNameMap } from "@data/config/categoryItemsConfig";
 import { categoryHiddenState } from "@lib/getHiddenState";
+import { initialUserSettings } from "@data/LocalStorage";
 
 const GroupItem = ({ onLayerClick, layerObj }) => {
   const { categoryCounts, config } = useMapContext();
   const [storageSettings, setStorageSettings] = useLocalStorageState(
-    USER_SETTING,
+    "interactive_map_user_setting",
     {
       defaultValue: initialUserSettings,
     }
   );
   const [completionTrack, setCompletionTrack] = useLocalStorageState(
-    COMPLETION_TRACK,
+    "rm.completion_track",
     {
       defaultValue: {
         [config.name]: { category: {}, completed: { [layerObj]: 0 } },
@@ -37,7 +31,7 @@ const GroupItem = ({ onLayerClick, layerObj }) => {
   );
 
   useEffect(() => {
-    if (storageSettings[SETTING_HIDDEN_CATEGORY][layerObj.name] === undefined) {
+    if (storageSettings["hiddenCategories"][layerObj.name] === undefined) {
       setStorageSettings((prevState) => ({
         ...prevState,
         hiddenCategories: {
@@ -65,7 +59,7 @@ const GroupItem = ({ onLayerClick, layerObj }) => {
 
   useEffect(() => {
     setShow(
-      !categoryHiddenState(layerObj.name) && !storageSettings[SETTING_HIDE_ALL]
+      !categoryHiddenState(layerObj.name) && !storageSettings["hideAll"]
     );
   }, [storageSettings]);
 
